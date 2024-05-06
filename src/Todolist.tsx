@@ -4,6 +4,7 @@ import React from "react";
 type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
+    removeTasks: (taskId: number) => void
 }
 
 export type TaskType = {
@@ -11,32 +12,19 @@ export type TaskType = {
     title: string
     isDone: boolean
 }
-export const Todolist = ({
-                             title,
-                             tasks
-                         }: TodolistPropsType) => {
-    // 1.
-    // const title = props.title
-    // const tasks = props.tasks
-    // 2.
-    // const {title, tasks}=props
-
-
-    // const tasksList: Array<JSX.Element> = []
-    // for (let i = 0; i < tasks.length; i++) {
-    //     tasksList.push(
-    //         <li>
-    //             <input type="checkbox" checked={tasks[i].isDone}/>
-    //             <span>{tasks[i].title}</span>
-    //         </li>
-    //     )
-    // }
+export const Todolist = (
+    {
+        title,
+        tasks,
+        removeTasks
+    }: TodolistPropsType) => {
 
     const tasksList: Array<JSX.Element> = tasks.map((task) => {
         return (
             <li>
                 <input type="checkbox" checked={task.isDone}/>
                 <span>{task.title}</span>
+                <button onClick={()=>removeTasks(task.id)}>x</button>
             </li>
         )
     })
