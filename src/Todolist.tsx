@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
@@ -6,7 +6,7 @@ type TodolistPropsType = {
     title: string;
     tasks: Array<TaskType>;
     removeTasks: (taskId: number) => void;
-    changeFilter: (filter: FilterValuesType) => void
+    // changeFilter: (filter: FilterValuesType) => void
 }
 
 export type TaskType = {
@@ -16,13 +16,44 @@ export type TaskType = {
 }
 
 export function Todolist(props: TodolistPropsType) {
-    const {title, tasks, removeTasks, changeFilter} = props;
+    const {title,
+        tasks,
+        removeTasks,
+        // changeFilter
+    } = props;
+
+    //UI logic (которая влияет на жизнь компаненты, но не относится к глобальным даным)
+    const [filter, setFilter] = useState<FilterValuesType>("all")
+
+    const changeFilter=(filter: FilterValuesType)=>{
+        setFilter(filter)
+    }
+
+    const getFilteredTasks = (allTasts: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
+        if (filterValue === "active") {
+            return allTasts.filter(t => t.isDone === false)
+        } else if (filterValue === "complited") {
+            return allTasts.filter(t => t.isDone === true)
+        } else {
+            return allTasts
+        }
+        // switch (filterValue) {
+        //     case "active":
+        //         return allTasts.filter(t => t.isDone === false)
+        //     case "complited":
+        //         return allTasts.filter(t => t.isDone === true)
+        //     default:
+        //         return allTasts
+        // }
+    }
+
+    const filteredTasks: Array<TaskType> = getFilteredTasks(tasks,filter)
 
 
-    const taskslist: JSX.Element = tasks.length === 0
+    const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <ul>
-            {tasks.map((task) => {
+            {filteredTasks.map((task) => {
                 return (
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone}/>

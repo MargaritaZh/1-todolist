@@ -21,32 +21,6 @@ function App() {
         setTasks(nextState)
     }
 
-//UI logic (которая влияет на жизнь компаненты, но не относится к глобальным даным)
-    const [filter, setFilter] = useState<FilterValuesType>("all")
-
-    const changeFilter=(filter: FilterValuesType)=>{
-        setFilter(filter)
-    }
-
-    const getFilteredTasks = (allTasts: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
-        if (filterValue === "active") {
-            return allTasts.filter(t => t.isDone === false)
-        } else if (filterValue === "complited") {
-            return allTasts.filter(t => t.isDone === true)
-        } else {
-            return allTasts
-        }
-        // switch (filterValue) {
-        //     case "active":
-        //         return allTasts.filter(t => t.isDone === false)
-        //     case "complited":
-        //         return allTasts.filter(t => t.isDone === true)
-        //     default:
-        //         return allTasts
-        // }
-    }
-
-    const filteredTasks: Array<TaskType> = getFilteredTasks(tasks,filter)
 
 
     //UI
@@ -54,9 +28,9 @@ function App() {
         <div className="App">
             <Todolist
                 title={todolistTitle_1}
-                tasks={filteredTasks}
+                tasks={tasks}
                 removeTasks={removeTasks}
-                changeFilter={changeFilter}
+                // changeFilter={changeFilter}
             />
 
         </div>
