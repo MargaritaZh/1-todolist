@@ -28,6 +28,11 @@ export function Todolist(props: TodolistPropsType) {
     //UI logic (которая влияет на жизнь компаненты, но не относится к глобальным даным)
     const [filter, setFilter] = useState<FilterValuesType>("all")
 
+    const [newTaskTitle, setNewTaskTitle] = useState("")
+
+    console.log(newTaskTitle)
+
+
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
     }
@@ -52,13 +57,10 @@ export function Todolist(props: TodolistPropsType) {
     const filteredTasks: Array<TaskType> = getFilteredTasks(tasks, filter)
 
     ////
-    const taskInputRef = useRef<HTMLInputElement>(null)
 
     const addTaskHandler = () => {
-        if (taskInputRef.current) {
-            addTask(taskInputRef.current.value)
-            taskInputRef.current.value=""
-        }
+        addTask(newTaskTitle)
+        setNewTaskTitle("")
     }
     ////
 
@@ -81,8 +83,18 @@ export function Todolist(props: TodolistPropsType) {
         <div className="todolist">
             <h3>{title}</h3>
             <div>
-                <input ref={taskInputRef}/>
-                <Button title={'+'} onclickHandler={addTaskHandler}/>
+                <input
+                    value={newTaskTitle}
+                    onChange={(e) => {
+                        setNewTaskTitle(e.currentTarget.value)
+                    }}
+                />
+                <Button
+                    title={'+'}
+                    onclickHandler={addTaskHandler}
+                    disabled={newTaskTitle.length === 0 || newTaskTitle.length > 15}
+                />
+                {newTaskTitle.length > 10 && <div>Recommended task length 10 characters</div>}
             </div>
             {taskslist}
             <div>
