@@ -18,7 +18,7 @@ function App() {
     ])
 
     //change logic
-    const removeTasks = (taskId: string) => {
+    const removeTask = (taskId: string) => {
         const nextState = tasks.filter(t => t.id !== taskId)
         setTasks(nextState)
     }
@@ -42,7 +42,7 @@ function App() {
             <Todolist
                 title={todolistTitle_1}
                 tasks={tasks}
-                removeTasks={removeTasks}
+                removeTask={removeTask}
                 addTask={addTask}
                 // changeFilter={changeFilter}
             />

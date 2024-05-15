@@ -1,11 +1,11 @@
-import React, {KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
 type TodolistPropsType = {
     title: string;
     tasks: Array<TaskType>;
-    removeTasks: (taskId: string) => void
+    removeTask: (taskId: string) => void
     addTask: (title: string) => void
     // changeFilter: (filter: FilterValuesType) => void
 }
@@ -20,7 +20,7 @@ export function Todolist(props: TodolistPropsType) {
     const {
         title,
         tasks,
-        removeTasks,
+        removeTask,
         addTask,
         // changeFilter,
     } = props;
@@ -31,7 +31,6 @@ export function Todolist(props: TodolistPropsType) {
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
     console.log(newTaskTitle)
-
 
     const changeFilter = (filter: FilterValuesType) => {
         setFilter(filter)
@@ -45,20 +44,12 @@ export function Todolist(props: TodolistPropsType) {
         } else {
             return allTasts
         }
-        // switch (filterValue) {
-        //     case "active":
-        //         return allTasts.filter(t => t.isDone === false)
-        //     case "complited":
-        //         return allTasts.filter(t => t.isDone === true)
-        //     default:
-        //         return allTasts
-        // }
     }
     const filteredTasks: Array<TaskType> = getFilteredTasks(tasks, filter)
 
     ////
 
-    const addTaskHandler = () => {
+    const addNewTaskHandler = () => {
         addTask(newTaskTitle)
         setNewTaskTitle("")
     }
@@ -66,20 +57,27 @@ export function Todolist(props: TodolistPropsType) {
 
     const addTaskOnKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && newTaskTitle) {
-            addTaskHandler()
+            addNewTaskHandler()
         }
     }
 
+    const changeNewTaskTitleHandler=(e:ChangeEvent<HTMLInputElement>) => {
+        setNewTaskTitle(e.currentTarget.value)
+    }
+
+    const isAddBthDisabled=newTaskTitle.length === 0 || newTaskTitle.length > 15
 
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <ul>
             {filteredTasks.map((task) => {
+
+                const removeTaskHandler=() => removeTask(task.id)
                 return (
                     <li key={task.id}>
                         <input type="checkbox" checked={task.isDone}/>
                         <span>{task.title}</span>
-                        <Button title={"X"} onclickHandler={() => removeTasks(task.id)}/>
+                        <Button title={"X"} onclickHandler={removeTaskHandler}/>
                         {/*<button onClick={() => removeTasks(task.id)}>x</button>*/}
                     </li>
                 )
@@ -92,15 +90,13 @@ export function Todolist(props: TodolistPropsType) {
             <div>
                 <input
                     value={newTaskTitle}
-                    onChange={(e) => {
-                        setNewTaskTitle(e.currentTarget.value)
-                    }}
+                    onChange={changeNewTaskTitleHandler}
                     onKeyUp={addTaskOnKeyUpHandler}
                 />
                 <Button
                     title={'+'}
-                    onclickHandler={addTaskHandler}
-                    disabled={newTaskTitle.length === 0 || newTaskTitle.length > 15}
+                    onclickHandler={addNewTaskHandler}
+                    disabled={isAddBthDisabled}
                 />
                 {newTaskTitle.length > 10 && <div>Recommended task length 10 characters</div>}
             </div>
