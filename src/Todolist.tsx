@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {KeyboardEvent, useState} from "react";
 import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
@@ -64,6 +64,13 @@ export function Todolist(props: TodolistPropsType) {
     }
     ////
 
+    const addTaskOnKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter" && newTaskTitle) {
+            addTaskHandler()
+        }
+    }
+
+
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <ul>
@@ -88,6 +95,7 @@ export function Todolist(props: TodolistPropsType) {
                     onChange={(e) => {
                         setNewTaskTitle(e.currentTarget.value)
                     }}
+                    onKeyUp={addTaskOnKeyUpHandler}
                 />
                 <Button
                     title={'+'}
