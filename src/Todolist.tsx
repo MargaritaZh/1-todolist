@@ -8,7 +8,7 @@ type TodolistPropsType = {
     removeTask: (taskId: string) => void
     addTask: (title: string) => void
     // changeFilter: (filter: FilterValuesType) => void
-    changeTaskStatus:(taskId: string,newIsDoneValue:boolean)=>void
+    changeTaskStatus: (taskId: string, newIsDoneValue: boolean) => void
 }
 
 export type TaskType = {
@@ -63,20 +63,20 @@ export function Todolist(props: TodolistPropsType) {
         }
     }
 
-    const changeNewTaskTitleHandler=(e:ChangeEvent<HTMLInputElement>) => {
+    const changeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTaskTitle(e.currentTarget.value)
     }
 
-    const isAddBthDisabled=newTaskTitle.length === 0 || newTaskTitle.length > 15
+    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.length > 15
 
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <ul>
             {filteredTasks.map((task) => {
 
-                const removeTaskHandler=() => removeTask(task.id)
+                const removeTaskHandler = () => removeTask(task.id)
 
-                const changeTaskStatusHandler=(e:ChangeEvent<HTMLInputElement>)=>{
+                const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
                     changeTaskStatus(task.id, e.currentTarget.checked)
                 }
                 return (
@@ -86,7 +86,7 @@ export function Todolist(props: TodolistPropsType) {
                             checked={task.isDone}
                             onChange={changeTaskStatusHandler}
                         />
-                        <span>{task.title}</span>
+                        <span className={task.isDone ? "is-done" : "task"}>{task.title}</span>
                         <Button title={"X"} onclickHandler={removeTaskHandler}/>
                         {/*<button onClick={() => removeTasks(task.id)}>x</button>*/}
                     </li>
@@ -112,9 +112,17 @@ export function Todolist(props: TodolistPropsType) {
             </div>
             {taskslist}
             <div>
-                <Button title={'All'} onclickHandler={() => changeFilter("all")}/>
-                <Button title={'Active'} onclickHandler={() => changeFilter("active")}/>
-                <Button title={'Completed'} onclickHandler={() => changeFilter("complited")}/>
+                <Button
+                    title={'All'}
+                    onclickHandler={() => changeFilter("all")} classes={filter === "all" ? "bth-active-filter" : ""}/>
+                <Button title={'Active'}
+                        onclickHandler={() => changeFilter("active")}
+                        classes={filter === "active" ? "bth-active-filter" : ""}
+                />
+                <Button title={'Completed'}
+                        onclickHandler={() => changeFilter("complited")}
+                        classes={filter === "complited" ? "bth-active-filter" : ""}
+                />
             </div>
         </div>
     )

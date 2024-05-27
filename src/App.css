@@ -14,3 +14,18 @@
   background-color: #bb63bb;
   padding: 15px;
 }
+
+.task {
+font-weight: bold;
+}
+
+.is-done {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.bth-active-filter {
+  background-color: lightgreen;
+  border-radius: 5px;
+  border: 2px solid lightgreen;
+}
