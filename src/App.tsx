@@ -18,13 +18,13 @@ function App() {
     ])
 
     //change logic
+    //delete
     const removeTask = (taskId: string) => {
         const nextState = tasks.filter(t => t.id !== taskId)
         setTasks(nextState)
     }
 
-    //UI logic
-
+    //create
     const addTask = (title: string) => {
         const newTask: TaskType = {
             id: v1(),
@@ -36,7 +36,21 @@ function App() {
 
     }
 
+    //UI logic
+    const changeTaskStatus = (taskId: string, newIsDoneValue:boolean) => {
+        // const taskForUpdate: TaskType | undefined = tasks.find(t => t.id === taskId)
+        // if(taskForUpdate){
+        // taskForUpdate.isDone=!taskForUpdate.isDone
+        // const copy=[...tasks]
+        // setTasks(copy)
 
+        const nextState: Array<TaskType> = tasks.map(t => t.id === taskId ? {...t, isDone: newIsDoneValue} : t)
+        setTasks(nextState)
+
+    }
+
+
+//UI
     return (
         <div className="App">
             <Todolist
@@ -45,6 +59,7 @@ function App() {
                 removeTask={removeTask}
                 addTask={addTask}
                 // changeFilter={changeFilter}
+                changeTaskStatus={changeTaskStatus}
             />
 
         </div>
