@@ -32,6 +32,8 @@ export function Todolist(props: TodolistPropsType) {
 
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
+    const [error, setError] = useState<string | null>(null)
+
     console.log(newTaskTitle)
 
     const changeFilter = (filter: FilterValuesType) => {
@@ -52,7 +54,12 @@ export function Todolist(props: TodolistPropsType) {
     ////
 
     const addNewTaskHandler = () => {
-        addTask(newTaskTitle)
+        const trimmednewTaskTitle = newTaskTitle.trim()
+        if (trimmednewTaskTitle !== "") {
+            addTask(newTaskTitle)
+        } else {
+            setError("Title is required")
+        }
         setNewTaskTitle("")
     }
     ////
@@ -64,10 +71,11 @@ export function Todolist(props: TodolistPropsType) {
     }
 
     const changeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        error && setError(null)
         setNewTaskTitle(e.currentTarget.value)
     }
 
-    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.length > 15
+    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
 
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
@@ -102,13 +110,19 @@ export function Todolist(props: TodolistPropsType) {
                     value={newTaskTitle}
                     onChange={changeNewTaskTitleHandler}
                     onKeyUp={addTaskOnKeyUpHandler}
+                    className={error ? "task-input-error" : ""}
                 />
                 <Button
                     title={'+'}
                     onclickHandler={addNewTaskHandler}
                     disabled={isAddBthDisabled}
                 />
-                {newTaskTitle.length > 10 && <div>Recommended task length 10 characters</div>}
+                {error && <div style={{color: "red"}}>{error}</div>}
+
+                {newTaskTitle.trim().length > 10 && newTaskTitle.length < 15 &&
+                    <div>Recommended task length 10 characters</div>}
+
+                {newTaskTitle.trim().length >= 15 && <div style={{color: "red"}}>Title is too long</div>}
             </div>
             {taskslist}
             <div>
