@@ -5,17 +5,38 @@ import {v1} from "uuid";
 
 export type FilterValuesType = "all" | "active" | "complited"
 
+type TodolistType = {
+    id: string
+    title: string
+    filter: FilterValuesType
+    tasks: Array<TaskType>
+}
+
 function App() {
 
-    //BLL
-    //data
-    const todolistTitle_1 = "What to learn?"
-
-    const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: v1(), title: "HTML & CSS", isDone: true},
-        {id: v1(), title: "JS & TS", isDone: true},
-        {id: v1(), title: "React", isDone: false},
-    ])
+    const [todolists, setTodolists] = useState<Array<TodolistType>>(
+        [
+            {
+                id: v1(),
+                title: "What to learn?",
+                filter: "all",
+                tasks: [
+                    {id: v1(), title: "HTML & CSS", isDone: true},
+                    {id: v1(), title: "JS & TS", isDone: true},
+                    {id: v1(), title: "React", isDone: false},
+                ],
+            },
+            {
+                id: v1(),
+                title: "What to buy?",
+                filter: "all",
+                tasks: [
+                    {id: v1(), title: "HTML & CSS", isDone: true},
+                    {id: v1(), title: "JS & TS", isDone: true},
+                    {id: v1(), title: "React", isDone: false},
+                ],
+            },
+        ])
 
     //change logic
     //delete
@@ -37,7 +58,7 @@ function App() {
     }
 
     //UI logic
-    const changeTaskStatus = (taskId: string, newIsDoneValue:boolean) => {
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
         // const taskForUpdate: TaskType | undefined = tasks.find(t => t.id === taskId)
         // if(taskForUpdate){
         // taskForUpdate.isDone=!taskForUpdate.isDone
@@ -54,7 +75,7 @@ function App() {
     return (
         <div className="App">
             <Todolist
-                title={todolistTitle_1}
+                title="What to learn"
                 tasks={tasks}
                 removeTask={removeTask}
                 addTask={addTask}
