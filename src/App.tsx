@@ -100,9 +100,10 @@ function App() {
     const deleteTodolist = (todolistId: string) => {
         setTodolists(todolists.filter(tl => tl.id !== todolistId))
         //удалить массив tasks, относящийся к нужному todolist
-        const copyTasks={...tasks}
-        delete copyTasks[todolistId]
-        setTasks(copyTasks)
+        // const copyTasks={...tasks}
+        // delete copyTasks[todolistId]
+        // setTasks(copyTasks)
+        delete tasks[todolistId]
     }
 
 
@@ -120,11 +121,9 @@ function App() {
                                   changeTaskStatus={changeTaskStatus}
                                   deleteTodolist={deleteTodolist}
                         />
-
                     )
                 })
             }
-
         </div>
     );
 }
