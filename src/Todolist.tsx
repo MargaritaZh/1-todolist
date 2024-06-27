@@ -3,12 +3,14 @@ import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
 type TodolistPropsType = {
+    todolistId:string
     title: string;
     tasks: Array<TaskType>;
     removeTask: (todolistId:string,taskId: string) => void
     addTask: (todolistId:string,title: string) => void
     // changeFilter: (filter: FilterValuesType) => void
     changeTaskStatus: (todolistId:string,taskId: string, newIsDoneValue: boolean) => void
+    deleteTodolist:(todolistId:string)=>void
 }
 
 export type TaskType = {
@@ -19,12 +21,14 @@ export type TaskType = {
 
 export function Todolist(props: TodolistPropsType) {
     const {
+        todolistId,
         title,
         tasks,
         removeTask,
         addTask,
         // changeFilter,
         changeTaskStatus,
+        deleteTodolist,
     } = props;
 
     //UI logic (которая влияет на жизнь компаненты, но не относится к глобальным даным)
@@ -56,7 +60,7 @@ export function Todolist(props: TodolistPropsType) {
     const addNewTaskHandler = () => {
         const trimmednewTaskTitle = newTaskTitle.trim()
         if (trimmednewTaskTitle !== "") {
-            addTask(newTaskTitle)
+            addTask(todolistId,newTaskTitle)
         } else {
             setError("Title is required")
         }
@@ -82,10 +86,10 @@ export function Todolist(props: TodolistPropsType) {
         : <ul>
             {filteredTasks.map((task) => {
 
-                const removeTaskHandler = () => removeTask(task.id)
+                const removeTaskHandler = () => removeTask(todolistId,task.id)
 
                 const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    changeTaskStatus(task.id, e.currentTarget.checked)
+                    changeTaskStatus(todolistId,task.id, e.currentTarget.checked)
                 }
                 return (
                     <li key={task.id}>
@@ -104,7 +108,7 @@ export function Todolist(props: TodolistPropsType) {
 
     return (
         <div className="todolist">
-            <h3>{title}</h3>
+            <h3>{title}<button onClick={()=>props.deleteTodolist(props.todolistId)}>X</button></h3>
             <div>
                 <input
                     value={newTaskTitle}

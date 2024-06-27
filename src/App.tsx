@@ -11,7 +11,7 @@ type TodolistType = {
     filter: FilterValuesType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [todolistId: string]: Array<TaskType>
 }
 
@@ -97,17 +97,31 @@ function App() {
 
     }
 
+    const deleteTodolist = (todolistId: string) => {
+        setTodolists(todolists.filter(tl => tl.id !== todolistId))
+        //удалить массив tasks, относящийся к нужному todolist
+        delete tasks[todolistId]
+    }
+
 
     return (
         <div className="App">
-            <Todolist
-                title="What to learn"
-                tasks={tasks}
-                removeTask={removeTask}
-                addTask={addTask}
-                // changeFilter={changeFilter}
-                changeTaskStatus={changeTaskStatus}
-            />
+            {
+                todolists.map(todolist => {
+                    return (
+                        <Todolist key={todolist.id}
+                                  todolistId={todolist.id}
+                                  title={todolist.title}
+                                  tasks={tasks[todolist.id]}
+                                  removeTask={removeTask}
+                                  addTask={addTask}
+                                  changeTaskStatus={changeTaskStatus}
+                                  deleteTodolist={deleteTodolist}
+                        />
+
+                    )
+                })
+            }
 
         </div>
     );
