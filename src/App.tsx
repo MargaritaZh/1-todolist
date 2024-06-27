@@ -3,7 +3,7 @@ import './App.css';
 import {TaskType, Todolist} from "./Todolist";
 import {v1} from "uuid";
 
-export type FilterValuesType = "all" | "active" | "complited"
+export type FilterValuesType = "all" | "active" | "completed"
 
 type TodolistType = {
     id: string
@@ -82,6 +82,17 @@ function App() {
         // setTasks(nextTasksState)
 
     }
+    const changeFilter = (todolistId: string, filter: FilterValuesType) => {
+        setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
+
+// //         найти нужный объект и засетать
+// //        const currentTodo=todolists.find(el=>el.id===todolistId)
+// //         if(currentTodo){
+// //             currentTodo.filter=filter
+// //             setTodolists([...todolists])
+//         }
+
+    }
 
     //UI logic
     const changeTaskStatus = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
@@ -111,13 +122,25 @@ function App() {
         <div className="App">
             {
                 todolists.map(todolist => {
+
+                    let tasksForTodolist = tasks[todolist.id]
+
+                    if (todolist.filter === 'active') {
+                        tasksForTodolist = tasks[todolist.id].filter(task => !task.isDone)
+                    }
+
+                    if (todolist.filter === 'completed') {
+                        tasksForTodolist = tasks[todolist.id].filter(task => task.isDone)
+                    }
                     return (
                         <Todolist key={todolist.id}
                                   todolistId={todolist.id}
                                   title={todolist.title}
-                                  tasks={tasks[todolist.id]}
+                                  tasks={tasksForTodolist}
                                   removeTask={removeTask}
                                   addTask={addTask}
+                                  changeFilter={changeFilter}
+                                  filter={todolist.filter}
                                   changeTaskStatus={changeTaskStatus}
                                   deleteTodolist={deleteTodolist}
                         />

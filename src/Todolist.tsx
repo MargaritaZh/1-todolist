@@ -3,12 +3,13 @@ import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 
 type TodolistPropsType = {
+    filter:FilterValuesType
     todolistId:string
     title: string;
     tasks: Array<TaskType>;
     removeTask: (todolistId:string,taskId: string) => void
     addTask: (todolistId:string,title: string) => void
-    // changeFilter: (filter: FilterValuesType) => void
+    changeFilter: (todolistId:string,filter: FilterValuesType) => void
     changeTaskStatus: (todolistId:string,taskId: string, newIsDoneValue: boolean) => void
     deleteTodolist:(todolistId:string)=>void
 }
@@ -26,13 +27,13 @@ export function Todolist(props: TodolistPropsType) {
         tasks,
         removeTask,
         addTask,
-        // changeFilter,
+        filter,
+        changeFilter,
         changeTaskStatus,
         deleteTodolist,
     } = props;
 
-    //UI logic (которая влияет на жизнь компаненты, но не относится к глобальным даным)
-    const [filter, setFilter] = useState<FilterValuesType>("all")
+
 
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
@@ -40,14 +41,14 @@ export function Todolist(props: TodolistPropsType) {
 
     console.log(newTaskTitle)
 
-    const changeFilter = (filter: FilterValuesType) => {
-        setFilter(filter)
+    const changeFilterTasksHandler = (filter: FilterValuesType) => {
+        changeFilter(props.todolistId, filter)
     }
 
     const getFilteredTasks = (allTasts: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
         if (filterValue === "active") {
             return allTasts.filter(t => t.isDone === false)
-        } else if (filterValue === "complited") {
+        } else if (filterValue === "completed") {
             return allTasts.filter(t => t.isDone === true)
         } else {
             return allTasts
@@ -132,14 +133,14 @@ export function Todolist(props: TodolistPropsType) {
             <div>
                 <Button
                     title={'All'}
-                    onclickHandler={() => changeFilter("all")} classes={filter === "all" ? "bth-active-filter" : ""}/>
+                    onclickHandler={() => changeFilterTasksHandler("all")} classes={filter === "all" ? "bth-active-filter" : ""}/>
                 <Button title={'Active'}
-                        onclickHandler={() => changeFilter("active")}
+                        onclickHandler={() => changeFilterTasksHandler("active")}
                         classes={filter === "active" ? "bth-active-filter" : ""}
                 />
                 <Button title={'Completed'}
-                        onclickHandler={() => changeFilter("complited")}
-                        classes={filter === "complited" ? "bth-active-filter" : ""}
+                        onclickHandler={() => changeFilterTasksHandler("completed")}
+                        classes={filter === "completed" ? "bth-active-filter" : ""}
                 />
             </div>
         </div>
