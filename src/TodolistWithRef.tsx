@@ -35,7 +35,7 @@ export function Todolist(props: TodolistPropsType) {
     const getFilteredTasks = (allTasts: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
         if (filterValue === "active") {
             return allTasts.filter(t => t.isDone === false)
-        } else if (filterValue === "complited") {
+        } else if (filterValue === "completed") {
             return allTasts.filter(t => t.isDone === true)
         } else {
             return allTasts
@@ -88,7 +88,7 @@ export function Todolist(props: TodolistPropsType) {
             <div>
                 <Button title={'All'} onclickHandler={() => changeFilter("all")}/>
                 <Button title={'Active'} onclickHandler={() => changeFilter("active")}/>
-                <Button title={'Completed'} onclickHandler={() => changeFilter("complited")}/>
+                <Button title={'Completed'} onclickHandler={() => changeFilter("completed")}/>
             </div>
         </div>
     )
