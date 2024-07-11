@@ -10,7 +10,7 @@ export const AddItemForm = (props: Props) => {
 
     const [error, setError] = useState<string | null>(null)
 
-    const changeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const changeNewItemTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
         error && setError(null)
         setNewTaskTitle(e.currentTarget.value)
     }
@@ -37,7 +37,7 @@ export const AddItemForm = (props: Props) => {
         <div>
             <input
                 value={newTaskTitle}
-                onChange={changeNewTaskTitleHandler}
+                onChange={changeNewItemTitleHandler}
                 onKeyUp={addItemOnKeyUpHandler}
                 className={error ? "task-input-error" : ""}
             />

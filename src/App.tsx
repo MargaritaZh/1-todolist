@@ -118,15 +118,23 @@ function App() {
         delete tasks[todolistId]
     }
 
-const addTodolists=(title:string)=>{
-      const newTodolist= {
-        id: v1(),
-        title: title,
-        filter: "all",
-    }
-    // setTodolists([...todolists,newTodolist])
+    const addTodolists = (title: string) => {
+        const newId = v1()
 
-}
+        const newTodo: TodolistType = {
+            id: newId,
+            title: title,
+            filter: "all",
+        }
+        setTodolists([...todolists, newTodo])
+        setTasks({
+            ...tasks, [newId]: [
+                {id: v1(), title: "HTML & CSS", isDone: true},
+                {id: v1(), title: "JS & TS", isDone: true},
+                {id: v1(), title: "React", isDone: false}]
+        })
+    }
+
     return (
         <div className="App">
 
@@ -162,4 +170,5 @@ const addTodolists=(title:string)=>{
     );
 }
 
-export default App;
+
+export default App
