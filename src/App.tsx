@@ -119,6 +119,7 @@ function App() {
     }
 
     const addTodolists = (title: string) => {
+        //один  и тот же ключ в двух местах
         const newId = v1()
 
         const newTodo: TodolistType = {
@@ -126,7 +127,7 @@ function App() {
             title: title,
             filter: "all",
         }
-        setTodolists([...todolists, newTodo])
+        setTodolists([newTodo,...todolists])
         setTasks({
             ...tasks, [newId]: [
                 {id: v1(), title: "HTML & CSS", isDone: true},
