@@ -3,6 +3,7 @@ import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
+import {Task} from "./Task";
 
 type TodolistPropsType = {
     filter: FilterValuesType
@@ -89,16 +90,6 @@ export function Todolist(props: TodolistPropsType) {
 
 
 
-
-
-
-    const upDateItemHandler = (taskId:string,newTitle: string) => {
-
-        // props.upDateTask(props.todolistId, task.id, newTitle)
-        props.upDateTask(props.todolistId, taskId, newTitle)
-    }
-
-
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <ul>
@@ -110,27 +101,33 @@ export function Todolist(props: TodolistPropsType) {
                     changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
                 }
 
-                // const upDateItemHandler = (newTitle: string) => {
-                //     props.upDateTask(props.todolistId, task.id, newTitle)
-                // }
+                const upDateItemHandler = (newTitle: string) => {
+                    props.upDateTask(props.todolistId, task.id, newTitle)
+                }
 
 
-                return (
-                    <li key={task.id}>
-                        <input
-                            type="checkbox"
-                            checked={task.isDone}
-                            onChange={changeTaskStatusHandler}
-                        />
-                        {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
-                        <EditableSpan
-                            oldTitle={task.title}
-                            isDone={task.isDone}
-                            upDateItem={(newTitle)=>upDateItemHandler(task.id,newTitle)}/>
-                        <Button title={"X"} onclickHandler={removeTaskHandler}/>
-                        {/*<button onClick={() => removeTasks(task.id)}>x</button>*/}
-                    </li>
-                )
+                return <Task taskId={task.id}
+                             isDone={task.isDone}
+                             taskTitle={task.title}
+                             changeTaskStatusHandler={changeTaskStatusHandler}
+                             upDateItemHandler={upDateItemHandler}
+                             removeTaskHandler={removeTaskHandler}
+                />
+                    // <li key={task.id}>
+                    //     <input
+                    //         type="checkbox"
+                    //         checked={task.isDone}
+                    //         onChange={changeTaskStatusHandler}
+                    //     />
+                    //     {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
+                    //     <EditableSpan
+                    //         oldTitle={task.title}
+                    //         isDone={task.isDone}
+                    //         upDateItem={upDateItemHandler}/>
+                    //     <Button title={"X"} onclickHandler={removeTaskHandler}/>
+                    //     {/*<button onClick={() => removeTasks(task.id)}>x</button>*/}
+                    // </li>
+
             })}
         </ul>
 
