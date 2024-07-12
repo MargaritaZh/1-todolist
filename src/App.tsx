@@ -127,13 +127,23 @@ function App() {
             title: title,
             filter: "all",
         }
-        setTodolists([newTodo,...todolists])
+        setTodolists([newTodo, ...todolists])
         setTasks({
             ...tasks, [newId]: [
                 {id: v1(), title: "HTML & CSS", isDone: true},
                 {id: v1(), title: "JS & TS", isDone: true},
                 {id: v1(), title: "React", isDone: false}]
         })
+    }
+    const upDateTask = (todolistId: string, id: string, newTitle: string) => {
+        setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
+    }
+
+
+    const upDateTodolist=(todolistId: string,newTitle:string)=>{
+        setTodolists(
+            todolists.map(el=>el.id===todolistId?{...el,title:newTitle}:el))
+
     }
 
     return (
@@ -163,6 +173,8 @@ function App() {
                                   filter={todolist.filter}
                                   changeTaskStatus={changeTaskStatus}
                                   deleteTodolist={deleteTodolist}
+                                  upDateTask={upDateTask}
+                                  upDateTodolist={upDateTodolist}
                         />
                     )
                 })
