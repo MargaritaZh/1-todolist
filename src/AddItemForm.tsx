@@ -1,9 +1,10 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 
 
 type Props = {
-    addItem:(title: string)=>void
+    addItem: (title: string) => void
 };
 export const AddItemForm = (props: Props) => {
 
@@ -20,7 +21,7 @@ export const AddItemForm = (props: Props) => {
         const trimmednewTaskTitle = newTaskTitle.trim()
         if (trimmednewTaskTitle !== "") {
 
-           props.addItem(newTaskTitle)
+            props.addItem(newTaskTitle)
         } else {
             setError("Title is required")
         }
@@ -36,20 +37,32 @@ export const AddItemForm = (props: Props) => {
     const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
 
 
-    const buttonStyles={
-        maxWidth: "30px",
-        maxHeight: "30px",
-        minWidth: "30px",
-        minHeight: "30px",
+    const buttonStyles = {
+        maxWidth: "38px",
+        maxHeight: "38px",
+        minWidth: "38px",
+        minHeight: "38px",
     }
 
     return (
         <div>
-            <input
-                value={newTaskTitle}
-                onChange={changeNewItemTitleHandler}
-                onKeyUp={addItemOnKeyUpHandler}
-                className={error ? "task-input-error" : ""}
+            {/*<input*/}
+            {/*    value={newTaskTitle}*/}
+            {/*    onChange={changeNewItemTitleHandler}*/}
+            {/*    onKeyUp={addItemOnKeyUpHandler}*/}
+            {/*    className={error ? "task-input-error" : ""}*/}
+            {/*/>*/}
+
+            <TextField id="outlined-basic" variant="outlined"
+                       // helperText={error}
+                       label={error ? error : "Enter a title"}
+                       size={"small"}
+                       error={!!error}
+
+
+                       value={newTaskTitle}
+                       onChange={changeNewItemTitleHandler}
+                       onKeyUp={addItemOnKeyUpHandler}
             />
             <Button variant="contained"
                     onClick={addNewItemHandler}
@@ -57,7 +70,7 @@ export const AddItemForm = (props: Props) => {
                     style={buttonStyles}
             >+</Button>
 
-            {error && <div style={{color: "red"}}>{error}</div>}
+            {/*{error && <div style={{color: "red"}}>{error}</div>}*/}
 
             {newTaskTitle.trim().length > 10 && newTaskTitle.length < 15 &&
                 <div>Recommended task length 10 characters</div>}
