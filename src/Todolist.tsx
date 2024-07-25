@@ -1,11 +1,12 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button} from "./Button";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+
 
 
 type TodolistPropsType = {
@@ -112,19 +113,35 @@ export function Todolist(props: TodolistPropsType) {
             <AddItemForm addItem={addTaskHandler}/>
 
             {taskslist}
+
             <div>
-                <Button
-                    title={'All'}
-                    onclickHandler={() => changeFilterTasksHandler("all")}
-                    classes={filter === "all" ? "bth-active-filter" : ""}/>
-                <Button title={'Active'}
-                        onclickHandler={() => changeFilterTasksHandler("active")}
-                        classes={filter === "active" ? "bth-active-filter" : ""}
-                />
-                <Button title={'Completed'}
-                        onclickHandler={() => changeFilterTasksHandler("completed")}
-                        classes={filter === "completed" ? "bth-active-filter" : ""}
-                />
+                {/*<Button*/}
+                {/*    title={'All'}*/}
+                {/*    onclickHandler={() => changeFilterTasksHandler("all")}*/}
+                {/*    classes={filter === "all" ? "bth-active-filter" : ""}/>*/}
+                {/*<Button title={'Active'}*/}
+                {/*        onclickHandler={() => changeFilterTasksHandler("active")}*/}
+                {/*        classes={filter === "active" ? "bth-active-filter" : ""}*/}
+                {/*/>*/}
+                {/*<Button title={'Completed'}*/}
+                {/*        onclickHandler={() => changeFilterTasksHandler("completed")}*/}
+                {/*        classes={filter === "completed" ? "bth-active-filter" : ""}*/}
+                {/*/>*/}
+
+                <Button variant={filter === "all" ?"contained":"outlined"}
+                        color={"inherit"}
+                        onClick={() => changeFilterTasksHandler("all")}
+                >All</Button>
+                <Button variant={filter === "active" ?"contained":"outlined"}
+                        color={"primary"}
+                        onClick={() => changeFilterTasksHandler("active")}
+                >Active</Button>
+                <Button variant={filter === "completed" ?"contained":"outlined"}
+                        color={"secondary"}
+                        onClick={() => changeFilterTasksHandler("completed")}
+                >Completed</Button>
+
+
             </div>
         </div>
 
