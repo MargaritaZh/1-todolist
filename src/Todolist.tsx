@@ -102,7 +102,7 @@ export function Todolist(props: TodolistPropsType) {
                 <EditableSpan oldTitle={title} upDateItem={upDateTodolistHandler}/>
 
                 {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
-                <IconButton aria-label="delete" size="small"
+                <IconButton aria-label="delete"
                             onClick={() => props.deleteTodolist(props.todolistId)}>
                     <DeleteIcon fontSize="inherit"/>
                 </IconButton>
