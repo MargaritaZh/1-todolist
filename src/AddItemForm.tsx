@@ -59,7 +59,6 @@ export const AddItemForm = (props: Props) => {
                        size={"small"}
                        error={!!error}
 
-
                        value={newTaskTitle}
                        onChange={changeNewItemTitleHandler}
                        onKeyUp={addItemOnKeyUpHandler}
