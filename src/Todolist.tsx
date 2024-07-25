@@ -4,6 +4,9 @@ import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Task} from "./Task";
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
 
 type TodolistPropsType = {
     filter: FilterValuesType
@@ -35,15 +38,9 @@ export function Todolist(props: TodolistPropsType) {
         filter,
         changeFilter,
         changeTaskStatus,
-        deleteTodolist,
         upDateTodolist,
 
     } = props;
-
-
-    // const [newTaskTitle, setNewTaskTitle] = useState("")
-
-    // const [error, setError] = useState<string | null>(null)
 
 
     const changeFilterTasksHandler = (filter: FilterValuesType) => {
@@ -59,35 +56,8 @@ export function Todolist(props: TodolistPropsType) {
             return allTasts
         }
     }
+
     const filteredTasks: Array<TaskType> = getFilteredTasks(tasks, filter)
-
-    ////
-
-    // const addNewTaskHandler = () => {
-    //     const trimmednewTaskTitle = newTaskTitle.trim()
-    //     if (trimmednewTaskTitle !== "") {
-    //         addTask(todolistId,newTaskTitle)
-    //     } else {
-    //         setError("Title is required")
-    //     }
-    //     setNewTaskTitle("")
-    // }
-    ////
-
-    // const addTaskOnKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    //     if (e.key === "Enter" && newTaskTitle) {
-    //         addNewTaskHandler()
-    //     }
-    // }
-
-    // const changeNewTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    //     error && setError(null)
-    //     setNewTaskTitle(e.currentTarget.value)
-    // }
-
-    // const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
-
-
 
 
     const taskslist: JSX.Element = filteredTasks.length === 0
@@ -105,7 +75,6 @@ export function Todolist(props: TodolistPropsType) {
                     props.upDateTask(props.todolistId, task.id, newTitle)
                 }
 
-
                 return <Task taskId={task.id}
                              isDone={task.isDone}
                              taskTitle={task.title}
@@ -113,20 +82,6 @@ export function Todolist(props: TodolistPropsType) {
                              upDateItemHandler={upDateItemHandler}
                              removeTaskHandler={removeTaskHandler}
                 />
-                    // <li key={task.id}>
-                    //     <input
-                    //         type="checkbox"
-                    //         checked={task.isDone}
-                    //         onChange={changeTaskStatusHandler}
-                    //     />
-                    //     {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
-                    //     <EditableSpan
-                    //         oldTitle={task.title}
-                    //         isDone={task.isDone}
-                    //         upDateItem={upDateItemHandler}/>
-                    //     <Button title={"X"} onclickHandler={removeTaskHandler}/>
-                    //     {/*<button onClick={() => removeTasks(task.id)}>x</button>*/}
-                    // </li>
 
             })}
         </ul>
@@ -143,32 +98,18 @@ export function Todolist(props: TodolistPropsType) {
 
         <div className="todolist">
             <div>
-                <EditableSpan oldTitle={title} upDateItem={upDateTodolistHandler}/>
                 {/*<h3>{title}</h3>*/}
-                <button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>
+                <EditableSpan oldTitle={title} upDateItem={upDateTodolistHandler}/>
+
+                {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
+                <IconButton aria-label="delete" size="small"
+                            onClick={() => props.deleteTodolist(props.todolistId)}>
+                    <DeleteIcon fontSize="inherit"/>
+                </IconButton>
+
             </div>
 
             <AddItemForm addItem={addTaskHandler}/>
-            {/*<div>*/}
-            {/*    <input*/}
-            {/*        value={newTaskTitle}*/}
-            {/*        onChange={changeNewTaskTitleHandler}*/}
-            {/*        onKeyUp={addTaskOnKeyUpHandler}*/}
-            {/*        className={error ? "task-input-error" : ""}*/}
-            {/*    />*/}
-            {/*    <Button*/}
-            {/*        title={'+'}*/}
-            {/*        onclickHandler={addNewTaskHandler}*/}
-            {/*        disabled={isAddBthDisabled}*/}
-            {/*    />*/}
-            {/*    {error && <div style={{color: "red"}}>{error}</div>}*/}
-
-            {/*    {newTaskTitle.trim().length > 10 && newTaskTitle.length < 15 &&*/}
-            {/*        <div>Recommended task length 10 characters</div>}*/}
-
-            {/*    {newTaskTitle.trim().length >= 15 && <div style={{color: "red"}}>Title is too long</div>}*/}
-            {/*</div>*/}
-
 
             {taskslist}
             <div>
