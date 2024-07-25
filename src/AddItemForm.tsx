@@ -1,5 +1,6 @@
-import {Button} from "./Button";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import Button from '@mui/material/Button';
+
 
 type Props = {
     addItem:(title: string)=>void
@@ -33,6 +34,15 @@ export const AddItemForm = (props: Props) => {
     }
 
     const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
+
+
+    const buttonStyles={
+        maxWidth: "30px",
+        maxHeight: "30px",
+        minWidth: "30px",
+        minHeight: "30px",
+    }
+
     return (
         <div>
             <input
@@ -41,11 +51,12 @@ export const AddItemForm = (props: Props) => {
                 onKeyUp={addItemOnKeyUpHandler}
                 className={error ? "task-input-error" : ""}
             />
-            <Button
-                title={'+'}
-                onclickHandler={addNewItemHandler}
-                disabled={isAddBthDisabled}
-            />
+            <Button variant="contained"
+                    onClick={addNewItemHandler}
+                    size="small"
+                    style={buttonStyles}
+            >+</Button>
+
             {error && <div style={{color: "red"}}>{error}</div>}
 
             {newTaskTitle.trim().length > 10 && newTaskTitle.length < 15 &&
