@@ -3,6 +3,7 @@ import {EditableSpan} from "./EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
+import ListItem from '@mui/material/ListItem';
 
 type Props = {
     taskId:string
@@ -14,7 +15,7 @@ type Props = {
 };
 export const Task = (props: Props) => {
     return (
-        <li key={props.taskId}>
+        <ListItem key={props.taskId}>
             {/*<input*/}
             {/*    type="checkbox"*/}
             {/*    checked={props.isDone}*/}
@@ -35,6 +36,6 @@ export const Task = (props: Props) => {
             >
                 <DeleteIcon fontSize="inherit" />
             </IconButton>
-        </li>
+        </ListItem>
     );
 };

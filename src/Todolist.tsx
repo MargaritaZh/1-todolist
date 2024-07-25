@@ -6,6 +6,8 @@ import {Task} from "./Task";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+
 
 
 
@@ -63,7 +65,7 @@ export function Todolist(props: TodolistPropsType) {
 
     const taskslist: JSX.Element = filteredTasks.length === 0
         ? <span>Your tasklist is empty</span>
-        : <ul>
+        : <List>
             {filteredTasks.map((task) => {
 
                 const removeTaskHandler = () => removeTask(todolistId, task.id)
@@ -85,7 +87,7 @@ export function Todolist(props: TodolistPropsType) {
                 />
 
             })}
-        </ul>
+        </List>
 
     const addTaskHandler = (title: string) => {
         addTask(props.todolistId, title)
