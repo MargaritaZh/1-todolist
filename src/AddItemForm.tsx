@@ -34,8 +34,6 @@ export const AddItemForm = (props: Props) => {
         }
     }
 
-    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
-
 
     const buttonStyles = {
         maxWidth: "38px",
@@ -43,6 +41,7 @@ export const AddItemForm = (props: Props) => {
         minWidth: "38px",
         minHeight: "38px",
     }
+    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
 
     return (
         <div>
@@ -63,7 +62,7 @@ export const AddItemForm = (props: Props) => {
                        onChange={changeNewItemTitleHandler}
                        onKeyUp={addItemOnKeyUpHandler}
             />
-            <Button variant="contained"
+            <Button variant="contained" disabled={isAddBthDisabled}
                     onClick={addNewItemHandler}
                     size="small"
                     style={buttonStyles}
@@ -73,7 +72,6 @@ export const AddItemForm = (props: Props) => {
 
             {newTaskTitle.trim().length > 10 && newTaskTitle.length < 15 &&
                 <div>Recommended task length 10 characters</div>}
-
             {newTaskTitle.trim().length >= 15 && <div style={{color: "red"}}>Title is too long</div>}
         </div>
     );
