@@ -4,6 +4,9 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
+import {getListItemSx} from "./Todolist.styles";
+
+
 
 type Props = {
     taskId: string
@@ -15,11 +18,7 @@ type Props = {
 };
 export const Task = (props: Props) => {
     return (
-        <ListItem key={props.taskId} sx={{
-            padding: "0px",
-            justifyContent: "space-between",
-            opacity: props.isDone ? 0.5 : 1,
-        }}>
+        <ListItem key={props.taskId} sx={getListItemSx(props.isDone)}>
 
             <div>
                 {/*<input*/}

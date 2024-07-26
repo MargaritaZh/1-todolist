@@ -7,6 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
+import Box from '@mui/material/Box';
+import {filterButtonContainerSx} from "./Todolist.styles";
+
 
 
 type TodolistPropsType = {
@@ -116,7 +119,7 @@ export function Todolist(props: TodolistPropsType) {
 
             {taskslist}
 
-            <div>
+            <Box sx={filterButtonContainerSx}>
                 {/*<Button*/}
                 {/*    title={'All'}*/}
                 {/*    onclickHandler={() => changeFilterTasksHandler("all")}*/}
@@ -143,10 +146,8 @@ export function Todolist(props: TodolistPropsType) {
                         onClick={() => changeFilterTasksHandler("completed")}
                 >Completed</Button>
 
-
-            </div>
+            </Box>
         </div>
 
     )
-
 }
