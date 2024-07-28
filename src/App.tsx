@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -160,7 +161,7 @@ function App() {
         palette: {
             mode: themeMode === "light" ? "light" : "dark",
             primary: {
-                main: '#af44af',
+                main: '#cf45cf',
             },
         },
     });
@@ -173,6 +174,7 @@ function App() {
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
+                <CssBaseline/>
                 <Container fixed>
                     <ButtonAppBar changeModeHandler={changeModeHandler}/>
 
