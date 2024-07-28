@@ -22,6 +22,8 @@ export type TasksStateType = {
     [todolistId: string]: Array<TaskType>
 }
 
+type ThemeMode = "dark" | "light"
+
 function App() {
     const todolistId1 = v1()
     const todolistId2 = v1()
@@ -152,21 +154,28 @@ function App() {
 
     }
 
+    const [themeMode, setThemeMode] = useState<ThemeMode>("light")
 
     const theme = createTheme({
         palette: {
+            mode: themeMode === "light" ? "light" : "dark",
             primary: {
-                main: '#be9bbe',
+                main: '#af44af',
             },
         },
     });
+
+    const changeModeHandler = () => {
+        setThemeMode(themeMode == "light" ? "dark" : "light")
+    }
 
 
     return (
         <div className="App">
             <ThemeProvider theme={theme}>
                 <Container fixed>
-                    <ButtonAppBar/>
+                    <ButtonAppBar changeModeHandler={changeModeHandler}/>
+
                     <Grid container sx={{marginBottom: "20px"}}>
                         <AddItemForm addItem={addTodolists}/>
                     </Grid>
