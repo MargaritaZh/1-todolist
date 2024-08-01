@@ -67,9 +67,13 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
                 title: action.payload.title,
                 filter: "all",
             }
-            return [...state,newTodo] // логика по добавлению тудулиста
+            return [...state, newTodo] // логика по добавлению тудулиста
         }
+        case "CHANGE-TODOLIST-TITLE": {
 
+
+            return state
+        }
 
         default:
             return state
