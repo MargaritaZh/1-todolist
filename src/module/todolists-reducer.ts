@@ -82,11 +82,53 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
             return [...state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)]
         }
 
-
         default:
             return state
         // throw new Error("I don't understand this type")
     }
 }
+
+
+export const deleteTodolistAC=(todolistID1:string)=>{
+    return  {
+        type: 'REMOVE-TODOLIST',
+        payload: {
+            id: todolistID1,
+        }
+    } as const
+}
+
+export const addTodolistsAC=()=>{
+    return {
+        type: 'ADD-TODOLIST',
+        payload: {
+            title: 'New Todolist',
+        },
+    } as const
+}
+
+export const upDateTodolistAC=(todolistId:string)=>{
+    return{
+        type: 'CHANGE-TODOLIST-TITLE',
+        payload: {
+            id: todolistId,
+            title: 'New Todolist',
+        },
+    } as const
+}
+
+
+export const changeFilterAC=(todolistId2:string)=>{
+    return  {
+        type: "CHANGE-TODOLIST-FIlTER",
+        payload: {
+            id: todolistId2,
+            filter: 'completed',
+        },
+    } as const
+}
+
+
+
 
 
