@@ -13,7 +13,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 export type FilterValuesType = "all" | "active" | "completed"
 
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
