@@ -22,7 +22,7 @@ export type ChangeTodolistTitleActionType = {
     }
 }
 export type ChangeTodolistFilterActionType = {
-    type: "CHANGE-TODOLIST-FITER"
+    type: "CHANGE-TODOLIST-FIlTER"
     payload: {
         id: string
         filter: FilterValuesType
@@ -70,13 +70,23 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
             return [...state, newTodo] // логика по добавлению тудулиста
         }
         case "CHANGE-TODOLIST-TITLE": {
+            // setTodolists(
+            //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
 
-
-            return state
+            return state.map(el => el.id === action.payload.id ? {...el, title: action.payload.title} : el)
         }
+
+        case "CHANGE-TODOLIST-FIlTER": {
+            // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
+
+            return [...state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)]
+        }
+
 
         default:
             return state
         // throw new Error("I don't understand this type")
     }
 }
+
+
