@@ -88,6 +88,7 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
     }
 }
 
+//as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
 export const deleteTodolistAC=(todolistID1:string)=>{
     return  {
