@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {TasksStateType} from "../App";
-import {addTasktAC, removeTasktAC, tasksReducer} from "./tasks-reducer";
+import {addTasktAC, changeTaskStatusAC, removeTasktAC, tasksReducer} from "./tasks-reducer";
 
 test("correct task should be deleted from correct array", () => {
 
@@ -68,4 +68,28 @@ test("correct task should be added to correct array", () => {
 })
 
 
+test("status of specified task should be changed", () => {
+
+    //1. стартовый state
+    const startState: TasksStateType = {
+        "todolistId1": [
+            {id: "1", title: "HTML & CSS", isDone: true},
+            {id: "2", title: "JS & TS", isDone: true},
+            {id: "3", title: "React", isDone: false}],
+        "todolistId2": [
+            {id: '1', title: "Beer", isDone: true},
+            {id: '2', title: "Cheeps", isDone: true},
+            {id: '3', title: "Fish", isDone: false}],
+    }
+
+    //2. действие   заменим action на вызов функции Action Creater (changeTaskStatusAC) и передадим в нее параметр (todolistId: string, taskId: string, newIsDoneValue: boolean)
+
+    const action = changeTaskStatusAC("todolistId2", "2", false)
+    const endState = tasksReducer(startState, action)
+
+
+//3. Проверяем, что наши действия (изменения state) соответствуют ожиданиям
+    expect(endState["todolistId1"][1].isDone).toBe(true)
+    expect(endState["todolistId2"][1].isDone).toBe(false)
+})
 
