@@ -54,7 +54,7 @@ test('correct todolist should be added', () => {
     // const endState = todolistReducer(startState, action)
 
     //2.  действиедействие   заменим action на вызов функции Action Creater (addTodolistsAC) и передадим в нее параметр (newTitle)
-    const endState = todolistReducer(startState, addTodolistsAC())
+    const endState = todolistReducer(startState, addTodolistsAC("New Todolist"))
 
 //3. Проверяем, что наши действия (изменения state) соответствуют ожиданиям
     expect(endState.length).toBe(3)

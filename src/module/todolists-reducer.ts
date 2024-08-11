@@ -12,6 +12,7 @@ export type AddTodolistActionType = {
     type: "ADD-TODOLIST"
     payload: {
         title: string
+        todolistId: string
     }
 }
 export type ChangeTodolistTitleActionType = {
@@ -61,9 +62,14 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
             // }
             // setTodolists([...todolists,newTodo])
 
-            const newId = v1()
+
+
+            ////создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
+
+            // const newId = v1()
             const newTodo: TodolistType = {
-                id: newId,
+                // id: newId,
+                id: action.payload.todolistId,
                 title: action.payload.title,
                 filter: "all",
             }
@@ -90,8 +96,8 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
 
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
-export const deleteTodolistAC=(todolistID1:string)=>{
-    return  {
+export const deleteTodolistAC = (todolistID1: string): RemoveTodolistActionType => {
+    return {
         type: 'REMOVE-TODOLIST',
         payload: {
             id: todolistID1,
@@ -99,17 +105,18 @@ export const deleteTodolistAC=(todolistID1:string)=>{
     } as const
 }
 
-export const addTodolistsAC=()=>{
+export const addTodolistsAC = (newTitle: string): AddTodolistActionType => {
     return {
         type: 'ADD-TODOLIST',
         payload: {
-            title: 'New Todolist',
+            title: newTitle,
+            todolistId: v1()
         },
     } as const
 }
 
-export const upDateTodolistAC=(todolistId:string)=>{
-    return{
+export const upDateTodolistAC = (todolistId: string): ChangeTodolistTitleActionType => {
+    return {
         type: 'CHANGE-TODOLIST-TITLE',
         payload: {
             id: todolistId,
@@ -119,8 +126,8 @@ export const upDateTodolistAC=(todolistId:string)=>{
 }
 
 
-export const changeFilterAC=(todolistId2:string)=>{
-    return  {
+export const changeFilterAC = (todolistId2: string): ChangeTodolistFilterActionType => {
+    return {
         type: "CHANGE-TODOLIST-FIlTER",
         payload: {
             id: todolistId2,

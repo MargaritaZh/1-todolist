@@ -1,12 +1,16 @@
 import {TasksStateType} from "../App";
 import {TaskType} from "../Todolist";
 import {v1} from "uuid";
+import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
 
 export type removeTaskActionType = ReturnType<typeof removeTasktAC>
 export type addTaskACActionType = ReturnType<typeof addTasktAC>
 export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 
-type ActionsType = removeTaskActionType | addTaskACActionType | changeTaskStatusActionType
+export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
+
+type ActionsType = removeTaskActionType | addTaskACActionType | changeTaskStatusActionType | changeTaskTitleActionType|AddTodolistActionType
+
 
 export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
     switch (action.type) {
@@ -61,6 +65,34 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
                 } : el)
             }
         }
+        case "CHANGE-TASK-TITLE": {
+            //из App
+            // setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
+            //
+            return {
+                ...state,
+                [action.todolistId]: state[action.todolistId].map(el => el.id === action.taskId ? {
+                    ...el,
+                    title: action.newTitle
+                } : el)
+            }
+        }
+        case "ADD-TODOLIST":{
+            // setTasks({
+            //     ...tasks, [newId]: [
+            //         {id: v1(), title: "HTML & CSS", isDone: true},
+            //         {id: v1(), title: "JS & TS", isDone: true},
+            //         {id: v1(), title: "React", isDone: false}]
+            // })
+
+            return {
+                ...state,
+                // [v1()]: []
+                //создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
+                [action.payload.todolistId]: []
+            }
+        }
+
         default:
             return state
         // throw new Error("I don't understand this type")
@@ -90,6 +122,14 @@ export const changeTaskStatusAC = (todolistId: string, taskId: string, newIsDone
         // type: 'CHANGE-TASK-STATUS', todolistId: todolistId, taskId: taskId,newIsDoneValue:newIsDoneValue
 
         type: 'CHANGE-TASK-STATUS', todolistId, taskId, newIsDoneValue
+    } as const
+}
+
+
+export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: string) => {
+    return {
+        // type: 'CHANGE-TASK-TITLE', todolistId: todolistId, taskId: taskId,newTitle:newTitle
+        type: 'CHANGE-TASK-TITLE', todolistId, taskId, newTitle
     } as const
 }
 
