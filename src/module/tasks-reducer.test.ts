@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 import {TasksStateType} from "../App";
 import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, removeTasktAC, tasksReducer} from "./tasks-reducer";
-import {addTodolistsAC} from "./todolists-reducer";
+import {addTodolistsAC, deleteTodolistAC} from "./todolists-reducer";
 
 test("correct task should be deleted from correct array", () => {
 
@@ -147,7 +147,7 @@ test("new array should be added when new todolist is added", () => {
 
     const keys = Object.keys(endState)
     const newKey = keys.find(k => k != "todolistId1" && k != "todolistId2")
-    if(!newKey){
+    if (!newKey) {
         throw Error("new key should be added")
     }
 
@@ -156,5 +156,35 @@ test("new array should be added when new todolist is added", () => {
 })
 
 
+test("property with todolist should be deleted", () => {
+
+    //1. стартовый state
+    const startState: TasksStateType = {
+        "todolistId1": [
+            {id: "1", title: "HTML & CSS", isDone: true},
+            {id: "2", title: "JS & TS", isDone: true},
+            {id: "3", title: "React", isDone: false}],
+        "todolistId2": [
+            {id: '1', title: "Beer", isDone: true},
+            {id: '2', title: "Cheeps", isDone: true},
+            {id: '3', title: "Fish", isDone: false}],
+    }
+
+    //2. действие   заменим action на вызов OБЩЕЙ функции Action Creater () и передадим в нее параметр
+
+
+    const action = deleteTodolistAC("todolistId2")
+
+
+    const endState = tasksReducer(startState, action)
+
+
+//3. Проверяем, что наши действия (изменения state) соответствуют ожиданиям
+
+    const keys = Object.keys(endState)
+
+    expect(keys.length).toBe(1)
+    expect(endState["todolistId2"]).not.toBeDefined()
+})
 
 
