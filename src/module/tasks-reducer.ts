@@ -9,7 +9,7 @@ export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 
 export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
-type ActionsType = removeTaskActionType | addTaskACActionType | changeTaskStatusActionType | changeTaskTitleActionType|AddTodolistActionType
+type ActionsType = removeTaskActionType | addTaskACActionType | changeTaskStatusActionType | changeTaskTitleActionType|AddTodolistActionType|RemoveTodolistActionType
 
 
 export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
@@ -91,6 +91,14 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
                 //создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
                 [action.payload.todolistId]: []
             }
+        }
+
+        case "REMOVE-TODOLIST":{
+            //из APP
+            // delete tasks[todolistId]
+           const copyState= {...state}
+            delete copyState[action.payload.id]
+            return copyState
         }
 
         default:
