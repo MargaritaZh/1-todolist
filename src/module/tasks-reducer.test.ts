@@ -3,6 +3,8 @@ import {TasksStateType} from "../App";
 import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, removeTasktAC, tasksReducer} from "./tasks-reducer";
 import {addTodolistsAC, deleteTodolistAC} from "./todolists-reducer";
 
+
+
 test("correct task should be deleted from correct array", () => {
 
     let todolistId1 = v1()

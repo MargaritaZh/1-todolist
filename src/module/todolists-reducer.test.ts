@@ -84,7 +84,7 @@ test('correct todolist should change its name', () => {
     //
     // const endState = todolistReducer(startState, action)
 
-    const endState = todolistReducer(startState, upDateTodolistAC(todolistID2))
+    const endState = todolistReducer(startState, upDateTodolistAC(todolistID2,'New Todolist'))
 
     //3. Проверяем, что наши действия (изменения state) соответствуют ожиданиям
     expect(endState[0].title).toBe('What to learn')
@@ -108,7 +108,7 @@ test('correct filter of todolist should be changed', () => {
 
     // const endState = todolistReducer(startState, action)
 
-    const endState = todolistReducer(startState, changeFilterAC(todolistID2))
+    const endState = todolistReducer(startState, changeFilterAC(todolistID2,"completed"))
 
     expect(endState[0].filter).toBe('all')
     // expect(endState[1].filter).toBe(action.payload.filter)

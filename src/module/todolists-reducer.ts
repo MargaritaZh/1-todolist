@@ -63,7 +63,6 @@ export const todolistReducer = (state: TodolistType[] = initialState, action: Ac
             // setTodolists([...todolists,newTodo])
 
 
-
             ////создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
 
             // const newId = v1()
@@ -115,23 +114,23 @@ export const addTodolistsAC = (newTitle: string): AddTodolistActionType => {
     } as const
 }
 
-export const upDateTodolistAC = (todolistId: string): ChangeTodolistTitleActionType => {
+export const upDateTodolistAC = (todolistId: string, newTitle: string): ChangeTodolistTitleActionType => {
     return {
         type: 'CHANGE-TODOLIST-TITLE',
         payload: {
             id: todolistId,
-            title: 'New Todolist',
+            title: newTitle,
         },
     } as const
 }
 
 
-export const changeFilterAC = (todolistId2: string): ChangeTodolistFilterActionType => {
+export const changeFilterAC = (todolistId: string, filter: FilterValuesType): ChangeTodolistFilterActionType => {
     return {
         type: "CHANGE-TODOLIST-FIlTER",
         payload: {
-            id: todolistId2,
-            filter: 'completed',
+            id: todolistId,
+            filter: filter,
         },
     } as const
 }
