@@ -9,10 +9,19 @@ export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 
 export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
-type ActionsType = removeTaskActionType | addTaskACActionType | changeTaskStatusActionType | changeTaskTitleActionType|AddTodolistActionType|RemoveTodolistActionType
+type ActionsType =
+    removeTaskActionType
+    | addTaskACActionType
+    | changeTaskStatusActionType
+    | changeTaskTitleActionType
+    | AddTodolistActionType
+    | RemoveTodolistActionType
 
 
-export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+
+const initialState: TasksStateType = {}
+
+export const tasksReducer = (state= initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case "REMOVE-TASK": {
             //из App
@@ -77,7 +86,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
                 } : el)
             }
         }
-        case "ADD-TODOLIST":{
+        case "ADD-TODOLIST": {
             // setTasks({
             //     ...tasks, [newId]: [
             //         {id: v1(), title: "HTML & CSS", isDone: true},
@@ -93,10 +102,10 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
             }
         }
 
-        case "REMOVE-TODOLIST":{
+        case "REMOVE-TODOLIST": {
             //из APP
             // delete tasks[todolistId]
-           const copyState= {...state}
+            const copyState = {...state}
             delete copyState[action.payload.id]
             return copyState
         }
