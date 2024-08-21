@@ -57,6 +57,9 @@ export const tasksReducer = (state= initialState, action: ActionsType): TasksSta
                 ...state,
                 [action.todolistId]: [newTask, ...state[action.todolistId]]
             }
+
+
+
         }
         case "CHANGE-TASK-STATUS": {
             //из App
@@ -73,6 +76,10 @@ export const tasksReducer = (state= initialState, action: ActionsType): TasksSta
                     isDone: action.newIsDoneValue
                 } : el)
             }
+
+
+
+
         }
         case "CHANGE-TASK-TITLE": {
             //из App
