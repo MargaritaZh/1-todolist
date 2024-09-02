@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
@@ -6,7 +6,10 @@ import TextField from '@mui/material/TextField';
 type Props = {
     addItem: (title: string) => void
 };
-export const AddItemForm = (props: Props) => {
+
+export const AddItemForm = memo((props: Props) => {
+
+    console.log("AddItemForm")
 
     const [newTaskTitle, setNewTaskTitle] = useState("")
 
@@ -29,6 +32,7 @@ export const AddItemForm = (props: Props) => {
     }
 
     const addItemOnKeyUpHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+
         if (e.key === "Enter" && newTaskTitle) {
             addNewItemHandler()
         }
@@ -75,5 +79,5 @@ export const AddItemForm = (props: Props) => {
             {newTaskTitle.trim().length >= 15 && <div style={{color: "red"}}>Title is too long</div>}
         </div>
     );
-};
+});
 

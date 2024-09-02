@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import './App.css';
 import {TaskType} from "./Todolist";
 import {v1} from "uuid";
@@ -46,6 +46,32 @@ function AppWithRedux() {
 
     const dispatch = useDispatch()
 
+    const addTodolists =useCallback( (title: string) => {
+        //один  и тот же ключ в двух местах
+        // const newId = v1()
+        //
+        // const newTodo: TodolistType = {
+        //     id: newId,
+        //     title: title,
+        //     filter: "all",
+        // }
+        // setTodolists([newTodo, ...todolists])
+        // setTasks({
+        //     ...tasks, [newId]: [
+        //         {id: v1(), title: "HTML & CSS", isDone: true},
+        //         {id: v1(), title: "JS & TS", isDone: true},
+        //         {id: v1(), title: "React", isDone: false}]
+        // })
+        //--
+        // const action = addTodolistsAC(title)
+        // dispatchToTodolistRedicer(action)
+        // dispatchToTasksReducer(action)
+        //--
+        const action = addTodolistsAC(title)
+        dispatch(action)
+
+    },[dispatch])
+
     //
     // const [todolists, dispatchToTodolistRedicer] = useReducer(todolistReducer,
     //     [
@@ -91,26 +117,27 @@ function AppWithRedux() {
     }
 
     //create
-    const addTask = (todolistId: string, title: string) => {
-        // const newTask: TaskType = {
-        //     id: v1(),
-        //     title: title,
-        //     isDone: false
-        // }
-        //
-        // setTasks({
-        //     ...tasks,
-        //     [todolistId]: [newTask, ...tasks[todolistId]]
-        // })
-        //---
-        //         const action = addTasktAC(todolistId,title)
-        //         dispatchToTasksReducer(action)
-        //      --
-        const action = addTasktAC(todolistId, title)
-        dispatch(action)
-        //--
+    // const addTask = (todolistId: string, title: string) => {
+    //     // const newTask: TaskType = {
+    //     //     id: v1(),
+    //     //     title: title,
+    //     //     isDone: false
+    //     // }
+    //     //
+    //     // setTasks({
+    //     //     ...tasks,
+    //     //     [todolistId]: [newTask, ...tasks[todolistId]]
+    //     // })
+    //     //---
+    //     //         const action = addTasktAC(todolistId,title)
+    //     //         dispatchToTasksReducer(action)
+    //     //      --
+    //     const action = addTasktAC(todolistId, title)
+    //     dispatch(action)
+    //     //--
+    //
+    // }
 
-    }
     const changeFilter = (todolistId: string, filter: FilterValuesType) => {
         // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
         //--
@@ -149,31 +176,9 @@ function AppWithRedux() {
         dispatch(action)
     }
 
-    const addTodolists = (title: string) => {
-        //один  и тот же ключ в двух местах
-        // const newId = v1()
-        //
-        // const newTodo: TodolistType = {
-        //     id: newId,
-        //     title: title,
-        //     filter: "all",
-        // }
-        // setTodolists([newTodo, ...todolists])
-        // setTasks({
-        //     ...tasks, [newId]: [
-        //         {id: v1(), title: "HTML & CSS", isDone: true},
-        //         {id: v1(), title: "JS & TS", isDone: true},
-        //         {id: v1(), title: "React", isDone: false}]
-        // })
-        //--
-        // const action = addTodolistsAC(title)
-        // dispatchToTodolistRedicer(action)
-        // dispatchToTasksReducer(action)
-        //--
-        const action = addTodolistsAC(title)
-        dispatch(action)
 
-    }
+
+
     const upDateTask = (todolistId: string, id: string, newTitle: string) => {
         // setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
         //--
