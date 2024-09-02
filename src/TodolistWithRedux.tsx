@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useCallback} from "react";
+import React, {ChangeEvent, memo, useCallback} from "react";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -25,7 +25,8 @@ export type TaskType = {
     isDone: boolean;
 }
 
-export function TodolistWithRedux(props: TodolistPropsType) {
+export const TodolistWithRedux=React.memo(function(props: TodolistPropsType) {
+
     const {todolist} = props;
     const {id, title, filter} = todolist
 
@@ -128,4 +129,4 @@ export function TodolistWithRedux(props: TodolistPropsType) {
             </Box>
         </div>
     )
-}
+})
