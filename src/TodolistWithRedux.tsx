@@ -81,10 +81,10 @@ export function TodolistWithRedux(props: TodolistPropsType) {
             })}
         </List>
 
-    const addTaskHandler = useCallback((title: string) => {
+    const addTaskHandler = (title: string) => {
         // addTask(props.todolistId, title)
         dispatch(addTasktAC(id, title))
-    },[dispatch])
+    }
 
 
     const upDateTodolistHandler = (newTitle: string) => {
