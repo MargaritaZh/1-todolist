@@ -15,6 +15,7 @@ import {AppRootStateType} from "./module/store";
 import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, removeTasktAC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
+import {TaskWithRedux} from "./TaskWithRedux";
 
 type TodolistPropsType = {
     todolist: TodolistType
@@ -51,32 +52,42 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     }
 
 
+
+
     const taskslist: JSX.Element = tasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <List>
             {tasks.map((task) => {
 
-                // const removeTaskHandler = () => removeTask(todolistId, task.id)
-                const removeTaskHandler = () => dispatch(removeTasktAC(id, task.id))
+                // // const removeTaskHandler = () => removeTask(todolistId, task.id)
+                // const removeTaskHandler = () => dispatch(removeTasktAC(id, task.id))
+                //
+                // const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                //     // changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
+                //     dispatch(changeTaskStatusAC(id, task.id, e.currentTarget.checked))
+                // }
+                //
+                // const upDateItemHandler = (newTitle: string) => {
+                //     // props.upDateTask(props.todolistId, task.id, newTitle)
+                //     dispatch(changeTaskTitleAC(id, task.id, newTitle))
+                // }
 
-                const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    // changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
-                    dispatch(changeTaskStatusAC(id, task.id, e.currentTarget.checked))
-                }
-
-                const upDateItemHandler = (newTitle: string) => {
-                    // props.upDateTask(props.todolistId, task.id, newTitle)
-                    dispatch(changeTaskTitleAC(id, task.id, newTitle))
-                }
-
+                // return (
+                //     <Task
+                //         key={task.id}
+                //           taskId={task.id}
+                //           isDone={task.isDone}
+                //           taskTitle={task.title}
+                //           changeTaskStatusHandler={changeTaskStatusHandler}
+                //           upDateItemHandler={upDateItemHandler}
+                //           removeTaskHandler={removeTaskHandler}
+                //     />)
                 return (
-                    <Task key={task.id}
-                          taskId={task.id}
-                          isDone={task.isDone}
-                          taskTitle={task.title}
-                          changeTaskStatusHandler={changeTaskStatusHandler}
-                          upDateItemHandler={upDateItemHandler}
-                          removeTaskHandler={removeTaskHandler}
+                    <TaskWithRedux
+                        key={task.id}
+                        todolistId={todolist.id}
+                          task={task}
+
                     />)
 
             })}
@@ -88,10 +99,10 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     }
 
 
-    const upDateTodolistHandler = (newTitle: string) => {
+    const upDateTodolistHandler = useCallback((newTitle: string) => {
         // upDateTodolist(props.todolistId, newTitle)
         dispatch(upDateTodolistAC(id, newTitle))
-    }
+    }, [dispatch])
 
     return (
 
@@ -124,13 +135,13 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                 <ButtonWithMemoPropsType
                     title={"Active"}
                     variant={filter === "active" ? "contained" : "outlined"}
-                        color={"primary"}
+                    color={"primary"}
                     onclickHandler={() => changeFilterTasksHandler("active")}
                 />
                 <ButtonWithMemoPropsType
                     title={"Completed"}
                     variant={filter === "completed" ? "contained" : "outlined"}
-                        color={"secondary"}
+                    color={"secondary"}
                     onclickHandler={() => changeFilterTasksHandler("completed")}
                 />
             </Box>
@@ -140,11 +151,11 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 type  ButtonWithMemoPropsType = ButtonPropsType & {
     variant: string;
-    color:"inherit"|"primary"|"secondary";
+    color: "inherit" | "primary" | "secondary";
     onclickHandler: () => void;
 }
 
-const ButtonWithMemoPropsType = memo(({title, variant, color,onclickHandler,...props} : ButtonWithMemoPropsType) => {
+const ButtonWithMemoPropsType = memo(({title, variant, color, onclickHandler, ...props}: ButtonWithMemoPropsType) => {
     return (
         <Button
             variant={variant as "text" | "outlined" | "contained"}

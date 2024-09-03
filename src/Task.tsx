@@ -1,4 +1,4 @@
-import {ChangeEvent} from "react";
+import {ChangeEvent, memo} from "react";
 import {EditableSpan} from "./EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,7 +16,10 @@ type Props = {
     upDateItemHandler: (newTitle: string) => void
     removeTaskHandler: () => void
 };
-export const Task = (props: Props) => {
+export const Task = memo((props: Props) => {
+
+
+
     return (
         <ListItem key={props.taskId} sx={getListItemSx(props.isDone)}>
 
@@ -27,22 +30,25 @@ export const Task = (props: Props) => {
                 {/*    onChange={props.changeTaskStatusHandler}*/}
                 {/*/>*/}
                 <Checkbox checked={props.isDone}
+                          // onChange={props.changeTaskStatusHandler}/>
                           onChange={props.changeTaskStatusHandler}/>
 
                 {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
                 <EditableSpan
                     oldTitle={props.taskTitle}
                     isDone={props.isDone}
+                    // upDateItem={props.upDateItemHandler}/>
                     upDateItem={props.upDateItemHandler}/>
 
             </div>
 
             {/*<Button title={"X"} onclickHandler={props.removeTaskHandler}/>*/}
             <IconButton aria-label="delete"
+                        // onClick={props.removeTaskHandler}
                         onClick={props.removeTaskHandler}
             >
                 <DeleteIcon fontSize="inherit"/>
             </IconButton>
         </ListItem>
     );
-};
+});
