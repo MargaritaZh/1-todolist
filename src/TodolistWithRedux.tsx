@@ -138,17 +138,21 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     )
 })
 
-type  ButtonWithMemoPropsType = ButtonPropsType & { variant: string;
-    color:"inherit"|"primary"|"secondary"}
+type  ButtonWithMemoPropsType = ButtonPropsType & {
+    variant: string;
+    color:"inherit"|"primary"|"secondary";
+    onclickHandler: () => void;
+}
 
-const ButtonWithMemoPropsType = memo(({title, variant, color, children} : React.PropsWithChildren<ButtonWithMemoPropsType>) => {
+const ButtonWithMemoPropsType = memo(({title, variant, color,onclickHandler,...props} : ButtonWithMemoPropsType) => {
     return (
         <Button
             variant={variant as "text" | "outlined" | "contained"}
             color={color}
-            title={title}
+            onClick={onclickHandler}
+            {...props}
         >
-            {children}
+            {title}
         </Button>
     )
 })
