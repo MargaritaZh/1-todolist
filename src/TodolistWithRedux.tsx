@@ -14,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./module/store";
 import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, removeTasktAC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
+import {ButtonPropsType} from "./Button";
 
 type TodolistPropsType = {
     todolist: TodolistType
@@ -25,36 +26,35 @@ export type TaskType = {
     isDone: boolean;
 }
 
-export const TodolistWithRedux=React.memo(function(props: TodolistPropsType) {
+export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) {
+
+    console.log("TodolistWithRedux")
 
     const {todolist} = props;
+
     const {id, title, filter} = todolist
 
     let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[id])
     const dispatch = useDispatch()
 
-    const changeFilterTasksHandler = (filter: FilterValuesType) => {
+
+    const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {
         // changeFilter(props.todolistId, filter)
         dispatch(changeFilterAC(id, filter))
+    }, [dispatch])
+
+
+    if (filter === "active") {
+        tasks = tasks.filter(t => t.isDone === false)
+    } else if (filter === "completed") {
+        tasks = tasks.filter(t => t.isDone === true)
     }
 
-    const getFilteredTasks = (allTasts: Array<TaskType>, filterValue: FilterValuesType): Array<TaskType> => {
-        if (filterValue === "active") {
-            return allTasts.filter(t => t.isDone === false)
-        } else if (filterValue === "completed") {
-            return allTasts.filter(t => t.isDone === true)
-        } else {
-            return allTasts
-        }
-    }
 
-    const filteredTasks: Array<TaskType> = getFilteredTasks(tasks, filter)
-
-
-    const taskslist: JSX.Element = filteredTasks.length === 0
+    const taskslist: JSX.Element = tasks.length === 0
         ? <span>Your tasklist is empty</span>
         : <List>
-            {filteredTasks.map((task) => {
+            {tasks.map((task) => {
 
                 // const removeTaskHandler = () => removeTask(todolistId, task.id)
                 const removeTaskHandler = () => dispatch(removeTasktAC(id, task.id))
@@ -114,19 +114,41 @@ export const TodolistWithRedux=React.memo(function(props: TodolistPropsType) {
             {taskslist}
 
             <Box sx={filterButtonContainerSx}>
-                <Button variant={filter === "all" ? "contained" : "outlined"}
-                        color={"inherit"}
-                        onClick={() => changeFilterTasksHandler("all")}
-                >All</Button>
-                <Button variant={filter === "active" ? "contained" : "outlined"}
+
+                <ButtonWithMemoPropsType
+                    title={"All"}
+                    variant={filter === "all" ? "contained" : "outlined"}
+                    color={"inherit"}
+                    onclickHandler={() => changeFilterTasksHandler("all")}
+                />
+                <ButtonWithMemoPropsType
+                    title={"Active"}
+                    variant={filter === "active" ? "contained" : "outlined"}
                         color={"primary"}
-                        onClick={() => changeFilterTasksHandler("active")}
-                >Active</Button>
-                <Button variant={filter === "completed" ? "contained" : "outlined"}
+                    onclickHandler={() => changeFilterTasksHandler("active")}
+                />
+                <ButtonWithMemoPropsType
+                    title={"Completed"}
+                    variant={filter === "completed" ? "contained" : "outlined"}
                         color={"secondary"}
-                        onClick={() => changeFilterTasksHandler("completed")}
-                >Completed</Button>
+                    onclickHandler={() => changeFilterTasksHandler("completed")}
+                />
             </Box>
         </div>
+    )
+})
+
+type  ButtonWithMemoPropsType = ButtonPropsType & { variant: string;
+    color:"inherit"|"primary"|"secondary"}
+
+const ButtonWithMemoPropsType = memo(({title, variant, color, children} : React.PropsWithChildren<ButtonWithMemoPropsType>) => {
+    return (
+        <Button
+            variant={variant as "text" | "outlined" | "contained"}
+            color={color}
+            title={title}
+        >
+            {children}
+        </Button>
     )
 })

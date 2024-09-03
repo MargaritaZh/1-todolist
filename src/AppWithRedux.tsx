@@ -99,22 +99,21 @@ function AppWithRedux() {
     //     }
     // )
 
-    //change logic
-    //delete
-    const removeTask = (todolistId: string, taskId: string) => {
-        // setTasks({
-        //     ...tasks,
-        //     [todolistId]: tasks[todolistId].filter(el => el.id !== taskId)
-        // })
 
-        //---
-        // const action = removeTasktAC(todolistId,taskId)
-        // dispatchToTasksReducer(action)
-        //--
-
-        const action = removeTasktAC(todolistId, taskId)
-        dispatch(action)
-    }
+    // const removeTask = (todolistId: string, taskId: string) => {
+    //     // setTasks({
+    //     //     ...tasks,
+    //     //     [todolistId]: tasks[todolistId].filter(el => el.id !== taskId)
+    //     // })
+    //
+    //     //---
+    //     // const action = removeTasktAC(todolistId,taskId)
+    //     // dispatchToTasksReducer(action)
+    //     //--
+    //
+    //     const action = removeTasktAC(todolistId, taskId)
+    //     dispatch(action)
+    // }
 
     //create
     // const addTask = (todolistId: string, title: string) => {
@@ -138,69 +137,69 @@ function AppWithRedux() {
     //
     // }
 
-    const changeFilter = (todolistId: string, filter: FilterValuesType) => {
-        // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
-        //--
-        // const action = changeFilterAC(todolistId, filter)
-        // dispatchToTodolistRedicer(action)
-        // ---
-        const action = changeFilterAC(todolistId, filter)
-        dispatch(action)
-
-    }
+    // const changeFilter = (todolistId: string, filter: FilterValuesType) => {
+    //     // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
+    //     //--
+    //     // const action = changeFilterAC(todolistId, filter)
+    //     // dispatchToTodolistRedicer(action)
+    //     // ---
+    //     const action = changeFilterAC(todolistId, filter)
+    //     dispatch(action)
+    //
+    // }
 
     //UI logic
-    const changeTaskStatus = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
+    // const changeTaskStatus = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
+    //
+    //     // setTasks(
+    //     //     {
+    //     //         ...tasks,
+    //     //         [todolistId]: tasks[todolistId].map(el => el.id === taskId ? {...el, isDone: newIsDoneValue} : el)
+    //     //     })
+    //     //--
+    //     //         const action = changeTaskStatusAC(todolistId, taskId, newIsDoneValue)
+    //     //         dispatchToTasksReducer(action)
+    //     //---
+    //     const action = changeTaskStatusAC(todolistId, taskId, newIsDoneValue)
+    //     dispatch(action)
+    // }
 
-        // setTasks(
-        //     {
-        //         ...tasks,
-        //         [todolistId]: tasks[todolistId].map(el => el.id === taskId ? {...el, isDone: newIsDoneValue} : el)
-        //     })
-        //--
-        //         const action = changeTaskStatusAC(todolistId, taskId, newIsDoneValue)
-        //         dispatchToTasksReducer(action)
-        //---
-        const action = changeTaskStatusAC(todolistId, taskId, newIsDoneValue)
-        dispatch(action)
-    }
-
-    const deleteTodolist = (todolistId: string) => {
-        // setTodolists(todolists.filter(tl => tl.id !== todolistId))
-        //        delete tasks[todolistId]
-        //--
-        //         const action = deleteTodolistAC(todolistId)
-        //         dispatchToTodolistRedicer(action)
-
-        const action = deleteTodolistAC(todolistId)
-        dispatch(action)
-    }
-
-
+    // const deleteTodolist = (todolistId: string) => {
+    //     // setTodolists(todolists.filter(tl => tl.id !== todolistId))
+    //     //        delete tasks[todolistId]
+    //     //--
+    //     //         const action = deleteTodolistAC(todolistId)
+    //     //         dispatchToTodolistRedicer(action)
+    //
+    //     const action = deleteTodolistAC(todolistId)
+    //     dispatch(action)
+    // }
 
 
-    const upDateTask = (todolistId: string, id: string, newTitle: string) => {
-        // setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
-        //--
-        //         const action = changeTaskTitleAC(todolistId, id, newTitle)
-        //         dispatchToTasksReducer(action)
-        //--
-        const action = changeTaskTitleAC(todolistId, id, newTitle)
-        dispatch(action)
-    }
 
 
-    const upDateTodolist = (todolistId: string, newTitle: string) => {
-        // setTodolists(
-        //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
-        //---
-        //         const action = upDateTodolistAC(todolistId, newTitle)
-        //         dispatchToTodolistRedicer(action)
-        //--
-        const action = upDateTodolistAC(todolistId, newTitle)
-        dispatch(action)
+    // const upDateTask = (todolistId: string, id: string, newTitle: string) => {
+    //     // setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
+    //     //--
+    //     //         const action = changeTaskTitleAC(todolistId, id, newTitle)
+    //     //         dispatchToTasksReducer(action)
+    //     //--
+    //     const action = changeTaskTitleAC(todolistId, id, newTitle)
+    //     dispatch(action)
+    // }
 
-    }
+    //
+    // const upDateTodolist = (todolistId: string, newTitle: string) => {
+    //     // setTodolists(
+    //     //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
+    //     //---
+    //     //         const action = upDateTodolistAC(todolistId, newTitle)
+    //     //         dispatchToTodolistRedicer(action)
+    //     //--
+    //     const action = upDateTodolistAC(todolistId, newTitle)
+    //     dispatch(action)
+    //
+    // }
 
     const [themeMode, setThemeMode] = useState<ThemeMode>("light")
 
