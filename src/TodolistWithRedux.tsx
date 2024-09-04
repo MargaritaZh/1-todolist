@@ -1,4 +1,4 @@
-import React, {ChangeEvent, memo, useCallback} from "react";
+import React, {ChangeEvent, memo, useCallback, useMemo} from "react";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -45,13 +45,23 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     }, [dispatch])
 
 
-    if (filter === "active") {
-        tasks = tasks.filter(t => t.isDone === false)
-    } else if (filter === "completed") {
-        tasks = tasks.filter(t => t.isDone === true)
-    }
+
+    //запоминает результат выз
+    tasks = useMemo(() => {
+        if (filter === "active") {
+            tasks = tasks.filter(t => t.isDone === false)
+        } else if (filter === "completed") {
+            tasks = tasks.filter(t => t.isDone === true)
+        }
+        return tasks
+    }, [tasks,filter])
 
 
+    // if (filter === "active") {
+    //     tasks = tasks.filter(t => t.isDone === false)
+    // } else if (filter === "completed") {
+    //     tasks = tasks.filter(t => t.isDone === true)
+    // }
 
 
     const taskslist: JSX.Element = tasks.length === 0
@@ -86,7 +96,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                     <TaskWithRedux
                         key={task.id}
                         todolistId={todolist.id}
-                          task={task}
+                        task={task}
 
                     />)
 
