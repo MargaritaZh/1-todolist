@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 
 
-type Props = {
+export type Props = {
     addItem: (title: string) => void
 };
 
