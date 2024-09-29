@@ -26,7 +26,7 @@ export const todolistAPI = {
         return promise
     },
     createTodolist(payload: CreateTodolistPayloadType) {
-        const promise = instance.post<ResponseType<{item: TodolistType}>>('/todo-lists', payload)
+        const promise = instance.post<ResponseType<{ item: TodolistType }>>('/todo-lists', payload)
         return promise
     },
     deleteTodolist(todolistId: string) {
@@ -36,14 +36,82 @@ export const todolistAPI = {
     updateTodolist(todolistId: string, payload: UpdateTodolistPayloadType) {
         const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}`, payload)
         return promise
-    }
+    },
+    getTasks(todolistId: string) {
+        const promise = instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`,)
+        return promise
+    },
+    createTask(payload: CreateTaskPayloadType,todolistId:string) {
+        const promise = instance.post<ResponseType<{item:TaskType}>>(`/todo-lists/${todolistId}/tasks`, payload)
+        return promise
+    },
+    deleteTask(todolistId: string,taskId:string) {
+        const promise = instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+        return promise
+    },
+    updateTask(todolistId: string, taskId:string,payload: UpdateTaskType) {
+        const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
+        return promise
+    },
 }
+
+
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TaskPriorities {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+
+type TaskType = {
+    description: string
+    title: string
+    completed: boolean
+    status: TaskStatuses
+    priority: TaskPriorities
+    startDate: string
+    deadline: string
+    id: string
+    todoListId: string
+    order: number
+    addedDate: string
+}
+
+
+type GetTasksResponse = {
+    items: Array<TaskType>
+    totalCount: number
+    error: string | null
+}
+
+type CreateTaskPayloadType={
+    title:string
+}
+
+export type UpdateTaskType = {
+    title: string
+}
+
+////////////////////////
 type CreateTodolistPayloadType = {
     title: string
 }
 
 type UpdateTodolistPayloadType = {
     title: string
+}
+
+type UpdateTaskPayloadType={
+    title:string
 }
 
 type TodolistType = {
@@ -53,7 +121,7 @@ type TodolistType = {
     order: number
 }
 
-type ResponseType<T={}>= {
+type ResponseType<T = {}> = {
     resultCode: number
     fieldsErrors: Array<string>
     messages: Array<string>

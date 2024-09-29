@@ -58,7 +58,80 @@ export const UpdateTodolist = () => {
             title: "new  title"
         }
 
-        todolistAPI.updateTodolist(todolistId,payload).then((res) => {
+        todolistAPI.updateTodolist(todolistId, payload).then((res) => {
+            setState(res.data)
+        })
+
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+////////////////////////////////////////////////////////
+
+export const GetTasks = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+        // здесь мы будем делать запрос и ответ закидывать в стейт.
+        // который в виде строки будем отображать в div-ке
+
+        const todolistId = "8d1e80ca-68a2-48ee-8f3e-9e7366e15138"
+
+        todolistAPI.getTasks(todolistId)
+            .then((res) => {
+                setState(res.data)
+            })
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+
+export const CreateTask = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+        const payload = {
+            title: "new task"
+        }
+
+        const todolistId = "8d1e80ca-68a2-48ee-8f3e-9e7366e15138"
+        todolistAPI.createTask(payload, todolistId).then((res) => {
+            setState(res.data)
+        })
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+export const DeleteTask = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+
+        const todolistId = "8d1e80ca-68a2-48ee-8f3e-9e7366e15138"
+
+        const taskId = "e4a5fdd6-e7bd-4075-baa2-f8b4a216d36e"
+
+        todolistAPI.deleteTask(todolistId, taskId).then((res) => {
+            setState(res.data)
+        })
+
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+export const UpdateTask = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+
+        const todolistId = "8d1e80ca-68a2-48ee-8f3e-9e7366e15138"
+
+        const payload = {
+            title: "new task title"
+        }
+
+        const taskId = "9d2b3aeb-a971-4afb-a4ca-6c1d3afe87a5"
+
+        todolistAPI.updateTask(todolistId, taskId, payload).then((res) => {
             setState(res.data)
         })
 
