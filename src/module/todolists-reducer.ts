@@ -1,5 +1,6 @@
 import {v1} from 'uuid'
 import {FilterValuesType, TodolistType} from "../App";
+import {TodolistApiType} from "../api/api";
 
 export type RemoveTodolistActionType = {
     type: "REMOVE-TODOLIST"
@@ -42,6 +43,9 @@ const initialState: TodolistType[] = []
 
 export const todolistReducer = (state = initialState, action: ActionsType): TodolistType[] => {
     switch (action.type) {
+
+
+
         case 'REMOVE-TODOLIST': {
             // setTodolists(todolists.filter(tl => tl.id !== todolistId))
             return state.filter(tl => tl.id !== action.payload.id) // логика по удалению тудулиста
@@ -128,6 +132,12 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType): Ch
         },
     } as const
 }
+
+///////////создодим AC для получения тодолистов с сервера
+type SetTodosActionType = ReturnType<typeof setTodosAC>
+
+export const setTodosAC = (todolists: Array<TodolistApiType>) => ({type:"SET-TODOLISTS",payload:{todolists}})
+
 
 
 

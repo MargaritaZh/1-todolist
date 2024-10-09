@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import {TaskType} from "./Todolist";
 import {v1} from "uuid";
@@ -16,6 +16,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./module/store";
 import {TodolistWithRedux} from "./TodolistWithRedux";
+import {todolistAPI} from "./api/api";
 
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -43,6 +44,17 @@ function AppWithRedux() {
 
     const dispatch = useDispatch()
 
+
+    useEffect(()=>{
+        todolistAPI.getTodolists().then((res)=>{
+            console.log(res.data)
+
+            //res.data
+            // dispatch(setTodosAC())
+        })
+
+    },[])
+
     const addTodolists =useCallback( (title: string) => {
         //один  и тот же ключ в двух местах
         // const newId = v1()
@@ -59,6 +71,7 @@ function AppWithRedux() {
         //         {id: v1(), title: "JS & TS", isDone: true},
         //         {id: v1(), title: "React", isDone: false}]
         // })
+
         //--
         // const action = addTodolistsAC(title)
         // dispatchToTodolistRedicer(action)

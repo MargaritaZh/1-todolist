@@ -22,11 +22,11 @@ const instance = axios.create({
 
 export const todolistAPI = {
     getTodolists() {
-        const promise = instance.get<Array<TodolistType>>('/todo-lists',)
+        const promise = instance.get<Array<TodolistApiType>>('/todo-lists',)
         return promise
     },
     createTodolist(payload: CreateTodolistPayloadType) {
-        const promise = instance.post<ResponseType<{ item: TodolistType }>>('/todo-lists', payload)
+        const promise = instance.post<ResponseType<{ item: TodolistApiType }>>('/todo-lists', payload)
         return promise
     },
     deleteTodolist(todolistId: string) {
@@ -50,7 +50,7 @@ export const todolistAPI = {
         return promise
     },
     updateTask(todolistId: string, taskId:string,payload: UpdateTaskType) {
-        const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
+        const promise = instance.put<ResponseType<{item:TaskType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
         return promise
     },
 }
@@ -114,7 +114,7 @@ type UpdateTaskPayloadType={
     title:string
 }
 
-type TodolistType = {
+export type TodolistApiType = {
     id: string
     title: string
     addedDate: string
