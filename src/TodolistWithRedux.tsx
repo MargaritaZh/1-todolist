@@ -57,6 +57,9 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     }, [tasks,filter])
 
 
+
+
+
     // if (filter === "active") {
     //     tasks = tasks.filter(t => t.isDone === false)
     // } else if (filter === "completed") {
@@ -66,7 +69,8 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const taskslist: JSX.Element = tasks.length === 0
         ? <span>Your tasklist is empty</span>
-        : <List>
+        :
+        <List>
             {tasks.map((task) => {
 
                 // // const removeTaskHandler = () => removeTask(todolistId, task.id)

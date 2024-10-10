@@ -1,7 +1,7 @@
 import {TasksStateType} from "../App";
 import {TaskType} from "../Todolist";
 import {v1} from "uuid";
-import {AddTodolistActionType, RemoveTodolistActionType} from "./todolists-reducer";
+import {AddTodolistActionType, RemoveTodolistActionType, SetTodosActionType} from "./todolists-reducer";
 
 export type removeTaskActionType = ReturnType<typeof removeTasktAC>
 export type addTaskACActionType = ReturnType<typeof addTasktAC>
@@ -16,13 +16,29 @@ type ActionsType =
     | changeTaskTitleActionType
     | AddTodolistActionType
     | RemoveTodolistActionType
-
+    | SetTodosActionType
 
 
 const initialState: TasksStateType = {}
 
-export const tasksReducer = (state= initialState, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
+    ///////////////////
+        //этот кейс в двух редьюсерах используется AC setTodolistAC , т.к. по tlId создается ключ в объекте тасок
+        case "SET-TODOLISTS": {
+            //создадим копию state=>пустого {}
+            const copyState = {...state}
+            //пееберем пришедший с сервера тодолист
+            // и в пустом {} создадим по ключу [tl.id] =>пустой массив
+            action.payload.todolists.forEach(tl => {
+                copyState[tl.id] = []
+            })
+
+            //возвращаем получившийся объект { [tl1.id]:[],[tl2.id]:[],[tl3.id]:[] }
+            return copyState
+        }
+
+    /////////////
         case "REMOVE-TASK": {
             //из App
             // setTasks({
@@ -59,7 +75,6 @@ export const tasksReducer = (state= initialState, action: ActionsType): TasksSta
             }
 
 
-
         }
         case "CHANGE-TASK-STATUS": {
             //из App
@@ -76,8 +91,6 @@ export const tasksReducer = (state= initialState, action: ActionsType): TasksSta
                     isDone: action.newIsDoneValue
                 } : el)
             }
-
-
 
 
         }

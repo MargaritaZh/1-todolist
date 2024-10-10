@@ -1,5 +1,4 @@
 import {v1} from 'uuid'
-import {FilterValuesType, TodolistType} from "../App";
 import {TodolistApiType} from "../api/api";
 
 export type RemoveTodolistActionType = {
@@ -36,54 +35,64 @@ type ActionsType =
     | AddTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
+    | SetTodosActionType
 
 
+export type FilterValuesType = "all" | "active" | "completed"
 
-const initialState: TodolistType[] = []
+//добавили в типы filter, то что не возвращает сервер
+export type TodolistDomainType = TodolistApiType & {
+    filter: FilterValuesType
+}
 
-export const todolistReducer = (state = initialState, action: ActionsType): TodolistType[] => {
+const initialState: TodolistDomainType[] = []
+
+export const todolistReducer = (state = initialState, action: ActionsType): TodolistDomainType[] => {
     switch (action.type) {
-
-
-
-        case 'REMOVE-TODOLIST': {
-            // setTodolists(todolists.filter(tl => tl.id !== todolistId))
-            return state.filter(tl => tl.id !== action.payload.id) // логика по удалению тудулиста
+        ///////////////
+        case "SET-TODOLISTS": {
+            return action.payload.todolists.map(tl => ({...tl, filter: "all"}))
+            //из объекта action достали данные, приходящие с сервера todolists
         }
-        case 'ADD-TODOLIST': {
-
-            // const newId = v1()
-            // const newTodo: TodolistType = {
-            //     id: newId,
-            //     title: title,
-            //     filter: "all",
-            // }
-            // setTodolists([...todolists,newTodo])
-
-
-            ////создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
-
-            // const newId = v1()
-            const newTodo: TodolistType = {
-                // id: newId,
-                id: action.payload.todolistId,
-                title: action.payload.title,
-                filter: "all",
-            }
-            return [...state, newTodo] // логика по добавлению тудулиста
-        }
-        case "CHANGE-TODOLIST-TITLE": {
-            // setTodolists(
-            //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
-
-            return state.map(el => el.id === action.payload.id ? {...el, title: action.payload.title} : el)
-        }
-
-        case "CHANGE-TODOLIST-FIlTER": {
-            // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
-
-            return [...state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)]
-        }
+        //////////////
+        // case 'REMOVE-TODOLIST': {
+        //     // setTodolists(todolists.filter(tl => tl.id !== todolistId))
+        //     return state.filter(tl => tl.id !== action.payload.id) // логика по удалению тудулиста
+        // }
+        // case 'ADD-TODOLIST': {
+        //
+        //     // const newId = v1()
+        //     // const newTodo: TodolistType = {
+        //     //     id: newId,
+        //     //     title: title,
+        //     //     filter: "all",
+        //     // }
+        //     // setTodolists([...todolists,newTodo])
+        //
+        //
+        //     ////создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
+        //
+        //     // const newId = v1()
+        //     const newTodo: TodolistType = {
+        //         // id: newId,
+        //         id: action.payload.todolistId,
+        //         title: action.payload.title,
+        //         filter: "all",
+        //     }
+        //     return [...state, newTodo] // логика по добавлению тудулиста
+        // }
+        // case "CHANGE-TODOLIST-TITLE": {
+        //     // setTodolists(
+        //     //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
+        //
+        //     return state.map(el => el.id === action.payload.id ? {...el, title: action.payload.title} : el)
+        // }
+        //
+        // case "CHANGE-TODOLIST-FIlTER": {
+        //     // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
+        //
+        //     return [...state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)]
+        // }
 
         default:
             return state
@@ -134,9 +143,13 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType): Ch
 }
 
 ///////////создодим AC для получения тодолистов с сервера
-type SetTodosActionType = ReturnType<typeof setTodosAC>
 
-export const setTodosAC = (todolists: Array<TodolistApiType>) => ({type:"SET-TODOLISTS",payload:{todolists}})
+export type SetTodosActionType = ReturnType<typeof setTodosAC>
+
+export const setTodosAC = (todolists: Array<TodolistApiType>) => ({
+    type: "SET-TODOLISTS",
+    payload: {todolists}
+} as const)
 
 
 

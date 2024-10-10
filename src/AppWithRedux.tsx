@@ -10,7 +10,7 @@ import Paper from '@mui/material/Paper';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
-    addTodolistsAC,
+    addTodolistsAC, setTodosAC,
 } from "./module/todolists-reducer";
 
 import {useDispatch, useSelector} from "react-redux";
@@ -50,7 +50,7 @@ function AppWithRedux() {
             console.log(res.data)
 
             //res.data
-            // dispatch(setTodosAC())
+            dispatch(setTodosAC(res.data))
         })
 
     },[])
