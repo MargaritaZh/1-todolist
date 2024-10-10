@@ -153,8 +153,8 @@ export const setTodosAC = (todolists: Array<TodolistApiType>) => ({
     payload: {todolists}
 } as const)
 
-export const getTodolistsTC = (dispatch: Dispatch, getState: () => AppRootStateType, extArg: unknown) => {
 
+export const getTodolistsTC = () => (dispatch: Dispatch, getState: () => AppRootStateType, extArg: unknown) => {
     todolistAPI.getTodolists().then((res) => {
         //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
         // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state

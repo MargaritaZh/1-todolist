@@ -37,34 +37,63 @@ export const todolistAPI = {
         const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}`, payload)
         return promise
     },
+
+    // getTasks(todolistId: string) {
+    //     const promise = instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`,)
+    //     return promise
+    // },
+    // createTask(payload: CreateTaskPayloadType,todolistId:string) {
+    //     const promise = instance.post<ResponseType<{item:TaskApiType}>>(`/todo-lists/${todolistId}/tasks`, payload)
+    //     return promise
+    // },
+    // deleteTask(todolistId: string,taskId:string) {
+    //     const promise = instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+    //     return promise
+    // },
+    // updateTask(todolistId: string, taskId:string,payload: UpdateTaskType) {
+    //     const promise = instance.put<ResponseType<{item:TaskApiType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
+    //     return promise
+    // },
+
     getTasks(todolistId: string) {
-        const promise = instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`,)
-        return promise
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
     },
-    createTask(payload: CreateTaskPayloadType,todolistId:string) {
-        const promise = instance.post<ResponseType<{item:TaskType}>>(`/todo-lists/${todolistId}/tasks`, payload)
-        return promise
+    createTask(payload: { title: string; todolistId: string }) {
+        const { title, todolistId } = payload
+        return instance.post<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks`, { title })
     },
-    deleteTask(todolistId: string,taskId:string) {
-        const promise = instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
-        return promise
+    deleteTask(payload: { todolistId: string; taskId: string }) {
+        const { taskId, todolistId } = payload
+        return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask(todolistId: string, taskId:string,payload: UpdateTaskType) {
-        const promise = instance.put<ResponseType<{item:TaskType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
-        return promise
+    updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
+        const { taskId, todolistId, model } = payload
+        return instance.put<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
+
+}
+
+export type FieldError = {
+    error: string
+    field: string
+}
+
+export type BaseResponse<D = {}> = {
+    resultCode: number
+    messages: string[]
+    fieldsErrors: FieldError[]
+    data: D
 }
 
 
-
-export enum TaskStatuses {
+export enum TaskStatus {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
 
-export enum TaskPriorities {
+export enum TaskPriority {
     Low = 0,
     Middle = 1,
     Hi = 2,
@@ -72,12 +101,11 @@ export enum TaskPriorities {
     Later = 4
 }
 
-type TaskType = {
+export type DomainTask = {
     description: string
     title: string
-    completed: boolean
-    status: TaskStatuses
-    priority: TaskPriorities
+    status: TaskStatus
+    priority: TaskPriority
     startDate: string
     deadline: string
     id: string
@@ -85,21 +113,24 @@ type TaskType = {
     order: number
     addedDate: string
 }
+export type UpdateTaskModel = {
+    title: string
+    description: string
+    status: TaskStatus
+    priority: TaskPriority
+    startDate: string
+    deadline: string
+}
+
 
 
 type GetTasksResponse = {
-    items: Array<TaskType>
+    items: Array<DomainTask>
     totalCount: number
     error: string | null
 }
 
-type CreateTaskPayloadType={
-    title:string
-}
 
-export type UpdateTaskType = {
-    title: string
-}
 
 ////////////////////////
 type CreateTodolistPayloadType = {
@@ -110,9 +141,6 @@ type UpdateTodolistPayloadType = {
     title: string
 }
 
-type UpdateTaskPayloadType={
-    title:string
-}
 
 export type TodolistApiType = {
     id: string

@@ -1,7 +1,7 @@
-import {TasksStateType} from "../App";
-import {TaskType} from "../Todolist";
 import {v1} from "uuid";
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodosActionType} from "./todolists-reducer";
+import {Dispatch} from "redux";
+import {DomainTask, todolistAPI} from "../api/api";
 
 export type removeTaskActionType = ReturnType<typeof removeTasktAC>
 export type addTaskACActionType = ReturnType<typeof addTasktAC>
@@ -17,13 +17,30 @@ type ActionsType =
     | AddTodolistActionType
     | RemoveTodolistActionType
     | SetTodosActionType
+    | SetTasksActionType
+
+
+// export type TaskType = {
+//     id: string
+//     title: string
+//     isDone: boolean
+// }
+
+type TaskType = DomainTask & {
+    isDone: boolean
+}
+
+
+export type TasksStateType = {
+    [key: string]: TaskType[]
+}
 
 
 const initialState: TasksStateType = {}
 
 export const tasksReducer = (state = initialState, action: ActionsType): TasksStateType => {
     switch (action.type) {
-    ///////////////////
+        ///////////////////
         //этот кейс в двух редьюсерах используется AC setTodolistAC , т.к. по tlId создается ключ в объекте тасок
         case "SET-TODOLISTS": {
             //создадим копию state=>пустого {}
@@ -38,7 +55,17 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
             return copyState
         }
 
-    /////////////
+        /////////////
+
+        case "SET-TASKS": {
+            return {
+                ...state,
+                [action.payload.todolistId]: action.payload.tasks.map(ts => ({...ts, isDone: false}))
+            }
+        }
+//////////////
+
+
         case "REMOVE-TASK": {
             //из App
             // setTasks({
@@ -169,7 +196,28 @@ export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: 
         type: 'CHANGE-TASK-TITLE', todolistId, taskId, newTitle
     } as const
 }
+///////////////////////////////////
 
+export type SetTasksActionType = ReturnType<typeof setTasksAC>
+
+export const setTasksAC = (tasks: Array<DomainTask>, todolistId: string) => {
+    return {
+        type: "SET-TASKS",
+        payload: {
+            tasks,
+            todolistId
+        }
+    } as const
+}
+
+export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
+    todolistAPI.getTasks(todolistId).then((res) => {
+
+        //res.data.items-массив тасок
+
+        dispatch(setTasksAC(res.data.items, todolistId))
+    })
+}
 
 
 

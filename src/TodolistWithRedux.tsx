@@ -1,4 +1,4 @@
-import React, {ChangeEvent, memo, useCallback, useMemo} from "react";
+import React, {ChangeEvent, memo, useCallback, useEffect, useMemo} from "react";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
@@ -11,8 +11,8 @@ import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "./Todolist.styles";
 import {TodolistType} from "./AppWithRedux";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./module/store";
-import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, removeTasktAC} from "./module/tasks-reducer";
+import {AppRootStateType, useAppDispatch, useAppSelector} from "./module/store";
+import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, getTasksTC, removeTasktAC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
@@ -35,8 +35,16 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const {id, title, filter} = todolist
 
-    let tasks = useSelector<AppRootStateType, Array<TaskType>>(state => state.tasks[id])
-    const dispatch = useDispatch()
+    let tasks = useAppSelector<Array<TaskType>>(state => state.tasks[id])
+
+    const dispatch = useAppDispatch()
+
+
+    useEffect(() => {
+
+       dispatch(getTasksTC(id))
+    }, []);
+
 
 
     const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {
@@ -58,44 +66,11 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 
 
-
-
-    // if (filter === "active") {
-    //     tasks = tasks.filter(t => t.isDone === false)
-    // } else if (filter === "completed") {
-    //     tasks = tasks.filter(t => t.isDone === true)
-    // }
-
-
     const taskslist: JSX.Element = tasks.length === 0
         ? <span>Your tasklist is empty</span>
         :
         <List>
             {tasks.map((task) => {
-
-                // // const removeTaskHandler = () => removeTask(todolistId, task.id)
-                // const removeTaskHandler = () => dispatch(removeTasktAC(id, task.id))
-                //
-                // const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                //     // changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
-                //     dispatch(changeTaskStatusAC(id, task.id, e.currentTarget.checked))
-                // }
-                //
-                // const upDateItemHandler = (newTitle: string) => {
-                //     // props.upDateTask(props.todolistId, task.id, newTitle)
-                //     dispatch(changeTaskTitleAC(id, task.id, newTitle))
-                // }
-
-                // return (
-                //     <Task
-                //         key={task.id}
-                //           taskId={task.id}
-                //           isDone={task.isDone}
-                //           taskTitle={task.title}
-                //           changeTaskStatusHandler={changeTaskStatusHandler}
-                //           upDateItemHandler={upDateItemHandler}
-                //           removeTaskHandler={removeTaskHandler}
-                //     />)
                 return (
                     <TaskWithRedux
                         key={task.id}

@@ -36,13 +36,11 @@ function AppWithRedux() {
 
     const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
 
-
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
-            dispatch(getTodolistsTC)
+            dispatch(getTodolistsTC())
     },[])
-
 
     const addTodolists =useCallback( (title: string) => {
         //один  и тот же ключ в двух местах
