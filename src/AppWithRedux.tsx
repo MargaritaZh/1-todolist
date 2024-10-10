@@ -10,11 +10,11 @@ import Paper from '@mui/material/Paper';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
-    addTodolistsAC, setTodosAC,
+    addTodolistsAC, getTodolistsTC,
 } from "./module/todolists-reducer";
 
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "./module/store";
+import {AppDispatchType, AppRootStateType} from "./module/store";
 import {TodolistWithRedux} from "./TodolistWithRedux";
 import {todolistAPI} from "./api/api";
 
@@ -42,17 +42,11 @@ function AppWithRedux() {
 
     // const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch<AppDispatchType>()
 
 
     useEffect(()=>{
-        todolistAPI.getTodolists().then((res)=>{
-            console.log(res.data)
-
-            //res.data
-            dispatch(setTodosAC(res.data))
-        })
-
+            dispatch(getTodolistsTC)
     },[])
 
     const addTodolists =useCallback( (title: string) => {

@@ -1,5 +1,7 @@
 import {v1} from 'uuid'
-import {TodolistApiType} from "../api/api";
+import {todolistAPI, TodolistApiType} from "../api/api";
+import {Dispatch} from "redux";
+import {AppRootStateType} from "./store";
 
 export type RemoveTodolistActionType = {
     type: "REMOVE-TODOLIST"
@@ -150,6 +152,16 @@ export const setTodosAC = (todolists: Array<TodolistApiType>) => ({
     type: "SET-TODOLISTS",
     payload: {todolists}
 } as const)
+
+export const getTodolistsTC = (dispatch: Dispatch, getState: () => AppRootStateType, extArg: unknown) => {
+
+    todolistAPI.getTodolists().then((res) => {
+        //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
+        // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state
+        dispatch(setTodosAC(res.data))
+    })
+}
+////////////////////
 
 
 
