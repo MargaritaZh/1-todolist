@@ -11,7 +11,7 @@ import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "./Todolist.styles";
 import {TodolistType} from "./AppWithRedux";
 import { useAppDispatch, useAppSelector} from "./module/store";
-import { createTasksTC, getTasksTC} from "./module/tasks-reducer";
+import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
@@ -42,6 +42,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     useEffect(() => {
 
        dispatch(getTasksTC(id))
+
     }, []);
 
 
@@ -83,7 +84,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const addTaskHandler = (title: string) => {
 
-        dispatch(createTasksTC(id, title))
+        dispatch(createTaskTC(title,id))
     }
 
 

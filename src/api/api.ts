@@ -14,7 +14,8 @@ const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1",
     withCredentials: true,
     headers: {
-        'API-KEY': '2301ad51-5dfc-4feb-b807-a9eea7d3c61e'
+        'API-KEY': '0e722c87-8616-40b4-b1ad-8b9e95b179d9',
+         'Authorization':'Bearer bf7dccd0-29b7-40af-8605-7c937b49c2b0'
     }
 
 })
@@ -56,19 +57,20 @@ export const todolistAPI = {
     // },
 
     getTasks(todolistId: string) {
-        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`)
+        return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(payload: { title: string; todolistId: string }) {
         const { title, todolistId } = payload
-        return instance.post<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks`, { title })
+
+        return instance.post<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks`, { title })
     },
     deleteTask(payload: { todolistId: string; taskId: string }) {
         const { taskId, todolistId } = payload
-        return instance.delete<BaseResponse>(`todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
         const { taskId, todolistId, model } = payload
-        return instance.put<BaseResponse<{ item: DomainTask }>>(`todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return instance.put<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
 
 }
