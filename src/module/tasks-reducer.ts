@@ -4,14 +4,12 @@ import {Dispatch} from "redux";
 import {DomainTask, todolistAPI} from "../api/api";
 
 export type removeTaskActionType = ReturnType<typeof removeTasktAC>
-export type addTaskACActionType = ReturnType<typeof addTasktAC>
 export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
-
 export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
 type ActionsType =
     removeTaskActionType
-    | addTaskACActionType
+    | AddTasksActionTye
     | changeTaskStatusActionType
     | changeTaskTitleActionType
     | AddTodolistActionType
@@ -30,11 +28,9 @@ type TaskType = DomainTask & {
     isDone: boolean
 }
 
-
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
-
 
 const initialState: TasksStateType = {}
 
@@ -63,8 +59,14 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
                 [action.payload.todolistId]: action.payload.tasks.map(ts => ({...ts, isDone: false}))
             }
         }
-//////////////
-
+        //////////////
+        case "CREATE-TASK": {
+            return {
+                ...state,
+                [action.payload.task.todoListId]:[{...action.payload.task,isDone:false},...state[action.payload.task.todoListId]]
+            }
+        }
+        /////////////////
 
         case "REMOVE-TASK": {
             //из App
@@ -78,31 +80,7 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
                 [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.taskId)
             }
         }
-        case "ADD-TASK": {
-            //из App
-            // const newTask: TaskType = {
-            //     id: v1(),
-            //     title: title,
-            //     isDone: false
-            // }
-            //
-            // setTasks({
-            //     ...tasks,
-            //     [todolistId]: [newTask, ...tasks[todolistId]]
-            // })
 
-            const newTask: TaskType = {
-                id: v1(),
-                title: action.title,
-                isDone: false
-            }
-            return {
-                ...state,
-                [action.todolistId]: [newTask, ...state[action.todolistId]]
-            }
-
-
-        }
         case "CHANGE-TASK-STATUS": {
             //из App
             // setTasks(
@@ -173,14 +151,6 @@ export const removeTasktAC = (todolistId: string, taskId: string) => {
 }
 
 
-export const addTasktAC = (todolistId: string, title: string) => {
-    return {
-        // type: 'REMOVE-TASK', todolistId: todolistId, title: title,
-        type: 'ADD-TASK', todolistId, title,
-    } as const
-}
-
-
 export const changeTaskStatusAC = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
     return {
         // type: 'CHANGE-TASK-STATUS', todolistId: todolistId, taskId: taskId,newIsDoneValue:newIsDoneValue
@@ -216,6 +186,25 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
         //res.data.items-массив тасок
 
         dispatch(setTasksAC(res.data.items, todolistId))
+    })
+}
+////////////////////
+
+type AddTasksActionTye = ReturnType<typeof addTasksAC>
+
+// export const addTasksAC = (todolistId: string, title: string) => {
+export const addTasksAC = (task: DomainTask) => {
+    return {
+        // type:'ADD-TASK', todolistId: todolistId, title: title,
+        type: 'CREATE-TASK',
+        payload: {task}
+    } as const
+}
+
+export const createTasksTC = (title: string, todolistId: string) => (dispatch: Dispatch) => {
+    todolistAPI.createTask({title, todolistId}).then((res) => {
+        //(res.data.data.item)
+        dispatch(addTasksAC(res.data.data.item))
     })
 }
 

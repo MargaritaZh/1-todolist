@@ -1,8 +1,8 @@
-import React, {ChangeEvent, memo, useCallback, useEffect, useMemo} from "react";
+import React, { memo, useCallback, useEffect, useMemo} from "react";
 import {FilterValuesType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
-import {Task} from "./Task";
+
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
@@ -10,9 +10,8 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "./Todolist.styles";
 import {TodolistType} from "./AppWithRedux";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType, useAppDispatch, useAppSelector} from "./module/store";
-import {addTasktAC, changeTaskStatusAC, changeTaskTitleAC, getTasksTC, removeTasktAC} from "./module/tasks-reducer";
+import { useAppDispatch, useAppSelector} from "./module/store";
+import { createTasksTC, getTasksTC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
@@ -83,8 +82,8 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         </List>
 
     const addTaskHandler = (title: string) => {
-        // addTask(props.todolistId, title)
-        dispatch(addTasktAC(id, title))
+
+        dispatch(createTasksTC(id, title))
     }
 
 
