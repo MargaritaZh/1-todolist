@@ -70,7 +70,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         ? <span>Your tasklist is empty</span>
         :
         <List>
-            {tasks.map((task) => {
+            {tasks?.map((task) => {
                 return (
                     <TaskWithRedux
                         key={task.id}
@@ -83,7 +83,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         </List>
 
     const addTaskHandler = (title: string) => {
-
+        ///
         dispatch(createTaskTC(title,id))
     }
 

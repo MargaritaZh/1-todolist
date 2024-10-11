@@ -6,8 +6,9 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
 import {TaskType} from "./TodolistWithRedux";
-import {changeTaskStatusAC, changeTaskTitleAC, removeTasktAC} from "./module/tasks-reducer";
+import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC} from "./module/tasks-reducer";
 import {useDispatch} from "react-redux";
+import {useAppDispatch} from "./module/store";
 
 
 type Props = {
@@ -15,10 +16,11 @@ type Props = {
     task: TaskType
 };
 export const TaskWithRedux = memo(({todolistId,task}: Props) => {
-    const dispatch = useDispatch()
+
+    const dispatch =useAppDispatch()
 
     // const removeTaskHandler = () => removeTask(todolistId, task.id)
-    const removeTaskHandler = () => dispatch(removeTasktAC(todolistId, task.id))
+    const removeTaskHandler = () => dispatch(deleteTaskTC(todolistId, task.id))
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         // changeTaskStatus(todolistId, task.id, e.currentTarget.checked)

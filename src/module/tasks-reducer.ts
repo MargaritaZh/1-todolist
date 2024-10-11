@@ -1,14 +1,13 @@
-
 import {AddTodolistActionType, RemoveTodolistActionType, SetTodosActionType} from "./todolists-reducer";
 import {Dispatch} from "redux";
 import {DomainTask, todolistAPI} from "../api/api";
 
-export type removeTaskActionType = ReturnType<typeof removeTasktAC>
+
 export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
 export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
 
 type ActionsType =
-    removeTaskActionType
+    DeleteTaskActionType
     | AddTasksActionType
     | changeTaskStatusActionType
     | changeTaskTitleActionType
@@ -64,24 +63,21 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
             console.log("CREATE-TASK action:", action.payload.task);
             return {
                 ...state,
-                [action.payload.task.todoListId]:[{...action.payload.task,isDone:false},...state[action.payload.task.todoListId]]
+                [action.payload.task.todoListId]: [{
+                    ...action.payload.task,
+                    isDone: false
+                }, ...state[action.payload.task.todoListId]]
 
             }
         }
         /////////////////
 
-        // case "REMOVE-TASK": {
-        //     //из App
-        //     // setTasks({
-        //     //     ...tasks,
-        //     //     [todolistId]: tasks[todolistId].filter(el => el.id !== taskId)
-        //     // })
-        //
-        //     return {
-        //         ...state,
-        //         [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.taskId)
-        //     }
-        // }
+        case "DELETE-TASK": {
+            return {
+                ...state,
+                [action.todolistId]: state[action.todolistId].filter(el => el.id !== action.taskId)
+            }
+        }
 
         // case "CHANGE-TASK-STATUS": {
         //     //из App
@@ -145,13 +141,6 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
 
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
-export const removeTasktAC = (todolistId: string, taskId: string) => {
-    return {
-        // type: 'REMOVE-TASK', todolistId: todolistId, taskId: taskId,
-        type: 'REMOVE-TASK', todolistId, taskId,
-    } as const
-}
-
 
 export const changeTaskStatusAC = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
     return {
@@ -172,7 +161,7 @@ export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: 
 
 export type SetTasksActionType = ReturnType<typeof setTasksAC>
 
-export const setTasksAC = (tasks: Array<DomainTask>, todolistId: string) => {
+const setTasksAC = (tasks: Array<DomainTask>, todolistId: string) => {
     return {
         type: "SET-TASKS",
         payload: {
@@ -195,7 +184,7 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
 type AddTasksActionType = ReturnType<typeof addTasksAC>
 
 // export const addTasksAC = (todolistId: string, title: string) => {
-export const addTasksAC = (task: DomainTask) => {
+const addTasksAC = (task: DomainTask) => {
     return {
         type: 'CREATE-TASK',
         payload: {task}
@@ -208,6 +197,26 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
         dispatch(addTasksAC(res.data.data.item))
     })
 }
+//////////////////
 
+type DeleteTaskActionType = ReturnType<typeof deleteTaskAC>
+
+const deleteTaskAC = (todolistId: string, taskId: string) => {
+
+    return {
+        type: 'DELETE-TASK', todolistId, taskId,
+    } as const
+}
+
+export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+
+    todolistAPI.deleteTask({todolistId, taskId}).then((res) => {
+        //res.data.data
+
+        dispatch(deleteTaskAC(todolistId,taskId))
+
+    })
+
+}
 
 
