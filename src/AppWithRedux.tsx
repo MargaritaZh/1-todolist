@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
 import {TaskType} from "./Todolist";
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import ButtonAppBar from "./ButtonAppBar";
 import Container from '@mui/material/Container';
@@ -10,7 +9,7 @@ import Paper from '@mui/material/Paper';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
-    addTodolistsAC, getTodolistsTC, TodolistDomainType,
+    createTodolistTC, getTodolistsTC, TodolistDomainType,
 } from "./module/todolists-reducer";
 
 
@@ -18,17 +17,14 @@ import { useAppDispatch, useAppSelector} from "./module/store";
 import {TodolistWithRedux} from "./TodolistWithRedux";
 
 
-export type FilterValuesType = "all" | "active" | "completed"
+// export type FilterValuesType = "all" | "active" | "completed"
+//
+// export type TodolistType = {
+//     id: string
+//     title: string
+//     filter: FilterValuesType
+// }
 
-export type TodolistType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-}
-
-export type TasksStateType = {
-    [todolistId: string]: Array<TaskType>
-}
 
 type ThemeMode = "dark" | "light"
 
@@ -44,30 +40,7 @@ function AppWithRedux() {
 
 
     const addTodolists =useCallback( (title: string) => {
-        //один  и тот же ключ в двух местах
-        // const newId = v1()
-        //
-        // const newTodo: TodolistType = {
-        //     id: newId,
-        //     title: title,
-        //     filter: "all",
-        // }
-        // setTodolists([newTodo, ...todolists])
-        // setTasks({
-        //     ...tasks, [newId]: [
-        //         {id: v1(), title: "HTML & CSS", isDone: true},
-        //         {id: v1(), title: "JS & TS", isDone: true},
-        //         {id: v1(), title: "React", isDone: false}]
-        // })
-
-        //--
-        // const action = addTodolistsAC(title)
-        // dispatchToTodolistRedicer(action)
-        // dispatchToTasksReducer(action)
-        //--
-        const action = addTodolistsAC(title)
-        dispatch(action)
-
+        dispatch(createTodolistTC(title))
     },[dispatch])
 
 

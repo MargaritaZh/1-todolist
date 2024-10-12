@@ -15,7 +15,7 @@ const instance = axios.create({
     withCredentials: true,
     headers: {
         'API-KEY': '0e722c87-8616-40b4-b1ad-8b9e95b179d9',
-         'Authorization':'Bearer bf7dccd0-29b7-40af-8605-7c937b49c2b0'
+        'Authorization': 'Bearer bf7dccd0-29b7-40af-8605-7c937b49c2b0'
     }
 
 })
@@ -26,7 +26,7 @@ export const todolistAPI = {
         const promise = instance.get<Array<TodolistType>>('/todo-lists',)
         return promise
     },
-    createTodolist(payload: CreateTodolistPayloadType) {
+    createTodolist(payload: { title: string }) {
         const promise = instance.post<ResponseType<{ item: TodolistType }>>('/todo-lists', payload)
         return promise
     },
@@ -38,38 +38,21 @@ export const todolistAPI = {
         const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}`, payload)
         return promise
     },
-
-    // getTasks(todolistId: string) {
-    //     const promise = instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`,)
-    //     return promise
-    // },
-    // createTask(payload: CreateTaskPayloadType,todolistId:string) {
-    //     const promise = instance.post<ResponseType<{item:TaskApiType}>>(`/todo-lists/${todolistId}/tasks`, payload)
-    //     return promise
-    // },
-    // deleteTask(todolistId: string,taskId:string) {
-    //     const promise = instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
-    //     return promise
-    // },
-    // updateTask(todolistId: string, taskId:string,payload: UpdateTaskType) {
-    //     const promise = instance.put<ResponseType<{item:TaskApiType}>>(`/todo-lists/${todolistId}/tasks/${taskId}`, payload)
-    //     return promise
-    // },
-
+    /////////
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(payload: { title: string; todolistId: string }) {
-        const { title, todolistId } = payload
+        const {title, todolistId} = payload
 
-        return instance.post<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(payload: { todolistId: string; taskId: string }) {
-        const { taskId, todolistId } = payload
+        const {taskId, todolistId} = payload
         return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
-        const { taskId, todolistId, model } = payload
+        const {taskId, todolistId, model} = payload
         return instance.put<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
 
@@ -125,7 +108,6 @@ export type UpdateTaskModel = {
 }
 
 
-
 type GetTasksResponse = {
     items: Array<TaskType>
     totalCount: number
@@ -133,11 +115,7 @@ type GetTasksResponse = {
 }
 
 
-
 ////////////////////////
-type CreateTodolistPayloadType = {
-    title: string
-}
 
 type UpdateTodolistPayloadType = {
     title: string

@@ -9,16 +9,17 @@ import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "./Todolist.styles";
-import {TodolistType} from "./AppWithRedux";
+// import {TodolistType} from "./AppWithRedux";
 import { useAppDispatch, useAppSelector} from "./module/store";
 import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
-import {changeFilterAC, deleteTodolistTC, upDateTodolistAC} from "./module/todolists-reducer";
+import {changeFilterAC, deleteTodolistTC, TodolistDomainType, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
 import {TaskStatus, TaskType} from "./api/api";
 
 type TodolistPropsType = {
-    todolist: TodolistType
+    // todolist: TodolistType
+    todolist: TodolistDomainType
 }
 
 

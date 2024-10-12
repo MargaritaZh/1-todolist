@@ -1,14 +1,13 @@
 import {v1} from 'uuid'
-import {todolistAPI,TodolistType} from "../api/api";
+import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
-
 
 
 type ActionsType =
     SetTodosActionType
     | DeleteTodolistActionType
-    | AddTodolistActionType
+    | CreateTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
 
@@ -41,28 +40,13 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
             return state.filter(tl => tl.id !== action.payload.id) // логика по удалению тудулиста
         }
 
-        // case 'ADD-TODOLIST': {
-        //
-        //     // const newId = v1()
-        //     // const newTodo: TodolistType = {
-        //     //     id: newId,
-        //     //     title: title,
-        //     //     filter: "all",
-        //     // }
-        //     // setTodolists([...todolists,newTodo])
-        //
-        //
-        //     ////создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
-        //
-        //     // const newId = v1()
-        //     const newTodo: TodolistType = {
-        //         // id: newId,
-        //         id: action.payload.todolistId,
-        //         title: action.payload.title,
-        //         filter: "all",
-        //     }
-        //     return [...state, newTodo] // логика по добавлению тудулиста
-        // }
+        case 'CREATE-TODOLIST': {
+            const newTodo: TodolistDomainType = {
+                ...action.payload.todolist,
+                filter: "all",
+            }
+            return [newTodo,...state] // логика по добавлению тудулиста
+        }
         // case "CHANGE-TODOLIST-TITLE": {
         //     // setTodolists(
         //     //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
@@ -81,11 +65,16 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
         // throw new Error("I don't understand this type")
     }
 }
+
+
+///////////создодим AC для получения тодолистов с сервера
 export type SetTodosActionType = ReturnType<typeof setTodosAC>
 
 export const setTodosAC = (todolists: Array<TodolistType>) => ({
     type: "SET-TODOLISTS",
-    payload: {todolists}
+    payload: {
+        todolists
+    }
 } as const)
 
 export const getTodolistsTC = () => (dispatch: Dispatch) => {
@@ -98,8 +87,8 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
 ////////////////////
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
- export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
- const deleteTodolistAC = (todolistId: string) => {
+export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
+const deleteTodolistAC = (todolistId: string) => {
     return {
         type: 'DELETE-TODOLIST',
         payload: {
@@ -108,8 +97,8 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
     } as const
 }
 
-export const deleteTodolistTC=(todolistId:string)=>(dispatch: Dispatch)=>{
-    todolistAPI.deleteTodolist(todolistId).then(res=>{
+export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+    todolistAPI.deleteTodolist(todolistId).then(res => {
         //
         dispatch(deleteTodolistAC(todolistId))
     })
@@ -117,16 +106,27 @@ export const deleteTodolistTC=(todolistId:string)=>(dispatch: Dispatch)=>{
 
 
 /////////////
-export type AddTodolistActionType = ReturnType<typeof addTodolistsAC>
-export const addTodolistsAC = (newTitle: string) => {
+export type CreateTodolistActionType = ReturnType<typeof createTodolistAC>
+
+// export const createTodolistAC = (title: string) => {
+//теперь нам пришел новый созданный тодолист с сервера
+export const createTodolistAC = (todolist: TodolistType) => {
     return {
-        type: 'ADD-TODOLIST',
+        type: 'CREATE-TODOLIST',
         payload: {
-            title: newTitle,
-            todolistId: v1()
+            todolist
         },
     } as const
 }
+
+export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
+    todolistAPI.createTodolist({title}).then(res => {
+        //res.data.data.item
+        // нам вернется новый объект тодолист с СЕРВЕРА,его и передаем в AC
+        dispatch(createTodolistAC(res.data.data.item))
+    })
+}
+
 
 /////////
 type ChangeTodolistTitleActionType = ReturnType<typeof upDateTodolistAC>
@@ -144,7 +144,7 @@ export const upDateTodolistAC = (todolistId: string, newTitle: string) => {
 
 type ChangeTodolistFilterActionType = ReturnType<typeof changeFilterAC>
 
-export const changeFilterAC = (todolistId: string, filter: FilterValuesType)=> {
+export const changeFilterAC = (todolistId: string, filter: FilterValuesType) => {
     return {
         type: "CHANGE-TODOLIST-FIlTER",
         payload: {
@@ -154,7 +154,7 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType)=> {
     } as const
 }
 
-///////////создодим AC для получения тодолистов с сервера
+
 
 
 

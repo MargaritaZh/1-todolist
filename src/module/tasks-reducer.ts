@@ -1,7 +1,7 @@
 import {Dispatch} from "redux";
 import {TaskStatus, TaskType, todolistAPI, UpdateTaskModel} from "../api/api";
 import {AppRootStateType} from "./store";
-import {AddTodolistActionType, DeleteTodolistActionType, SetTodosActionType} from "./todolists-reducer";
+import {CreateTodolistActionType, DeleteTodolistActionType, SetTodosActionType} from "./todolists-reducer";
 
 
 export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
@@ -12,7 +12,7 @@ type ActionsType =
     | AddTasksActionType
     | changeTaskStatusActionType
     | changeTaskTitleActionType
-    | AddTodolistActionType
+    | CreateTodolistActionType
     | DeleteTodolistActionType
     | SetTodosActionType
     | SetTasksActionType
@@ -89,21 +89,13 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
         //         } : el)
         //     }
         // }
-        // case "ADD-TODOLIST": {
-        // setTasks({
-        //     ...tasks, [newId]: [
-        //         {id: v1(), title: "HTML & CSS", isDone: true},
-        //         {id: v1(), title: "JS & TS", isDone: true},
-        //         {id: v1(), title: "React", isDone: false}]
-        // })
-        //
-        //     return {
-        //         ...state,
-        //         // [v1()]: []
-        //         //создали генерацию общего id в caмом AC addTodolistsAC в возвращаемом объекте action
-        //         [action.payload.todolistId]: []
-        //     }
-        // }
+        case "CREATE-TODOLIST": {
+            return {
+                ...state,
+                //создали ключ в пустом {} тасок по id тодолиста и значение пустой [] для будующих тасок
+                [action.payload.todolist.id]: []
+            }
+        }
 
         case "DELETE-TODOLIST": {
             const copyState = {...state}
