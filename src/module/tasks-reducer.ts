@@ -7,7 +7,7 @@ import {CreateTodolistActionType, DeleteTodolistActionType, SetTodosActionType} 
 type ActionsType =
     DeleteTaskActionType
     | AddTasksActionType
-    |UpdateTaskActionType
+    | UpdateTaskActionType
     | CreateTodolistActionType
     | DeleteTodolistActionType
     | SetTodosActionType
@@ -162,7 +162,7 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
 ////////////////////
 
 
-
+//чтобы не путать с типом просто UpdateTaskModelType в api
 export type UpdateDomainTaskModelType = {
     title?: string
     description?: string
@@ -171,14 +171,14 @@ export type UpdateDomainTaskModelType = {
     startDate?: string
     deadline?: string
 }
- export type UpdateTaskActionType=ReturnType<typeof updateTaskAC>
+export type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
 
-export const updateTaskAC = ( todolistId: string,taskId: string, model: UpdateDomainTaskModelType) => {
+export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => {
 
-    return {type: "UPDATE-TASK", todolistId: todolistId,taskId: taskId, model} as const
+    return {type: "UPDATE-TASK", todolistId: todolistId, taskId: taskId, model} as const
 }
 
-export const updateTaskTC = (todolistId: string,taskId: string,domainModel: UpdateDomainTaskModelType, ) => {
+export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType,) => {
 
     return (dispatch: Dispatch, getState: () => AppRootStateType) => {
 //сначало обновим на сервере
@@ -191,7 +191,8 @@ export const updateTaskTC = (todolistId: string,taskId: string,domainModel: Upda
             console.warn("task not found in the state")
             return
         }
-//ЧТОБЫ НЕ ПЕРЕЗАТЕРЕТЬ ДАННЫЕ В model, возьмем для объекта model из найденной таски .КРОМЕ STATUS-ЕГО НУЖНО ОБНОВИТЬ
+//возьмем для объекта model данные из найденной таски и зафиксируем их.
+// Потом перезатрем новыми, пришедшими с UI ...domainModel(МОЖЕТ БЫТЬ ОДНО НАПРИМЕР TITLE)
         const apiModel: UpdateTaskModelType = {
             status: task.status,
             title: task.title,
@@ -204,7 +205,7 @@ export const updateTaskTC = (todolistId: string,taskId: string,domainModel: Upda
         todolistAPI.updateTask(todolistId, taskId, apiModel).then(res => {
 
             //когда пришел твет с сервера, то уже обновляем в BLL и т.д.
-            dispatch(updateTaskAC( todolistId,taskId, domainModel))
+            dispatch(updateTaskAC(todolistId, taskId, domainModel))
         })
     }
 }

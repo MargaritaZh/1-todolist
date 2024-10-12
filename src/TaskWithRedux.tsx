@@ -5,30 +5,33 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
-import { changeTaskTitleAC, deleteTaskTC} from "./module/tasks-reducer";
+import {changeTaskTitleAC, deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
 import {useAppDispatch} from "./module/store";
 import {TaskStatus, TaskType} from "./api/api";
-
 
 
 type Props = {
     todolistId: string
     task: TaskType
 };
-export const TaskWithRedux = memo(({todolistId,task}: Props) => {
+export const TaskWithRedux = memo(({todolistId, task}: Props) => {
 
-    const dispatch =useAppDispatch()
+    const dispatch = useAppDispatch()
 
 
     const removeTaskHandler = () => dispatch(deleteTaskTC(todolistId, task.id))
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(changeTaskStatusAC(todolistId, task.id,e.currentTarget.checked))
+        //изменить status таски при помощи объекта model
+        let status = e.currentTarget.checked ? TaskStatus.Completed : TaskStatus.New
+        dispatch(updateTaskTC(todolistId, task.id, {status: status}))
 
     }
 
     const upDateItemHandler = (newTitle: string) => {
-        dispatch(changeTaskTitleAC(todolistId, task.id, newTitle))
+        //изменить title таски при помощи объекта model
+        // dispatch(changeTaskTitleAC(todolistId, task.id, newTitle))
+        dispatch(updateTaskTC(todolistId, task.id, {title:newTitle}))
     }
 
 

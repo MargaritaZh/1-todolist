@@ -24,14 +24,11 @@ import {TaskWithRedux} from "./TaskWithRedux";
 import {TaskStatus, TaskType} from "./api/api";
 
 type TodolistPropsType = {
-    // todolist: TodolistType
     todolist: TodolistDomainType
 }
 
 
 export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) {
-
-    console.log("TodolistWithRedux")
 
     const {todolist} = props;
 
