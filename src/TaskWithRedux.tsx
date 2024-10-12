@@ -5,10 +5,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
-import {TaskType} from "./TodolistWithRedux";
 import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC} from "./module/tasks-reducer";
-import {useDispatch} from "react-redux";
 import {useAppDispatch} from "./module/store";
+import {TaskStatus, TaskType} from "./api/api";
+
 
 
 type Props = {
@@ -19,22 +19,21 @@ export const TaskWithRedux = memo(({todolistId,task}: Props) => {
 
     const dispatch =useAppDispatch()
 
-    // const removeTaskHandler = () => removeTask(todolistId, task.id)
+
     const removeTaskHandler = () => dispatch(deleteTaskTC(todolistId, task.id))
 
     const changeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        // changeTaskStatus(todolistId, task.id, e.currentTarget.checked)
-        dispatch(changeTaskStatusAC(todolistId, task.id, e.currentTarget.checked))
+        dispatch(changeTaskStatusAC(todolistId, task.id,e.currentTarget.checked))
+
     }
 
     const upDateItemHandler = (newTitle: string) => {
-        // props.upDateTask(props.todolistId, task.id, newTitle)
         dispatch(changeTaskTitleAC(todolistId, task.id, newTitle))
     }
 
 
     return (
-        <ListItem key={task.id} sx={getListItemSx(task.isDone)}>
+        <ListItem key={task.id} sx={getListItemSx(task.status === TaskStatus.Completed)}>
 
             <div>
                 {/*<input*/}
@@ -42,14 +41,14 @@ export const TaskWithRedux = memo(({todolistId,task}: Props) => {
                 {/*    checked={props.isDone}*/}
                 {/*    onChange={props.changeTaskStatusHandler}*/}
                 {/*/>*/}
-                <Checkbox checked={task.isDone}
+                <Checkbox checked={task.status === TaskStatus.Completed}
                     // onChange={props.changeTaskStatusHandler}/>
                           onChange={changeTaskStatusHandler}/>
 
                 {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
                 <EditableSpan
                     oldTitle={task.title}
-                    isDone={task.isDone}
+                    isDone={task.status === TaskStatus.Completed}
                     // upDateItem={props.upDateItemHandler}/>
                     upDateItem={upDateItemHandler}/>
 

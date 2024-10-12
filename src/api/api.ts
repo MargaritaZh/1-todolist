@@ -23,11 +23,11 @@ const instance = axios.create({
 
 export const todolistAPI = {
     getTodolists() {
-        const promise = instance.get<Array<TodolistApiType>>('/todo-lists',)
+        const promise = instance.get<Array<TodolistType>>('/todo-lists',)
         return promise
     },
     createTodolist(payload: CreateTodolistPayloadType) {
-        const promise = instance.post<ResponseType<{ item: TodolistApiType }>>('/todo-lists', payload)
+        const promise = instance.post<ResponseType<{ item: TodolistType }>>('/todo-lists', payload)
         return promise
     },
     deleteTodolist(todolistId: string) {
@@ -62,7 +62,7 @@ export const todolistAPI = {
     createTask(payload: { title: string; todolistId: string }) {
         const { title, todolistId } = payload
 
-        return instance.post<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks`, { title })
+        return instance.post<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, { title })
     },
     deleteTask(payload: { todolistId: string; taskId: string }) {
         const { taskId, todolistId } = payload
@@ -70,7 +70,7 @@ export const todolistAPI = {
     },
     updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
         const { taskId, todolistId, model } = payload
-        return instance.put<BaseResponse<{ item: DomainTask }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return instance.put<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
     },
 
 }
@@ -103,7 +103,7 @@ export enum TaskPriority {
     Later = 4
 }
 
-export type DomainTask = {
+export type TaskType = {
     description: string
     title: string
     status: TaskStatus
@@ -127,7 +127,7 @@ export type UpdateTaskModel = {
 
 
 type GetTasksResponse = {
-    items: Array<DomainTask>
+    items: Array<TaskType>
     totalCount: number
     error: string | null
 }
@@ -144,7 +144,7 @@ type UpdateTodolistPayloadType = {
 }
 
 
-export type TodolistApiType = {
+export type TodolistType = {
     id: string
     title: string
     addedDate: string

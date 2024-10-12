@@ -15,16 +15,12 @@ import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
 import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
+import {TaskStatus, TaskType} from "./api/api";
 
 type TodolistPropsType = {
     todolist: TodolistType
 }
 
-export type TaskType = {
-    id: string;
-    title: string;
-    isDone: boolean;
-}
 
 export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) {
 
@@ -40,9 +36,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 
     useEffect(() => {
-
        dispatch(getTasksTC(id))
-
     }, []);
 
 
@@ -55,11 +49,12 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 
     //запоминает результат выз
+
     tasks = useMemo(() => {
         if (filter === "active") {
-            tasks = tasks.filter(t => t.isDone === false)
+            tasks = tasks.filter(t => t.status === TaskStatus.New)
         } else if (filter === "completed") {
-            tasks = tasks.filter(t => t.isDone === true)
+            tasks = tasks.filter(t => t.status === TaskStatus.Completed)
         }
         return tasks
     }, [tasks,filter])

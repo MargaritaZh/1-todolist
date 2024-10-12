@@ -42,6 +42,7 @@ function AppWithRedux() {
             dispatch(getTodolistsTC())
     },[])
 
+
     const addTodolists =useCallback( (title: string) => {
         //один  и тот же ключ в двух местах
         // const newId = v1()
