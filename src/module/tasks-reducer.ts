@@ -1,4 +1,3 @@
-
 import {Dispatch} from "redux";
 import {TaskStatus, TaskType, todolistAPI, UpdateTaskModel} from "../api/api";
 import {AppRootStateType} from "./store";
@@ -22,8 +21,6 @@ type ActionsType =
 export type TasksStateType = {
     [key: string]: TaskType[]
 }
-
-
 
 
 const initialState: TasksStateType = {}
@@ -59,19 +56,15 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
             }
         }
 
-        // case "CREATE-TASK": {
-        //     console.log("CREATE-TASK action:", action.payload.task);
-        //     return {
-        //         ...state,
-        //         [action.payload.task.todoListId]: [{
-        //             ...action.payload.task,
-        //             isDone: false
-        //         }, ...state[action.payload.task.todoListId]]
-        //
-        //     }
-        // }
-        /////////////////
-
+        case "CREATE-TASK": {
+            return {
+                ...state,
+                [action.payload.task.todoListId]: [{
+                    ...action.payload.task,
+                }, ...state[action.payload.task.todoListId]]
+            }
+        }
+        ///////////////
 
 
         // case "CHANGE-TASK-STATUS": {
@@ -97,12 +90,12 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
         //     }
         // }
         // case "ADD-TODOLIST": {
-            // setTasks({
-            //     ...tasks, [newId]: [
-            //         {id: v1(), title: "HTML & CSS", isDone: true},
-            //         {id: v1(), title: "JS & TS", isDone: true},
-            //         {id: v1(), title: "React", isDone: false}]
-            // })
+        // setTasks({
+        //     ...tasks, [newId]: [
+        //         {id: v1(), title: "HTML & CSS", isDone: true},
+        //         {id: v1(), title: "JS & TS", isDone: true},
+        //         {id: v1(), title: "React", isDone: false}]
+        // })
         //
         //     return {
         //         ...state,
@@ -173,10 +166,11 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
     })
 }
 //////////////////
-type AddTasksActionType = ReturnType<typeof addTasksAC>
+type AddTasksActionType = ReturnType<typeof createTasksAC>
 
+//ПЕРЕПИСЫВАЕМ AC , теперь мы получаем готовую таску с СЕРВЕРА!!
 // export const addTasksAC = (todolistId: string, title: string) => {
-const addTasksAC = (task: TaskType) => {
+const createTasksAC = (task: TaskType) => {
     return {
         type: 'CREATE-TASK',
         payload: {task}
@@ -186,7 +180,8 @@ const addTasksAC = (task: TaskType) => {
 export const createTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch) => {
     todolistAPI.createTask({title, todolistId}).then((res) => {
         //(res.data.data.item)
-        dispatch(addTasksAC(res.data.data.item))
+        //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в AC
+        dispatch(createTasksAC(res.data.data.item))
     })
 }
 
@@ -226,8 +221,6 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
         // })
 
     }
-
-
 
 
 }
