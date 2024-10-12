@@ -5,7 +5,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
-import {changeTaskStatusAC, changeTaskTitleAC, deleteTaskTC} from "./module/tasks-reducer";
+import { changeTaskTitleAC, deleteTaskTC} from "./module/tasks-reducer";
 import {useAppDispatch} from "./module/store";
 import {TaskStatus, TaskType} from "./api/api";
 

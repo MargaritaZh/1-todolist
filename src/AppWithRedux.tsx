@@ -17,15 +17,6 @@ import { useAppDispatch, useAppSelector} from "./module/store";
 import {TodolistWithRedux} from "./TodolistWithRedux";
 
 
-// export type FilterValuesType = "all" | "active" | "completed"
-//
-// export type TodolistType = {
-//     id: string
-//     title: string
-//     filter: FilterValuesType
-// }
-
-
 type ThemeMode = "dark" | "light"
 
 function AppWithRedux() {

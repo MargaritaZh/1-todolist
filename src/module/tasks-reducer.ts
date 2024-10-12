@@ -1,17 +1,13 @@
 import {Dispatch} from "redux";
-import {TaskStatus, TaskType, todolistAPI, UpdateTaskModel} from "../api/api";
+import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
 import {CreateTodolistActionType, DeleteTodolistActionType, SetTodosActionType} from "./todolists-reducer";
 
 
-export type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
-export type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
-
 type ActionsType =
     DeleteTaskActionType
     | AddTasksActionType
-    | changeTaskStatusActionType
-    | changeTaskTitleActionType
+    |UpdateTaskActionType
     | CreateTodolistActionType
     | DeleteTodolistActionType
     | SetTodosActionType
@@ -66,29 +62,17 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
         }
         ///////////////
 
+        case "UPDATE-TASK": {
+            return {
+                ...state,
+                [action.todolistId]: state[action.todolistId].map(el => el.id === action.taskId ? {
+                    ...el,
+                    ...action.model
+                } : el)
+            }
+        }
 
-        // case "CHANGE-TASK-STATUS": {
-        //     return {
-        //         ...state,
-        //         [action.todolistId]: state[action.todolistId].map(el => el.id === action.taskId ? {
-        //             ...el,
-        //             isDone: action.newIsDoneValue
-        //         } : el)
-        //     }
-        //
-        // }
-        // case "CHANGE-TASK-TITLE": {
-        //     //из App
-        //     // setTasks({...tasks, [todolistId]: tasks[todolistId].map(el => el.id === id ? {...el, title: newTitle} : el)})
-        //     //
-        //     return {
-        //         ...state,
-        //         [action.todolistId]: state[action.todolistId].map(el => el.id === action.taskId ? {
-        //             ...el,
-        //             title: action.newTitle
-        //         } : el)
-        //     }
-        // }
+        /////
         case "CREATE-TODOLIST": {
             return {
                 ...state,
@@ -178,42 +162,50 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
 ////////////////////
 
 
-export const changeTaskStatusAC = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
-    return {
-        // type: 'CHANGE-TASK-STATUS', todolistId: todolistId, taskId: taskId,newIsDoneValue:newIsDoneValue
 
-        type: 'CHANGE-TASK-STATUS', todolistId, taskId, newIsDoneValue
-    } as const
+export type UpdateDomainTaskModelType = {
+    title?: string
+    description?: string
+    status?: TaskStatus
+    priority?: TaskPriority
+    startDate?: string
+    deadline?: string
+}
+ export type UpdateTaskActionType=ReturnType<typeof updateTaskAC>
+
+export const updateTaskAC = ( todolistId: string,taskId: string, model: UpdateDomainTaskModelType) => {
+
+    return {type: "UPDATE-TASK", todolistId: todolistId,taskId: taskId, model} as const
 }
 
-export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatus) => (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const updateTaskTC = (todolistId: string,taskId: string,domainModel: UpdateDomainTaskModelType, ) => {
 
-    //чтобы обновить нашу таску, найдем ее в state методом find
-    const state = getState()
-
-    const task = state.tasks[todolistId].find(task => task.id === taskId)
-
-    if (task) {
-        const model: UpdateTaskModel = {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+//сначало обновим на сервере
+        //1 при помощи функции getState мы находим наш state
+        const state = getState()
+//находим нужную таску
+        const task = state.tasks[todolistId].find(t => t.id === taskId)
+//если ее нет сообщение ошибки
+        if (!task) {
+            console.warn("task not found in the state")
+            return
+        }
+//ЧТОБЫ НЕ ПЕРЕЗАТЕРЕТЬ ДАННЫЕ В model, возьмем для объекта model из найденной таски .КРОМЕ STATUS-ЕГО НУЖНО ОБНОВИТЬ
+        const apiModel: UpdateTaskModelType = {
+            status: task.status,
             title: task.title,
-            startDate: task.startDate,
+            deadline: task.deadline,
             description: task.description,
             priority: task.priority,
-            deadline: task.deadline,
-            status
+            startDate: task.startDate,
+            ...domainModel
         }
+        todolistAPI.updateTask(todolistId, taskId, apiModel).then(res => {
 
-        //?????????? todolistAPI.updateTask(todolistId,taskId,model).then(res => {
-        //     //
-        //     dispatch(changeTaskStatusAC(todolistId, taskId, status))
-        //
-        // })
-
+            //когда пришел твет с сервера, то уже обновляем в BLL и т.д.
+            dispatch(updateTaskAC( todolistId,taskId, domainModel))
+        })
     }
-
-
 }
-
-
-
 

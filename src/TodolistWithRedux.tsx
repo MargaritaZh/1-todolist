@@ -12,7 +12,13 @@ import {filterButtonContainerSx} from "./Todolist.styles";
 // import {TodolistType} from "./AppWithRedux";
 import { useAppDispatch, useAppSelector} from "./module/store";
 import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
-import {changeFilterAC, deleteTodolistTC, TodolistDomainType, upDateTodolistAC} from "./module/todolists-reducer";
+import {
+    changeFilterAC,
+    deleteTodolistTC,
+    TodolistDomainType,
+
+    upDateTodolistTitleTC
+} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
 import {TaskStatus, TaskType} from "./api/api";
@@ -79,14 +85,12 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         </List>
 
     const addTaskHandler = (title: string) => {
-        ///
         dispatch(createTaskTC(title,id))
     }
 
 
     const upDateTodolistHandler = useCallback((newTitle: string) => {
-        // upDateTodolist(props.todolistId, newTitle)
-        dispatch(upDateTodolistAC(id, newTitle))
+        dispatch(upDateTodolistTitleTC(id, newTitle))
     }, [dispatch])
 
     return (

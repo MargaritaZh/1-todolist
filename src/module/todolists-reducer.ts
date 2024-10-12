@@ -45,20 +45,15 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
                 ...action.payload.todolist,
                 filter: "all",
             }
-            return [newTodo,...state] // логика по добавлению тудулиста
+            return [newTodo, ...state] // логика по добавлению тудулиста
         }
-        // case "CHANGE-TODOLIST-TITLE": {
-        //     // setTodolists(
-        //     //     todolists.map(el => el.id === todolistId ? {...el, title: newTitle} : el))
-        //
-        //     return state.map(el => el.id === action.payload.id ? {...el, title: action.payload.title} : el)
-        // }
-        //
-        // case "CHANGE-TODOLIST-FIlTER": {
-        //     // setTodolists([...todolists.map(el => el.id === todolistId ? {...el, filter: filter} : el)])
-        //
-        //     return [...state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)]
-        // }
+        case "CHANGE-TODOLIST-TITLE": {
+            return state.map(el => el.id === action.payload.id ? {...el, title: action.payload.title} : el)
+        }
+
+        case "CHANGE-TODOLIST-FIlTER": {
+            return state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)
+        }
 
         default:
             return state
@@ -67,9 +62,9 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
 }
 
 
-///////////создодим AC для получения тодолистов с сервера
+///////////создaдим TC для получения тодолистов с сервера
 export type SetTodosActionType = ReturnType<typeof setTodosAC>
-
+//as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 export const setTodosAC = (todolists: Array<TodolistType>) => ({
     type: "SET-TODOLISTS",
     payload: {
@@ -85,7 +80,6 @@ export const getTodolistsTC = () => (dispatch: Dispatch) => {
     })
 }
 ////////////////////
-//as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
 export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
 const deleteTodolistAC = (todolistId: string) => {
@@ -129,9 +123,9 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
 
 
 /////////
-type ChangeTodolistTitleActionType = ReturnType<typeof upDateTodolistAC>
+type ChangeTodolistTitleActionType = ReturnType<typeof upDateTodolistTitleAC>
 
-export const upDateTodolistAC = (todolistId: string, newTitle: string) => {
+export const upDateTodolistTitleAC = (todolistId: string, newTitle: string) => {
     return {
         type: 'CHANGE-TODOLIST-TITLE',
         payload: {
@@ -140,8 +134,22 @@ export const upDateTodolistAC = (todolistId: string, newTitle: string) => {
         },
     } as const
 }
+
+export const upDateTodolistTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+
+    todolistAPI.updateTodolist(todolistId, {title}).then(res => {
+        //сначало обновим а сервере, затем в BLL
+        dispatch(upDateTodolistTitleAC(todolistId, title))
+
+
+    })
+
+
+}
+
 /////////
 
+//!!МЫ НЕ ДЕЛАЛИ ДЛЯ ФИЛЬТРАЦИИ TC, так как фильтрация пока происходит на UI/В дальнейшем сделаем на сервере в этом проекте
 type ChangeTodolistFilterActionType = ReturnType<typeof changeFilterAC>
 
 export const changeFilterAC = (todolistId: string, filter: FilterValuesType) => {

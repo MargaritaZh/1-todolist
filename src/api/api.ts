@@ -34,7 +34,7 @@ export const todolistAPI = {
         const promise = instance.delete<ResponseType>(`/todo-lists/${todolistId}`)
         return promise
     },
-    updateTodolist(todolistId: string, payload: UpdateTodolistPayloadType) {
+    updateTodolist(todolistId: string, payload: { title: string }) {
         const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}`, payload)
         return promise
     },
@@ -51,11 +51,16 @@ export const todolistAPI = {
         const {taskId, todolistId} = payload
         return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModel }) {
-        const {taskId, todolistId, model} = payload
-        return instance.put<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
-    },
-
+    // updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModelType }) {
+    //     const {taskId, todolistId, model} = payload
+    //     //!!!Нужно деструктурировать, так как принимается один уровень вложенности {}. т.к. model тоже {}
+    //     return instance.put<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks/${taskId}`, model)
+    // },
+    updateTask(todolistId: string, taskId: string, model: UpdateTaskModelType) {
+        const promise = instance.put<ResponseType>(
+            `todo-lists/${todolistId}/tasks/${taskId}`, model)
+        return promise
+    }
 }
 
 export type FieldError = {
@@ -98,7 +103,7 @@ export type TaskType = {
     order: number
     addedDate: string
 }
-export type UpdateTaskModel = {
+export type UpdateTaskModelType = {
     title: string
     description: string
     status: TaskStatus
@@ -117,9 +122,6 @@ type GetTasksResponse = {
 
 ////////////////////////
 
-type UpdateTodolistPayloadType = {
-    title: string
-}
 
 
 export type TodolistType = {
