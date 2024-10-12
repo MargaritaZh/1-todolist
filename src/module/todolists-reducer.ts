@@ -81,10 +81,25 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
         // throw new Error("I don't understand this type")
     }
 }
+export type SetTodosActionType = ReturnType<typeof setTodosAC>
 
+export const setTodosAC = (todolists: Array<TodolistType>) => ({
+    type: "SET-TODOLISTS",
+    payload: {todolists}
+} as const)
+
+export const getTodolistsTC = () => (dispatch: Dispatch) => {
+    todolistAPI.getTodolists().then((res) => {
+        //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
+        // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state
+        dispatch(setTodosAC(res.data))
+    })
+}
+////////////////////
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
-export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
-export const deleteTodolistAC = (todolistId: string) => {
+
+ export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
+ const deleteTodolistAC = (todolistId: string) => {
     return {
         type: 'DELETE-TODOLIST',
         payload: {
@@ -92,6 +107,14 @@ export const deleteTodolistAC = (todolistId: string) => {
         }
     } as const
 }
+
+export const deleteTodolistTC=(todolistId:string)=>(dispatch: Dispatch)=>{
+    todolistAPI.deleteTodolist(todolistId).then(res=>{
+        //
+        dispatch(deleteTodolistAC(todolistId))
+    })
+}
+
 
 /////////////
 export type AddTodolistActionType = ReturnType<typeof addTodolistsAC>
@@ -133,21 +156,7 @@ export const changeFilterAC = (todolistId: string, filter: FilterValuesType)=> {
 
 ///////////создодим AC для получения тодолистов с сервера
 
-export type SetTodosActionType = ReturnType<typeof setTodosAC>
 
-export const setTodosAC = (todolists: Array<TodolistType>) => ({
-    type: "SET-TODOLISTS",
-    payload: {todolists}
-} as const)
-
-export const getTodolistsTC = () => (dispatch: Dispatch) => {
-    todolistAPI.getTodolists().then((res) => {
-        //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
-        // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state
-        dispatch(setTodosAC(res.data))
-    })
-}
-////////////////////
 
 
 

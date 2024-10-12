@@ -12,7 +12,7 @@ import {filterButtonContainerSx} from "./Todolist.styles";
 import {TodolistType} from "./AppWithRedux";
 import { useAppDispatch, useAppSelector} from "./module/store";
 import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
-import {changeFilterAC, deleteTodolistAC, upDateTodolistAC} from "./module/todolists-reducer";
+import {changeFilterAC, deleteTodolistTC, upDateTodolistAC} from "./module/todolists-reducer";
 import {ButtonPropsType} from "./Button";
 import {TaskWithRedux} from "./TaskWithRedux";
 import {TaskStatus, TaskType} from "./api/api";
@@ -98,7 +98,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                 {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
                 <IconButton aria-label="delete"
                     // onClick={() => props.deleteTodolist(props.todolistId)}>
-                            onClick={() => dispatch(deleteTodolistAC(id))}>
+                            onClick={() => dispatch(deleteTodolistTC(id))}>
                     <DeleteIcon fontSize="inherit"/>
                 </IconButton>
 

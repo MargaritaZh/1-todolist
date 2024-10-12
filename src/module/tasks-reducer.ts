@@ -105,13 +105,11 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
         //     }
         // }
 
-        // case "REMOVE-TODOLIST": {
-        //     //из APP
-        //     // delete tasks[todolistId]
-        //     const copyState = {...state}
-        //     delete copyState[action.payload.id]
-        //     return copyState
-        // }
+        case "DELETE-TODOLIST": {
+            const copyState = {...state}
+            delete copyState[action.payload.id]
+            return copyState
+        }
 
         default:
             return state
@@ -184,7 +182,6 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
         dispatch(createTasksAC(res.data.data.item))
     })
 }
-
 
 ////////////////////
 
