@@ -1,8 +1,6 @@
-import {v1} from 'uuid'
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {AppRootStateType} from "./store";
-import {setAppStatusAC} from "../app/app-reducer";
+import {setAppStatusAC, setAppStatusActionType} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -11,6 +9,7 @@ type ActionsType =
     | CreateTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
+    | setAppStatusActionType
 
 
 export type FilterValuesType = "all" | "active" | "completed"
@@ -73,15 +72,15 @@ export const setTodosAC = (todolists: Array<TodolistType>) => ({
     }
 } as const)
 
-export const getTodolistsTC = () => (dispatch: Dispatch) => {
-
+export const getTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
+    //покажи крутилку
     dispatch(setAppStatusAC("loading"))
 
     todolistAPI.getTodolists().then((res) => {
         //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
         // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state
         dispatch(setTodosAC(res.data))
-
+        //убери крутилку
         dispatch(setAppStatusAC("succeeded"))
     })
 }
@@ -97,10 +96,15 @@ const deleteTodolistAC = (todolistId: string) => {
     } as const
 }
 
-export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+    //покажи крутилку
+    dispatch(setAppStatusAC("loading"))
+
     todolistAPI.deleteTodolist(todolistId).then(res => {
         //
         dispatch(deleteTodolistAC(todolistId))
+        //убери крутилку
+        dispatch(setAppStatusAC("succeeded"))
     })
 }
 
@@ -119,11 +123,16 @@ export const createTodolistAC = (todolist: TodolistType) => {
     } as const
 }
 
-export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
+export const createTodolistTC = (title: string) => (dispatch: Dispatch<ActionsType>) => {
+    //покажи крутилку
+    dispatch(setAppStatusAC("loading"))
+
     todolistAPI.createTodolist({title}).then(res => {
         //res.data.data.item
         // нам вернется новый объект тодолист с СЕРВЕРА,его и передаем в AC
         dispatch(createTodolistAC(res.data.data.item))
+        //убери крутилку
+        dispatch(setAppStatusAC("succeeded"))
     })
 }
 
@@ -141,12 +150,14 @@ export const upDateTodolistTitleAC = (todolistId: string, newTitle: string) => {
     } as const
 }
 
-export const upDateTodolistTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
-
+export const upDateTodolistTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch<ActionsType>) => {
+    //покажи крутилку
+    dispatch(setAppStatusAC("loading"))
     todolistAPI.updateTodolist(todolistId, {title}).then(res => {
         //сначало обновим а сервере, затем в BLL
         dispatch(upDateTodolistTitleAC(todolistId, title))
-
+        //убери крутилку
+        dispatch(setAppStatusAC("succeeded"))
 
     })
 

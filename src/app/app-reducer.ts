@@ -11,22 +11,23 @@ export const appReducer = (
     action: ActionsType
 ): InitialStateType => {
     switch (action.type) {
-        case 'SET_STATUS':
-            return { ...state, status: action.payload.status }
+        case 'APP/SET-STATUS':
+            return {...state, status: action.payload.status}
         default:
             return state
     }
 }
 
 
-type ActionsType=setAppStatusActionType
-
-
-export type setAppStatusActionType=ReturnType<typeof setAppStatusAC>
-
 export const setAppStatusAC = (status: RequestStatusType) => {
     return {
-        type: 'SET_STATUS',
-        payload: { status },
+        type: 'APP/SET-STATUS',
+        payload: {status},
     } as const
+
 }
+
+//type
+type ActionsType = setAppStatusActionType
+
+export type setAppStatusActionType = ReturnType<typeof setAppStatusAC>
