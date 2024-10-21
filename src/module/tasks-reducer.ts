@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
 import {CreateTodolistActionType, DeleteTodolistActionType, SetTodosActionType} from "./todolists-reducer";
-import {setAppStatusAC, setAppStatusActionType} from "../app/app-reducer";
+import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -13,7 +13,8 @@ type ActionsType =
     | DeleteTodolistActionType
     | SetTodosActionType
     | SetTasksActionType
-    | setAppStatusActionType
+    | SetAppStatusActionType
+    | SetAppErrorActionType
 
 
 export type TasksStateType = {
@@ -98,25 +99,13 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 
 
-export const changeTaskTitleAC = (todolistId: string, taskId: string, newTitle: string) => {
-    return {
-        // type: 'CHANGE-TASK-TITLE', todolistId: todolistId, taskId: taskId,newTitle:newTitle
-        type: 'CHANGE-TASK-TITLE', todolistId, taskId, newTitle
-    } as const
-}
 ///////////////////////////////////
 
 export type SetTasksActionType = ReturnType<typeof setTasksAC>
 
-const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => {
-    return {
-        type: "SET-TASKS",
-        payload: {
-            tasks,
-            todolistId
-        }
-    } as const
-}
+const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => ({
+    type: "SET-TASKS", payload: {tasks, todolistId}
+} as const)
 
 export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     //покажи крутилку
@@ -134,11 +123,8 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
 
 type DeleteTaskActionType = ReturnType<typeof deleteTaskAC>
 
-const deleteTaskAC = (todolistId: string, taskId: string) => {
-    return {
-        type: 'DELETE-TASK', todolistId, taskId,
-    } as const
-}
+const deleteTaskAC = (todolistId: string, taskId: string) => ({type: 'DELETE-TASK', todolistId, taskId,} as const)
+
 
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<ActionsType>) => {
     //покажи крутилку
@@ -156,12 +142,7 @@ type AddTasksActionType = ReturnType<typeof createTasksAC>
 
 //ПЕРЕПИСЫВАЕМ AC , теперь мы получаем готовую таску с СЕРВЕРА!!
 // export const addTasksAC = (todolistId: string, title: string) => {
-const createTasksAC = (task: TaskType) => {
-    return {
-        type: 'CREATE-TASK',
-        payload: {task}
-    } as const
-}
+const createTasksAC = (task: TaskType) => ({type: 'CREATE-TASK', payload: {task}} as const)
 
 export const createTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     //покажи крутилку
@@ -169,15 +150,26 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
 
     todolistAPI.createTask({title, todolistId}).then((res) => {
         //(res.data.data.item)
-        //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в AC
-        dispatch(createTasksAC(res.data.data.item))
-        //убери крутилку
-        dispatch(setAppStatusAC("succeeded"))
+
+        if (res.data.resultCode === 0) {
+            //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в createTasksAC
+            dispatch(createTasksAC(res.data.data.item))
+            //убери крутилку
+            dispatch(setAppStatusAC("succeeded"))
+        } else {
+            if (res.data.messages.length) {
+                dispatch(setAppErrorAC(res.data.messages[0]))
+            } else {
+                //выводим дефолтеую ошибку
+                dispatch(setAppErrorAC("Something went wrong"))
+            }
+            //убрать крутилку
+            dispatch(setAppStatusAC("failed"))
+        }
     })
 }
 
 ////////////////////
-
 
 //чтобы не путать с типом просто UpdateTaskModelType в api
 export type UpdateDomainTaskModelType = {
@@ -190,17 +182,18 @@ export type UpdateDomainTaskModelType = {
 }
 export type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
 
-export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => {
-
-    return {type: "UPDATE-TASK", todolistId: todolistId, taskId: taskId, model} as const
-}
+export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => ({
+    type: "UPDATE-TASK",
+    todolistId: todolistId,
+    taskId: taskId,
+    model
+} as const)
 
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType,) => {
 
     return (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
         //покажи крутилку
         dispatch(setAppStatusAC("loading"))
-
 
         //сначало обновим на сервере
         //1 при помощи функции getState мы находим наш state
@@ -223,7 +216,6 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             startDate: task.startDate,
             ...domainModel
         }
-
 
         todolistAPI.updateTask(todolistId, taskId, apiModel).then(res => {
 

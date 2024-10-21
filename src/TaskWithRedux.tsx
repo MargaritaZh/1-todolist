@@ -1,11 +1,11 @@
 import {ChangeEvent, memo} from "react";
-import {EditableSpan} from "./EditableSpan";
+import {EditableSpan} from "./components/EditableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
-import {changeTaskTitleAC, deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
+import { deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
 import {useAppDispatch} from "./module/store";
 import {TaskStatus, TaskType} from "./api/api";
 

@@ -8,7 +8,6 @@ type Props = {
 };
 export const EditableSpan = memo((props: Props) => {
 
-    console.log("EditableSpan")
 
     const [editMode, setEditMode] = useState(false)
     const [newTitle, setNewtitle] = useState(props.oldTitle)
@@ -26,7 +25,6 @@ export const EditableSpan = memo((props: Props) => {
         setNewtitle(event.currentTarget.value)
 
     }
-
 
     const addItemHandler=()=>{
         props.upDateItem(newTitle)

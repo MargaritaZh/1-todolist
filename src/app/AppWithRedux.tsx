@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
-import {TaskType} from "../Todolist";
-import {AddItemForm} from "../AddItemForm";
+import {AddItemForm} from "../components/AddItemForm/AddItemForm";
 import ButtonAppBar from "../ButtonAppBar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -11,11 +10,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {
     createTodolistTC, getTodolistsTC, TodolistDomainType,
 } from "../module/todolists-reducer";
-
-
 import { useAppDispatch, useAppSelector} from "../module/store";
 import {TodolistWithRedux} from "../TodolistWithRedux";
 import LinearProgress from '@mui/material/LinearProgress';
+import {CustomizedSnackbars} from "../components/ErrorSnackBar/CustomizedSnackbars";
+
+
 
 
 type ThemeMode = "dark" | "light"
@@ -91,6 +91,8 @@ function AppWithRedux() {
                             })
                         }
                     </Grid>
+
+                    <CustomizedSnackbars/>
                 </Container>
             </ThemeProvider>
         </div>

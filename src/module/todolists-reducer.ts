@@ -1,6 +1,6 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {setAppStatusAC, setAppStatusActionType} from "../app/app-reducer";
+import {setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -9,7 +9,7 @@ type ActionsType =
     | CreateTodolistActionType
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
-    | setAppStatusActionType
+    | SetAppStatusActionType
 
 
 export type FilterValuesType = "all" | "active" | "completed"
