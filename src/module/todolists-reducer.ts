@@ -2,6 +2,7 @@ import {v1} from 'uuid'
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
 import {AppRootStateType} from "./store";
+import {setAppStatusAC} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -73,10 +74,15 @@ export const setTodosAC = (todolists: Array<TodolistType>) => ({
 } as const)
 
 export const getTodolistsTC = () => (dispatch: Dispatch) => {
+
+    dispatch(setAppStatusAC("loading"))
+
     todolistAPI.getTodolists().then((res) => {
         //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
         // чтобы в редьюсеры передать актуальные данные, обновить ,засетать тодолисты с сервера в state
         dispatch(setTodosAC(res.data))
+
+        dispatch(setAppStatusAC("succeeded"))
     })
 }
 ////////////////////

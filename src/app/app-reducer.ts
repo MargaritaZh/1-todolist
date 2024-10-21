@@ -19,11 +19,14 @@ export const appReducer = (
 }
 
 
-type ActionsType=any
+type ActionsType=setAppStatusActionType
 
-// export const setAppStatusAC = (status: RequestStatusType) => {
-//     return {
-//         type: 'SET_STATUS',
-//         payload: { status },
-//     } as const
-// }
+
+export type setAppStatusActionType=ReturnType<typeof setAppStatusAC>
+
+export const setAppStatusAC = (status: RequestStatusType) => {
+    return {
+        type: 'SET_STATUS',
+        payload: { status },
+    } as const
+}

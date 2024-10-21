@@ -22,6 +22,9 @@ type ThemeMode = "dark" | "light"
 
 function AppWithRedux() {
 
+    const status=useAppSelector(state => state.app.status)
+
+
     const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
 
     const dispatch = useAppDispatch()
@@ -57,7 +60,7 @@ function AppWithRedux() {
                 <CssBaseline/>
                 <Container fixed>
                     <ButtonAppBar changeModeHandler={changeModeHandler}/>
-                    <LinearProgress color="secondary" />
+                    {status==="loading"&& <LinearProgress color="secondary" />}
                     <Grid container sx={{marginBottom: "20px"}}>
                         <AddItemForm addItem={addTodolists}/>
                     </Grid>
