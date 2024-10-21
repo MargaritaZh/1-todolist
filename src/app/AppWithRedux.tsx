@@ -1,8 +1,8 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import './App.css';
-import {TaskType} from "./Todolist";
-import {AddItemForm} from "./AddItemForm";
-import ButtonAppBar from "./ButtonAppBar";
+import {TaskType} from "../Todolist";
+import {AddItemForm} from "../AddItemForm";
+import ButtonAppBar from "../ButtonAppBar";
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -10,11 +10,12 @@ import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
     createTodolistTC, getTodolistsTC, TodolistDomainType,
-} from "./module/todolists-reducer";
+} from "../module/todolists-reducer";
 
 
-import { useAppDispatch, useAppSelector} from "./module/store";
-import {TodolistWithRedux} from "./TodolistWithRedux";
+import { useAppDispatch, useAppSelector} from "../module/store";
+import {TodolistWithRedux} from "../TodolistWithRedux";
+import LinearProgress from '@mui/material/LinearProgress';
 
 
 type ThemeMode = "dark" | "light"
@@ -56,7 +57,7 @@ function AppWithRedux() {
                 <CssBaseline/>
                 <Container fixed>
                     <ButtonAppBar changeModeHandler={changeModeHandler}/>
-
+                    <LinearProgress color="secondary" />
                     <Grid container sx={{marginBottom: "20px"}}>
                         <AddItemForm addItem={addTodolists}/>
                     </Grid>
