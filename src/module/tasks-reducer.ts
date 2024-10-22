@@ -144,6 +144,14 @@ type AddTasksActionType = ReturnType<typeof createTasksAC>
 // export const addTasksAC = (todolistId: string, title: string) => {
 const createTasksAC = (task: TaskType) => ({type: 'CREATE-TASK', payload: {task}} as const)
 
+
+//enum как константа, ее нельзя изменить
+enum Result_Code {
+    SUCCESS = 0,
+    ERROR = 1,
+    RECAPTCHA_ERROR = 10
+}
+
 export const createTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     //покажи крутилку
     dispatch(setAppStatusAC("loading"))
@@ -151,7 +159,7 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
     todolistAPI.createTask({title, todolistId}).then((res) => {
         //(res.data.data.item)
 
-        if (res.data.resultCode === 0) {
+        if (res.data.resultCode === Result_Code.SUCCESS) {
             //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в createTasksAC
             dispatch(createTasksAC(res.data.data.item))
             //убери крутилку
