@@ -1,6 +1,12 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {RequestStatusType, setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
+import {
+    RequestStatusType,
+    setAppErrorAC,
+    SetAppErrorActionType,
+    setAppStatusAC,
+    SetAppStatusActionType
+} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -11,6 +17,7 @@ type ActionsType =
     | ChangeTodolistFilterActionType
     | SetAppStatusActionType
     | ReturnType<typeof changeEntityStatusAC>
+    | SetAppErrorActionType
 
 
 //добавили в типы filter, то что не возвращает сервер
@@ -116,13 +123,18 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch<Acti
     //измени emptity статус тодолиста для управления  disaibled нужныx элементов
     dispatch(changeEntityStatusAC(todolistId, "loading"))
 
-    todolistAPI.deleteTodolist(todolistId).then(res => {
-        //
-        dispatch(deleteTodolistAC(todolistId))
-        //убери крутилку
-        dispatch(setAppStatusAC("succeeded"))
-
-    })
+    todolistAPI.deleteTodolist(todolistId)
+        .then(res => {
+            //
+            dispatch(deleteTodolistAC(todolistId))
+            //убери крутилку
+            dispatch(setAppStatusAC("succeeded"))
+        })
+        .catch((error) => {
+            dispatch(setAppErrorAC(error.messages))
+            //измени emptity статус тодолиста для управления  disaibled нужныx элементов/РАЗДИЗЭЙБЛИТЬ
+            dispatch(changeEntityStatusAC(todolistId, "idle"))
+        })
 }
 
 
