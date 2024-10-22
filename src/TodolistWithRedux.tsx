@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useEffect, useMemo} from "react";
+import React, {memo, useCallback, useEffect, useMemo} from "react";
 import {AddItemForm} from "./components/AddItemForm/AddItemForm";
 import {EditableSpan} from "./components/EditableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "./Todolist.styles";
-import { useAppDispatch, useAppSelector} from "./module/store";
+import {useAppDispatch, useAppSelector} from "./module/store";
 import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
 import {
     changeFilterAC,
@@ -28,7 +28,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const {todolist} = props;
 
-    const {id, title, filter} = todolist
+    const {id, title, filter, entityStatus} = todolist
 
     let tasks = useAppSelector<Array<TaskType>>(state => state.tasks[id])
 
@@ -36,16 +36,14 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 
     useEffect(() => {
-       dispatch(getTasksTC(id))
+        dispatch(getTasksTC(id))
     }, []);
-
 
 
     const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {
         // changeFilter(props.todolistId, filter)
         dispatch(changeFilterAC(id, filter))
     }, [dispatch])
-
 
 
     //запоминает результат выз
@@ -57,8 +55,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
             tasks = tasks.filter(t => t.status === TaskStatus.Completed)
         }
         return tasks
-    }, [tasks,filter])
-
+    }, [tasks, filter])
 
 
     const taskslist: JSX.Element = tasks.length === 0
@@ -78,7 +75,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         </List>
 
     const addTaskHandler = (title: string) => {
-        dispatch(createTaskTC(title,id))
+        dispatch(createTaskTC(title, id))
     }
 
     const upDateTodolistHandler = useCallback((newTitle: string) => {
@@ -95,13 +92,14 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                 {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
                 <IconButton aria-label="delete"
                     // onClick={() => props.deleteTodolist(props.todolistId)}>
-                            onClick={() => dispatch(deleteTodolistTC(id))}>
+                            onClick={() => dispatch(deleteTodolistTC(id))}
+                            disabled={entityStatus==="loading"}>
                     <DeleteIcon fontSize="inherit"/>
                 </IconButton>
 
             </div>
 
-            <AddItemForm addItem={addTaskHandler}/>
+            <AddItemForm addItem={addTaskHandler} disabled={entityStatus==="loading"}/>
 
             {taskslist}
 

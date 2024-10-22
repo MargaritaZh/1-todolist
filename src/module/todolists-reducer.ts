@@ -1,6 +1,6 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
+import {RequestStatusType, setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
 
 
 type ActionsType =
@@ -10,9 +10,8 @@ type ActionsType =
     | ChangeTodolistTitleActionType
     | ChangeTodolistFilterActionType
     | SetAppStatusActionType
+    | ReturnType<typeof changeEntityStatusAC>
 
-
-export type FilterValuesType = "all" | "active" | "completed"
 
 //добавили в типы filter, то что не возвращает сервер
 // type TodolistType = {
@@ -22,8 +21,12 @@ export type FilterValuesType = "all" | "active" | "completed"
 //     order: number
 // }
 
+export type FilterValuesType = "all" | "active" | "completed"
+// type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+
 export type TodolistDomainType = TodolistType & {
-    filter: FilterValuesType
+    filter: FilterValuesType,
+    entityStatus: RequestStatusType
 }
 
 const initialState: TodolistDomainType[] = []
@@ -32,7 +35,7 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
     switch (action.type) {
         ///////////////
         case "SET-TODOLISTS": {
-            return action.payload.todolists.map(tl => ({...tl, filter: "all"}))
+            return action.payload.todolists.map(tl => ({...tl, filter: "all", entityStatus: "idle"}))
             //из объекта action достали данные, приходящие с сервера todolists
         }
         ////////////
@@ -44,6 +47,7 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
             const newTodo: TodolistDomainType = {
                 ...action.payload.todolist,
                 filter: "all",
+                entityStatus: "idle"
             }
             return [newTodo, ...state] // логика по добавлению тудулиста
         }
@@ -54,7 +58,12 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
         case "CHANGE-TODOLIST-FIlTER": {
             return state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)
         }
-
+        case "TODOLIST/CHANGE-ENTITY-STATUS": {
+            return state.map(el => el.id === action.payload.id ? {
+                ...el,
+                entityStatus: action.payload.entityStatus
+            } : el)
+        }
         default:
             return state
         // throw new Error("I don't understand this type")
@@ -85,26 +94,34 @@ export const getTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
     })
 }
 ////////////////////
+//для изменения статуса тододиста,чтобы управлять disabled нужных элементов
+
+const changeEntityStatusAC = (todolistId: string, entityStatus: RequestStatusType) => ({
+    type: 'TODOLIST/CHANGE-ENTITY-STATUS', payload: {id: todolistId, entityStatus}
+} as const)
+
+
+///////////////////////
 
 export type DeleteTodolistActionType = ReturnType<typeof deleteTodolistAC>
-const deleteTodolistAC = (todolistId: string) => {
-    return {
-        type: 'DELETE-TODOLIST',
-        payload: {
-            id: todolistId,
-        }
-    } as const
-}
+
+const deleteTodolistAC = (todolistId: string) => ({
+    type: 'DELETE-TODOLIST', payload: {id: todolistId,}
+} as const)
 
 export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+
     //покажи крутилку
     dispatch(setAppStatusAC("loading"))
+    //измени emptity статус тодолиста для управления  disaibled нужныx элементов
+    dispatch(changeEntityStatusAC(todolistId, "loading"))
 
     todolistAPI.deleteTodolist(todolistId).then(res => {
         //
         dispatch(deleteTodolistAC(todolistId))
         //убери крутилку
         dispatch(setAppStatusAC("succeeded"))
+
     })
 }
 

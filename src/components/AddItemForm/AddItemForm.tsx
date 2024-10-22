@@ -4,7 +4,8 @@ import TextField from '@mui/material/TextField';
 
 
 export type Props = {
-    addItem: (title: string) => void
+    addItem: (title: string) => void,
+    disabled?:boolean
 };
 
 export const AddItemForm = memo((props: Props) => {
@@ -44,7 +45,8 @@ export const AddItemForm = memo((props: Props) => {
         minWidth: "38px",
         minHeight: "38px",
     }
-    const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
+    //на уровне пользователя проверка
+    // const isAddBthDisabled = newTaskTitle.length === 0 || newTaskTitle.trim().length >= 15
 
     return (
         <div>
@@ -61,14 +63,19 @@ export const AddItemForm = memo((props: Props) => {
                        size={"small"}
                        error={!!error}
 
+                       disabled={props.disabled}
                        value={newTaskTitle}
                        onChange={changeNewItemTitleHandler}
                        onKeyUp={addItemOnKeyUpHandler}
             />
-            <Button variant="contained" disabled={isAddBthDisabled}
+            <Button variant="contained"
+                    // disabled={isAddBthDisabled}
+
+                    disabled={props.disabled}
                     onClick={addNewItemHandler}
                     size="small"
                     style={buttonStyles}
+
             >+</Button>
 
             {/*{error && <div style={{color: "red"}}>{error}</div>}*/}
