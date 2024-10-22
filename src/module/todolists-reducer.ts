@@ -65,7 +65,7 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
         case "CHANGE-TODOLIST-FIlTER": {
             return state.map(el => el.id === action.payload.id ? {...el, filter: action.payload.filter} : el)
         }
-        case "TODOLIST/CHANGE-ENTITY-STATUS": {
+        case "CHANGE-ENTITY-STATUS": {
             return state.map(el => el.id === action.payload.id ? {
                 ...el,
                 entityStatus: action.payload.entityStatus
@@ -103,8 +103,8 @@ export const getTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
 ////////////////////
 //для изменения статуса тододиста,чтобы управлять disabled нужных элементов
 
-const changeEntityStatusAC = (todolistId: string, entityStatus: RequestStatusType) => ({
-    type: 'TODOLIST/CHANGE-ENTITY-STATUS', payload: {id: todolistId, entityStatus}
+export const changeEntityStatusAC = (todolistId: string, entityStatus: RequestStatusType) => ({
+    type: 'CHANGE-ENTITY-STATUS', payload: {id: todolistId, entityStatus}
 } as const)
 
 
@@ -132,8 +132,13 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch<Acti
         })
         .catch((error) => {
             dispatch(setAppErrorAC(error.messages))
+            //убрать крутилку
+            dispatch(setAppStatusAC("failed"))
+
+            //узкий кейс
             //измени emptity статус тодолиста для управления  disaibled нужныx элементов/РАЗДИЗЭЙБЛИТЬ
             dispatch(changeEntityStatusAC(todolistId, "idle"))
+
         })
 }
 

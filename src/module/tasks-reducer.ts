@@ -1,8 +1,14 @@
 import {Dispatch} from "redux";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
-import {CreateTodolistActionType, DeleteTodolistActionType, SetTodosActionType} from "./todolists-reducer";
+import {
+    changeEntityStatusAC,
+    CreateTodolistActionType,
+    DeleteTodolistActionType,
+    SetTodosActionType
+} from "./todolists-reducer";
 import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
+import {handleServerAppError} from "../utils/error-utils";
 
 
 type ActionsType =
@@ -165,14 +171,17 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
             //убери крутилку
             dispatch(setAppStatusAC("succeeded"))
         } else {
-            if (res.data.messages.length) {
-                dispatch(setAppErrorAC(res.data.messages[0]))
-            } else {
-                //выводим дефолтеую ошибку
-                dispatch(setAppErrorAC("Something went wrong"))
-            }
-            //убрать крутилку
-            dispatch(setAppStatusAC("failed"))
+
+            handleServerAppError(res.data,dispatch)
+
+            // if (res.data.messages.length) {
+            //     dispatch(setAppErrorAC(res.data.messages[0]))
+            // } else {
+            //     //выводим дефолтную ошибку
+            //     dispatch(setAppErrorAC("Something went wrong"))
+            // }
+            // //убрать крутилку
+            // dispatch(setAppStatusAC("failed"))
         }
     })
 }
@@ -225,13 +234,34 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
             ...domainModel
         }
 
-        todolistAPI.updateTask(todolistId, taskId, apiModel).then(res => {
 
-            //когда пришел твет с сервера, то уже обновляем в BLL и т.д.
-            dispatch(updateTaskAC(todolistId, taskId, domainModel))
-            //убери крутилку
-            dispatch(setAppStatusAC("succeeded"))
-        })
+        todolistAPI.updateTask(todolistId, taskId, apiModel)
+            .then(res => {
+
+                if (res.data.resultCode === Result_Code.SUCCESS) {
+                    //когда пришел твет с сервера, то уже обновляем в BLL и т.д.
+                    dispatch(updateTaskAC(todolistId, taskId, domainModel))
+                    //убери крутилку
+                    dispatch(setAppStatusAC("succeeded"))
+                }else {
+                    if (res.data.messages.length) {
+                        dispatch(setAppErrorAC(res.data.messages[0]))
+                    } else {
+                        //выводим дефолтную ошибку
+                        dispatch(setAppErrorAC("Something went wrong"))
+                    }
+                    //убрать крутилку
+                    dispatch(setAppStatusAC("failed"))
+                }
+
+            })
+            .catch((error)=>{
+                dispatch(setAppErrorAC(error.messages))
+                //убрать крутилку
+                dispatch(setAppStatusAC("failed"))
+            })
     }
+
+
 }
 
