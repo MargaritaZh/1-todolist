@@ -38,18 +38,19 @@ export const todolistAPI = {
         const promise = instance.put<ResponseType>(`/todo-lists/${todolistId}`, payload)
         return promise
     },
-    /////////
+    ///////
     getTasks(todolistId: string) {
         return instance.get<GetTasksResponse>(`/todo-lists/${todolistId}/tasks`)
     },
     createTask(payload: { title: string; todolistId: string }) {
         const {title, todolistId} = payload
 
-        return instance.post<BaseResponse<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<ResponseType<{ item: TaskType }>>(`/todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(payload: { todolistId: string; taskId: string }) {
         const {taskId, todolistId} = payload
-        return instance.delete<BaseResponse>(`/todo-lists/${todolistId}/tasks/${taskId}`)
+
+        return instance.delete<ResponseType>(`/todo-lists/${todolistId}/tasks/${taskId}`)
     },
     // updateTask(payload: { todolistId: string; taskId: string; model: UpdateTaskModelType }) {
     //     const {taskId, todolistId, model} = payload
@@ -68,7 +69,8 @@ export type FieldError = {
     field: string
 }
 
-export type BaseResponse<D = {}> = {
+
+export type ResponseType<D = {}> = {
     resultCode: number
     messages: string[]
     fieldsErrors: FieldError[]
@@ -131,12 +133,14 @@ export type TodolistType = {
     order: number
 }
 
-type ResponseType<T = {}> = {
-    resultCode: number
-    fieldsErrors: Array<string>
-    messages: Array<string>
-    data: T
-}
+//ЗАМЕНИЛИ НА ОДИН ТИП
+
+// export type ResponseType<T = {}> = {
+//     resultCode: number
+//     fieldsErrors: Array<string>
+//     messages: Array<string>
+//     data: T
+// }
 
 // type CreateResponseType = {
 //     resultCode: number

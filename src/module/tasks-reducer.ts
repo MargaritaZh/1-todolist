@@ -8,7 +8,8 @@ import {
     SetTodosActionType
 } from "./todolists-reducer";
 import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../app/app-reducer";
-import {handleServerAppError} from "../utils/error-utils";
+import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {AxiosError} from "axios";
 
 
 type ActionsType =
@@ -120,6 +121,7 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
     todolistAPI.getTasks(todolistId).then((res) => {
         //res.data.items-массив тасок
 
+        //!!для getTasksTC проверку на ResultCode делать не надо
         dispatch(setTasksAC(res.data.items, todolistId))
         //убери крутилку
         dispatch(setAppStatusAC("succeeded"))
@@ -138,10 +140,18 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
 
     todolistAPI.deleteTask({todolistId, taskId}).then((res) => {
         //res.data.data
-        dispatch(deleteTaskAC(todolistId, taskId))
-        //убери крутилку
-        dispatch(setAppStatusAC("succeeded"))
+
+        if (res.data.resultCode === Result_Code.SUCCESS) {
+            dispatch(deleteTaskAC(todolistId, taskId))
+            //убери крутилку
+            dispatch(setAppStatusAC("succeeded"))
+        } else {
+            handleServerAppError(res.data, dispatch)
+        }
     })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
 }
 //////////////////
 type AddTasksActionType = ReturnType<typeof createTasksAC>
@@ -152,7 +162,7 @@ const createTasksAC = (task: TaskType) => ({type: 'CREATE-TASK', payload: {task}
 
 
 //enum как константа, ее нельзя изменить
-enum Result_Code {
+export enum Result_Code {
     SUCCESS = 0,
     ERROR = 1,
     RECAPTCHA_ERROR = 10
@@ -162,28 +172,32 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
     //покажи крутилку
     dispatch(setAppStatusAC("loading"))
 
-    todolistAPI.createTask({title, todolistId}).then((res) => {
-        //(res.data.data.item)
+    todolistAPI.createTask({title, todolistId})
+        .then((res) => {
+            //(res.data.data.item)
 
-        if (res.data.resultCode === Result_Code.SUCCESS) {
-            //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в createTasksAC
-            dispatch(createTasksAC(res.data.data.item))
-            //убери крутилку
-            dispatch(setAppStatusAC("succeeded"))
-        } else {
+            if (res.data.resultCode === Result_Code.SUCCESS) {
+                //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в createTasksAC
+                dispatch(createTasksAC(res.data.data.item))
+                //убери крутилку
+                dispatch(setAppStatusAC("succeeded"))
+            } else {
 
-            handleServerAppError(res.data,dispatch)
+                handleServerAppError(res.data, dispatch)
 
-            // if (res.data.messages.length) {
-            //     dispatch(setAppErrorAC(res.data.messages[0]))
-            // } else {
-            //     //выводим дефолтную ошибку
-            //     dispatch(setAppErrorAC("Something went wrong"))
-            // }
-            // //убрать крутилку
-            // dispatch(setAppStatusAC("failed"))
-        }
-    })
+                // if (res.data.messages.length) {
+                //     dispatch(setAppErrorAC(res.data.messages[0]))
+                // } else {
+                //     //выводим дефолтную ошибку
+                //     dispatch(setAppErrorAC("Something went wrong"))
+                // }
+                // //убрать крутилку
+                // dispatch(setAppStatusAC("failed"))
+            }
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
 }
 
 ////////////////////
@@ -199,14 +213,10 @@ export type UpdateDomainTaskModelType = {
 }
 export type UpdateTaskActionType = ReturnType<typeof updateTaskAC>
 
-export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => ({
-    type: "UPDATE-TASK",
-    todolistId: todolistId,
-    taskId: taskId,
-    model
-} as const)
+export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDomainTaskModelType) => (
+    {type: "UPDATE-TASK", todolistId: todolistId, taskId: taskId, model} as const)
 
-export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType,) => {
+export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) => {
 
     return (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
         //покажи крутилку
@@ -243,25 +253,28 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
                     dispatch(updateTaskAC(todolistId, taskId, domainModel))
                     //убери крутилку
                     dispatch(setAppStatusAC("succeeded"))
-                }else {
-                    if (res.data.messages.length) {
-                        dispatch(setAppErrorAC(res.data.messages[0]))
-                    } else {
-                        //выводим дефолтную ошибку
-                        dispatch(setAppErrorAC("Something went wrong"))
-                    }
-                    //убрать крутилку
-                    dispatch(setAppStatusAC("failed"))
+                } else {
+
+                    handleServerAppError(res.data, dispatch)
+
+                    // if (res.data.messages.length) {
+                    //     dispatch(setAppErrorAC(res.data.messages[0]))
+                    // } else {
+                    //     //выводим дефолтную ошибку
+                    //     dispatch(setAppErrorAC("Something went wrong"))
+                    // }
+                    // //убрать крутилку
+                    // dispatch(setAppStatusAC("failed"))
                 }
 
             })
-            .catch((error)=>{
-                dispatch(setAppErrorAC(error.messages))
-                //убрать крутилку
-                dispatch(setAppStatusAC("failed"))
+            .catch((error) => {
+
+                handleServerNetworkError(error, dispatch)
+                // dispatch(setAppErrorAC(error.messages))
+                // //убрать крутилку
+                // dispatch(setAppStatusAC("failed"))
             })
     }
-
-
 }
 
