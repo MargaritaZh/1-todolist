@@ -5,6 +5,7 @@ type Props = {
     oldTitle: string
     isDone?: boolean
     upDateItem:(newTitle:string)=>void
+    disabled?:boolean
 };
 export const EditableSpan = memo((props: Props) => {
 
@@ -36,7 +37,11 @@ export const EditableSpan = memo((props: Props) => {
                    value={newTitle}
                    onChange={changeTitleHandler}
                    onBlur={activateEditModeHandler}
-                   autoFocus/>
+                   autoFocus
+                   disabled={props.disabled}
+
+
+            />
             : <span className={props.isDone ? "is-done" : "task"}
                     onDoubleClick={activateEditModeHandler}>{props.oldTitle}</span>
     );

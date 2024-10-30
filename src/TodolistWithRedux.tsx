@@ -67,6 +67,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                     <TaskWithRedux
                         key={task.id}
                         todolistId={todolist.id}
+                        entityStatus={todolist.entityStatus}
                         task={task}
 
                     />)
@@ -87,7 +88,11 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
         <div className="todolist">
             <div>
                 {/*<h3>{title}</h3>*/}
-                <EditableSpan oldTitle={title} upDateItem={upDateTodolistHandler}/>
+                <EditableSpan
+                    oldTitle={title}
+                    upDateItem={upDateTodolistHandler}
+                    disabled={entityStatus==="loading"}
+                />
 
                 {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
                 <IconButton aria-label="delete"

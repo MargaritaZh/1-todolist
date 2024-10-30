@@ -5,17 +5,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
 import {getListItemSx} from "./Todolist.styles";
-import { deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
+import {deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
 import {useAppDispatch} from "./module/store";
 import {TaskStatus, TaskType} from "./api/api";
+import {RequestStatusType} from "./app/app-reducer";
 
 
 type Props = {
     todolistId: string
     task: TaskType
-};
-export const TaskWithRedux = memo(({todolistId, task}: Props) => {
+    entityStatus: RequestStatusType
+}
 
+export const TaskWithRedux = memo(({todolistId, entityStatus, task}: Props) => {
 
 
     const dispatch = useAppDispatch()
@@ -33,7 +35,7 @@ export const TaskWithRedux = memo(({todolistId, task}: Props) => {
     const upDateItemHandler = (newTitle: string) => {
         //изменить title таски при помощи объекта model
         // dispatch(changeTaskTitleAC(todolistId, task.id, newTitle))
-        dispatch(updateTaskTC(todolistId, task.id, {title:newTitle}))
+        dispatch(updateTaskTC(todolistId, task.id, {title: newTitle}))
     }
 
 
@@ -48,14 +50,18 @@ export const TaskWithRedux = memo(({todolistId, task}: Props) => {
                 {/*/>*/}
                 <Checkbox checked={task.status === TaskStatus.Completed}
                     // onChange={props.changeTaskStatusHandler}/>
-                          onChange={changeTaskStatusHandler}/>
+                          onChange={changeTaskStatusHandler}
+                          disabled={entityStatus === "loading"}
+                />
 
                 {/*<span className={task.isDone ? "is-done" : "task"}>{task.title}</span>*/}
                 <EditableSpan
                     oldTitle={task.title}
                     isDone={task.status === TaskStatus.Completed}
                     // upDateItem={props.upDateItemHandler}/>
-                    upDateItem={upDateItemHandler}/>
+                    upDateItem={upDateItemHandler}
+                    disabled={entityStatus === "loading"}
+                />
 
             </div>
 
@@ -63,6 +69,7 @@ export const TaskWithRedux = memo(({todolistId, task}: Props) => {
             <IconButton aria-label="delete"
                 // onClick={props.removeTaskHandler}
                         onClick={removeTaskHandler}
+                        disabled={entityStatus === "loading"}
             >
                 <DeleteIcon fontSize="inherit"/>
             </IconButton>

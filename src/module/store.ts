@@ -10,7 +10,8 @@ import {appReducer} from "../app/app-reducer";
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistReducer,
-    app:appReducer
+    app:appReducer,
+
 })
 // непосредственно создаём store
 export const store = legacy_createStore(rootReducer,{},applyMiddleware(thunk))
