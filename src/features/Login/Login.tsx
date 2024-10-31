@@ -87,13 +87,18 @@ export const Login = () => {
                     <form onSubmit={formik.handleSubmit}>
                         <FormGroup>
                             <TextField
-                                name="email"
                                 label="Email"
                                 margin="normal"
-                                onChange={formik.handleChange}
-                                value={formik.values.email}
+
+                                // name="email"
+                                // onChange={formik.handleChange}
+                                // value={formik.values.email}
                                 //когда я поставила курсор в инпут, а потом отвела курсор в сторону ,зафиксирует это событие
-                                onBlur={formik.handleBlur}
+                                // onBlur={formik.handleBlur}
+
+                                // заменяет все закомментированное выше
+                                {...formik.getFieldProps("email")}
+
                                 // у поля из материал ul есть error и поле будет гореть красным,если есть ошибка
                                 //переведем в булевое значение  error={true}
                                 error={formik.touched.email && !!formik.errors.email}
@@ -102,13 +107,17 @@ export const Login = () => {
                             {formik.touched.email && formik.errors.email &&
                                 <div style={{color: "red"}}>{formik.errors.email}</div>}
                             <TextField
-                                name="password"
                                 type="password"
                                 label="Password"
                                 margin="normal"
-                                onChange={formik.handleChange}
-                                value={formik.values.password}
-                                onBlur={formik.handleBlur}
+
+                                // name="password"
+                                // onChange={formik.handleChange}
+                                // value={formik.values.password}
+                                // onBlur={formik.handleBlur}
+
+                                // заменяет все закомментированное выше
+                                {...formik.getFieldProps("password")}
                                 //
                                 error={formik.touched.password && !!formik.errors.password}
                             />
@@ -118,9 +127,14 @@ export const Login = () => {
                                 label={'Remember me'}
                                 control={
                                     <Checkbox
-                                        name="rememberMe"
-                                        onChange={formik.handleChange}
+                                        //ОСТАВЛЯЕМ checkbox!!!!
                                         checked={formik.values.rememberMe}
+
+
+                                        // name="rememberMe"
+                                        // onChange={formik.handleChange}
+                                        // заменяет все закомментированное выше
+                                        {...formik.getFieldProps("rememberMe")}
                                     />
                                 }/>
                             <Button
