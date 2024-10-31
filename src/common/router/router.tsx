@@ -18,6 +18,13 @@ export const router = createBrowserRouter([
         // в пути не найденной страницы укажи в URL -стпаницы -404
         errorElement: <Navigate to="/404"/>,
         children: [
+            //когда я ввожу базовый адрес -
+            // куда будет перенаправлять нас при загрузке приложения,на какой children
+            {
+                index:true,
+                element:<Navigate to="/login"/>
+            },
+            //
             {
                 path: "/login",
                 element: <Login/>,
