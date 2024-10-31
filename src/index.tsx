@@ -5,7 +5,9 @@ import AppWithRedux from "./app/AppWithRedux";
 import {Provider} from "react-redux";
 import {store} from "./module/store";
 import {DevSupport} from "@react-buddy/ide-toolbox";
-import { ComponentPreviews, useInitial } from './dev'; // Импортируем из папки dev
+import { ComponentPreviews, useInitial } from './dev';
+import {RouterProvider} from "react-router-dom";
+import {router} from "./common/router/router"; // Импортируем из папки dev
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -13,10 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
     // <React.StrictMode>
     <Provider store={store}>
+
         <DevSupport ComponentPreviews={ComponentPreviews}
                     useInitialHook={useInitial}
         >
-            <AppWithRedux/>
+            {/*мы уже отрисовываем не компаненту, а:   */}
+            {/*<AppWithRedux/>*/}
+            <RouterProvider router={router} />
         </DevSupport>
     </Provider>
 

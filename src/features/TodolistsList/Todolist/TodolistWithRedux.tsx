@@ -1,23 +1,23 @@
 import React, {memo, useCallback, useEffect, useMemo} from "react";
-import {AddItemForm} from "./components/AddItemForm/AddItemForm";
-import {EditableSpan} from "./components/EditableSpan/EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
-import {filterButtonContainerSx} from "./Todolist.styles";
-import {useAppDispatch, useAppSelector} from "./module/store";
-import {createTaskTC, getTasksTC} from "./module/tasks-reducer";
+import {filterButtonContainerSx} from "../../../Todolist.styles";
+import {useAppDispatch, useAppSelector} from "../../../module/store";
+import {createTaskTC, getTasksTC} from "../../../module/tasks-reducer";
 import {
     changeFilterAC,
     deleteTodolistTC, FilterValuesType,
     TodolistDomainType,
     upDateTodolistTitleTC
-} from "./module/todolists-reducer";
-import {ButtonPropsType} from "./Button";
-import {TaskWithRedux} from "./TaskWithRedux";
-import {TaskStatus, TaskType} from "./api/api";
+} from "../../../module/todolists-reducer";
+import {ButtonPropsType} from "../../../Button";
+import {TaskWithRedux} from "./Task/TaskWithRedux";
+import {TaskStatus, TaskType} from "../../../api/api";
 
 
 type TodolistPropsType = {

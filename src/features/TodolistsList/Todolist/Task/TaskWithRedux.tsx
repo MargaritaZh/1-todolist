@@ -1,14 +1,14 @@
 import {ChangeEvent, memo} from "react";
-import {EditableSpan} from "./components/EditableSpan/EditableSpan";
+import {EditableSpan} from "../../../../components/EditableSpan/EditableSpan";
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Checkbox from '@mui/material/Checkbox';
 import ListItem from '@mui/material/ListItem';
-import {getListItemSx} from "./Todolist.styles";
-import {deleteTaskTC, updateTaskTC} from "./module/tasks-reducer";
-import {useAppDispatch} from "./module/store";
-import {TaskStatus, TaskType} from "./api/api";
-import {RequestStatusType} from "./app/app-reducer";
+import {getListItemSx} from "../../../../Todolist.styles";
+import {deleteTaskTC, updateTaskTC} from "../../../../module/tasks-reducer";
+import {useAppDispatch} from "../../../../module/store";
+import {TaskStatus, TaskType} from "../../../../api/api";
+import {RequestStatusType} from "../../../../app/app-reducer";
 
 
 type Props = {
