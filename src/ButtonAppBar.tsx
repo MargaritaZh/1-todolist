@@ -7,13 +7,24 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {MenuButton} from "./MenuButton";
 import Switch from '@mui/material/Switch';
 import {useTheme} from "@mui/material";
+import {useAppDispatch, useAppSelector} from "./module/store";
+import {logOutTC} from "./features/Login/auth-reducer";
 
-type ButtonAppBarPropsType={
-    changeModeHandler:()=>void
+type ButtonAppBarPropsType = {
+    changeModeHandler: () => void
+}
+
+export default function ButtonAppBar({changeModeHandler}: ButtonAppBarPropsType) {
+    const theme = useTheme()
+
+    const dispatch = useAppDispatch()
+
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+    const logOut = () => {
+        dispatch(logOutTC())
     }
 
-export default function ButtonAppBar({changeModeHandler}:ButtonAppBarPropsType) {
-    const theme =useTheme()
     return (
         <Box sx={{flexGrow: 1, marginBottom: "80px"}}>
             <AppBar position="fixed">
@@ -30,9 +41,12 @@ export default function ButtonAppBar({changeModeHandler}:ButtonAppBarPropsType) 
                     <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
                         News
                     </Typography>
-                    <MenuButton color="inherit" background={theme.palette.primary.main}>Login</MenuButton>
-                    <MenuButton color="inherit">Logout</MenuButton>
-                    <MenuButton color="inherit">Faq</MenuButton>
+                    {/*<MenuButton color="inherit" background={theme.palette.primary.main}>Login</MenuButton>*/}
+                    {isLoggedIn && <MenuButton
+                        onClick={logOut}
+                        color="inherit"
+                    >Logout</MenuButton>}
+                    {/*<MenuButton color="inherit">Faq</MenuButton>*/}
 
                     <Switch onChange={changeModeHandler}/>
 

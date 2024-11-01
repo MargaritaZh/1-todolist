@@ -62,6 +62,8 @@ function AppWithRedux() {
                 <Container fixed>
                     <ButtonAppBar changeModeHandler={changeModeHandler}/>
                     {status === "loading" && <LinearProgress color="secondary"/>}
+
+
                     {/*//*/}
                     {/*перенести в router, и теперь это лежит там по нужному пути в children*/}
                     {/*<TodolistsList/>*/}

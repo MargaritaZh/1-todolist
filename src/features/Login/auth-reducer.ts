@@ -52,6 +52,35 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
     dispatch(setAppStatusAC("succeeded"))
 }
 
+
+//этот запрос нужен чтобы backEnd зачистил хранилище cookie
+export const logOutTC = () => async (dispatch: Dispatch) => {
+
+    dispatch(setAppStatusAC('loading'))
+    try {
+        //если промис зарезолвился ,то отрабатывает эта логика в try
+        const result = await authApi.logOut()
+        if (result.data.resultCode === 0) {
+            //пользователь не залогинен
+            dispatch(setIsLoggedInAC(false))
+
+            dispatch(setAppStatusAC('succeeded'))
+        } else {
+            handleServerAppError(result.data, dispatch)
+        }
+
+    } catch (e) {
+        handleServerNetworkError((e as unknown as { messages: string }), dispatch)
+    }
+
+    dispatch(setAppStatusAC("succeeded"))
+}
+
+
+
+
+
+
 export const meTC = () => async (dispatch: Dispatch) => {
 
     dispatch(setAppStatusAC('loading'))
@@ -78,3 +107,5 @@ export const meTC = () => async (dispatch: Dispatch) => {
 
     dispatch(setInitialisedAC(true))
 }
+
+

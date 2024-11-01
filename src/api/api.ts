@@ -28,9 +28,10 @@ export const authApi = {
         return promise
     },
     logOut() {
+        return instance.delete<ResponseType>(`/auth/login`)
     },
     me() {
-        const promise = instance.get<ResponseType<UserType>>('/auth/me',)
+        const promise = instance.get<ResponseType<UserType>>('/auth/me')
         return promise
     },
 
