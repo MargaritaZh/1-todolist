@@ -30,6 +30,8 @@ export const authApi = {
     logOut() {
     },
     me() {
+        const promise = instance.get<ResponseType<UserType>>('/auth/me',)
+        return promise
     },
 
 }
@@ -76,6 +78,12 @@ export const todolistAPI = {
             `todo-lists/${todolistId}/tasks/${taskId}`, model)
         return promise
     }
+}
+
+export type UserType={
+    id: number
+    email: string
+    login: string
 }
 
 export type FieldError = {

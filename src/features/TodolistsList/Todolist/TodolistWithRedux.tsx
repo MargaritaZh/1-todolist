@@ -36,6 +36,8 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
 
     useEffect(() => {
+
+       //3
         dispatch(getTasksTC(id))
     }, []);
 
