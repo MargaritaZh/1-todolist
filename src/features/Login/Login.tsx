@@ -7,8 +7,11 @@ import FormLabel from '@mui/material/FormLabel'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import {getTheme} from "../../common/theme/theme";
-import {useAppSelector} from "../../module/store";
+import {useAppDispatch, useAppSelector} from "../../module/store";
 import {useFormik} from "formik";
+import {useDispatch} from "react-redux";
+import {loginTC} from "./auth-reducer";
+import {Navigate} from "react-router-dom";
 
 
 type ErrorsType = {
@@ -16,7 +19,20 @@ type ErrorsType = {
     password?: string
 }
 
+
+export type LoginType = {
+    email: string
+    password: string
+    rememberMe: boolean
+
+}
+
+
 export const Login = () => {
+
+    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+
+    const dispatch = useAppDispatch()
 
     const themeMode = useAppSelector(state => state.app.themeMode)
 
@@ -50,15 +66,25 @@ export const Login = () => {
         },
         validate,
 
-        // onSubmit принимает всю соБранную информацию с полей В values ,ее мы и дспатчим в TC
         onSubmit: values => {
+            // onSubmit принимает всю соБранную информацию с полей В values ,ее мы и дспатчим в TC
+            dispatch(loginTC(values))
 
+            // alert(JSON.stringify(values, null, 2))
 
-            alert(JSON.stringify(values, null, 2))
+            //зачистить форму после отправки данных
+            formik.resetForm()
         },
     })
 
     console.log(formik.values)
+
+    //достали значение isLoggedIn из стэйта, и если true-пользователь залогинен то,
+    //перенаправим его на страницу тодолистов
+    if (isLoggedIn) {
+        return <Navigate to={"/todolists"}/>
+    }
+
 
     return (
         <Grid container justifyContent={'center'}>
@@ -122,12 +148,13 @@ export const Login = () => {
                                 error={formik.touched.password && !!formik.errors.password}
                             />
                             {/*когда поле было тронуто и там есть ошибка, только в этом случае показываем ошибку*/}
-                            {formik.touched.password && formik.errors.password && <div style={{color: "red"}}>{formik.errors.password}</div>}
+                            {formik.touched.password && formik.errors.password &&
+                                <div style={{color: "red"}}>{formik.errors.password}</div>}
                             <FormControlLabel
                                 label={'Remember me'}
                                 control={
                                     <Checkbox
-                                        //ОСТАВЛЯЕМ checkbox!!!!
+                                        //ОСТАВЛЯЕМ checked в checkbox!!!! БАГА-в нем нет values
                                         checked={formik.values.rememberMe}
 
 

@@ -1,6 +1,7 @@
 //уровень DALL(уровень доступа к данным)
 //создаем объект ,в котором мы будем описывать методы в заимодействия с сервером
 import axios from "axios";
+import {LoginType} from "../features/Login/Login";
 
 
 // const config = {
@@ -19,6 +20,19 @@ const instance = axios.create({
     }
 
 })
+
+
+export const authApi = {
+    login(data:LoginType) {
+        const promise = instance.post<ResponseType<{userId: number}>>('/auth/login', data)
+        return promise
+    },
+    logOut() {
+    },
+    me() {
+    },
+
+}
 
 
 export const todolistAPI = {
@@ -123,7 +137,6 @@ type GetTasksResponse = {
 
 
 ////////////////////////
-
 
 
 export type TodolistType = {
