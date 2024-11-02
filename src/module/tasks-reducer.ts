@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
 import {
-    changeEntityStatusAC,
+    changeEntityStatusAC, ClearDataActionType,
     CreateTodolistActionType,
     DeleteTodolistActionType,
     SetTodosActionType
@@ -22,6 +22,7 @@ type ActionsType =
     | SetTasksActionType
     | SetAppStatusActionType
     | SetAppErrorActionType
+    | ClearDataActionType
 
 
 export type TasksStateType = {
@@ -96,6 +97,9 @@ export const tasksReducer = (state = initialState, action: ActionsType): TasksSt
             delete copyState[action.payload.id]
             return copyState
         }
+
+        case "CLEA-DATA":
+            return {}
 
         default:
             return state

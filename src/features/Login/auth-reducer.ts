@@ -1,8 +1,9 @@
 import {setAppStatusAC, setInitialisedAC} from "../../app/app-reducer";
 import {Dispatch} from "redux";
 import {LoginType} from "./Login";
-import {authApi, UserType} from "../../api/api";
+import {authApi} from "../../api/api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
+import {clearTodosDataAC} from "../../module/todolists-reducer";
 
 type InitialStateType = typeof initialState
 
@@ -62,9 +63,14 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
         const result = await authApi.logOut()
         if (result.data.resultCode === 0) {
             //пользователь не залогинен
+            //выйти из приложения false
             dispatch(setIsLoggedInAC(false))
-
+            //крутилку убери:
             dispatch(setAppStatusAC('succeeded'))
+
+            //зачисти данные после вылогинивания
+            dispatch(clearTodosDataAC())
+
         } else {
             handleServerAppError(result.data, dispatch)
         }
@@ -72,7 +78,6 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
     } catch (e) {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
-
     dispatch(setAppStatusAC("succeeded"))
 }
 
@@ -96,11 +101,9 @@ export const meTC = () => async (dispatch: Dispatch) => {
         } else {
             handleServerAppError(result.data, dispatch)
         }
-
     } catch (e) {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
-
     //убрать моргание, покажем крутилку пока идет запрос me,изначально istInitialised-false-показывается крутилка на все приложение
 //когда мы уже узнали ответ от сервера был ли пользователь ранее проинициализирован, неважно да или нет,
     //мы уже изменим значение istInitialised  на true и уберем крутилку

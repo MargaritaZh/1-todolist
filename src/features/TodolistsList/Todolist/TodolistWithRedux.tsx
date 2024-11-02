@@ -35,11 +35,11 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
     const dispatch = useAppDispatch()
 
 
-    useEffect(() => {
-
-       //3
-        dispatch(getTasksTC(id))
-    }, []);
+    // useEffect(() => {
+    //
+    //
+    //     dispatch(getTasksTC(id))
+    // }, []);
 
 
     const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {

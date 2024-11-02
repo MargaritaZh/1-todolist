@@ -7,8 +7,10 @@ import {
     setAppStatusAC,
     SetAppStatusActionType
 } from "../app/app-reducer";
-import {Result_Code} from "./tasks-reducer";
+import {getTasksTC, Result_Code, SetTasksActionType} from "./tasks-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {ThunkDispatch} from "redux-thunk";
+import {AppRootStateType} from "./store";
 
 
 type ActionsType =
@@ -20,6 +22,7 @@ type ActionsType =
     | SetAppStatusActionType
     | ReturnType<typeof changeEntityStatusAC>
     | SetAppErrorActionType
+    | ClearDataActionType
 
 
 //добавили в типы filter, то что не возвращает сервер
@@ -73,19 +76,31 @@ export const todolistReducer = (state = initialState, action: ActionsType): Todo
                 entityStatus: action.payload.entityStatus
             } : el)
         }
+        case "CLEA-DATA":
+            return []
         default:
             return state
         // throw new Error("I don't understand this type")
     }
 }
 
+////
+
+
+//зачистим state в store после вылогинивания,чтобы у нас был пустой инициализацинный state
+
+export const clearTodosDataAC = () => ({type: "CLEA-DATA"} as const)
+
+export type ClearDataActionType = ReturnType<typeof clearTodosDataAC>
 
 ///////////создaдим TC для получения тодолистов с сервера
 export type SetTodosActionType = ReturnType<typeof setTodosAC>
 //as const фиксирует посимвольно значение строки type в action, чтобы в дальнейшем распозвать это значение в switch case,(в нашем случае зафиксировали весь объект просто, а можно только строку type сделать as const)
 export const setTodosAC = (todolists: Array<TodolistType>) => ({type: "SET-TODOLISTS", payload: {todolists}} as const)
 
-export const getTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
+
+//ЗАДИСПАТЧИМ САНКУ В САНКЕ И уберем useEfffect и запрос за тасками в компаненте todolist
+export const getTodolistsTC = () => (dispatch: ThunkDispatch<AppRootStateType, unknown, ActionsType> ) => {
     //покажи крутилку
     dispatch(setAppStatusAC("loading"))
 
@@ -97,7 +112,15 @@ export const getTodolistsTC = () => (dispatch: Dispatch<ActionsType>) => {
         dispatch(setTodosAC(res.data))
         //убери крутилку
         dispatch(setAppStatusAC("succeeded"))
+        return res.data
+    }).then((todos) => {
+        todos.forEach((tl) => {
+            dispatch(getTasksTC(tl.id))
+        })
     })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch)
+        })
 }
 ////////////////////
 //для изменения статуса тододиста,чтобы управлять disabled нужных элементов
