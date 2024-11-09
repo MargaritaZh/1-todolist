@@ -8,7 +8,7 @@ import {MenuButton} from "./MenuButton";
 import Switch from '@mui/material/Switch';
 import {useTheme} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "./module/store";
-import {logOutTC} from "./features/Login/auth-reducer";
+import {logOutTC} from "./features/Login/authSlice";
 
 type ButtonAppBarPropsType = {
     changeModeHandler: () => void

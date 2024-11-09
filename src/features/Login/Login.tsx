@@ -10,7 +10,7 @@ import {getTheme} from "../../common/theme/theme";
 import {useAppDispatch, useAppSelector} from "../../module/store";
 import {useFormik} from "formik";
 import {useDispatch} from "react-redux";
-import {loginTC} from "./auth-reducer";
+import {loginTC} from "./authSlice";
 import {Navigate} from "react-router-dom";
 
 

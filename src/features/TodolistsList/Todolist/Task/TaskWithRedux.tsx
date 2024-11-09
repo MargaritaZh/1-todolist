@@ -8,7 +8,7 @@ import {getListItemSx} from "../../../../Todolist.styles";
 import {deleteTaskTC, updateTaskTC} from "../../../../module/tasks-reducer";
 import {useAppDispatch} from "../../../../module/store";
 import {TaskStatus, TaskType} from "../../../../api/api";
-import {RequestStatusType} from "../../../../app/app-reducer";
+import {RequestStatusType} from "../../../../app/appSlice";
 
 
 type Props = {

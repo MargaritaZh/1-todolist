@@ -6,7 +6,7 @@ import {
     SetAppErrorActionType,
     setAppStatusAC,
     SetAppStatusActionType
-} from "../app/app-reducer";
+} from "../app/appSlice";
 import {getTasksTC, Result_Code, SetTasksActionType} from "./tasks-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {ThunkDispatch} from "redux-thunk";

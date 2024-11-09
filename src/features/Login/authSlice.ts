@@ -1,4 +1,4 @@
-import {setAppStatusAC, setInitialisedAC} from "../../app/app-reducer";
+import {setAppStatus, setInitialised} from "../../app/appSlice";
 import {Dispatch} from "redux";
 import {LoginType} from "./Login";
 import {authApi} from "../../api/api";
@@ -26,10 +26,11 @@ export const authSlice = createSlice({
         // }
 
         //НОВЫЙ СИНТАКСИС 2.0
+        //ТЕПЕТЬ РЕДЬЮСЕР ОБЕРНУЛИ В ФУНКЦИЮ,КОТОРАЯ ВОЗВРАЩАЕТ ОБЪЕКТ
         reducers: (create) => {
             return {
                 //Подредьюсер
-                setIsLoggedInAC: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
+                setIsLoggedIn: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
                     state.isLoggedIn = action.payload.isLoggedIn
                 })
                 //
@@ -39,9 +40,9 @@ export const authSlice = createSlice({
 )
 
 export const authReducer = authSlice.reducer
-export const {setIsLoggedInAC} = authSlice.actions
+export const {setIsLoggedIn} = authSlice.actions
 
-// export const authReducer = (
+// export const authSlice = (
 //     state: InitialStateType = initialState,
 //     action: ActionsType
 // ): InitialStateType => {
@@ -64,15 +65,15 @@ export const {setIsLoggedInAC} = authSlice.actions
 // thunks
 export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatusAC('loading'))
+    dispatch(setAppStatus({status:'loading'}))
     try {
         //если промис зарезолвился ,то отрабатывает эта логика в try
         const result = await authApi.login(data)
         if (result.data.resultCode === 0) {
             //пользователь залогинен
-            dispatch(setIsLoggedInAC({isLoggedIn: true}))
+            dispatch(setIsLoggedIn({isLoggedIn: true}))
 
-            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setAppStatus({status:'succeeded'}))
         } else {
             handleServerAppError(result.data, dispatch)
         }
@@ -81,23 +82,23 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
 
-    dispatch(setAppStatusAC("succeeded"))
+    dispatch(setAppStatus({status:"succeeded"}))
 }
 
 
 //этот запрос нужен чтобы backEnd зачистил хранилище cookie
 export const logOutTC = () => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatusAC('loading'))
+    dispatch(setAppStatus({status:'loading'}))
     try {
         //если промис зарезолвился ,то отрабатывает эта логика в try
         const result = await authApi.logOut()
         if (result.data.resultCode === 0) {
             //пользователь не залогинен
             //выйти из приложения false
-            dispatch(setIsLoggedInAC({isLoggedIn: false}))
+            dispatch(setIsLoggedIn({isLoggedIn: false}))
             //крутилку убери:
-            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setAppStatus({status:'succeeded'}))
 
             //зачисти данные после вылогинивания
             dispatch(clearTodosDataAC())
@@ -109,22 +110,22 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
     } catch (e) {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
-    dispatch(setAppStatusAC("succeeded"))
+    dispatch(setAppStatus({status:"succeeded"}))
 }
 
 
 export const meTC = () => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatusAC('loading'))
+    dispatch(setAppStatus({status:'loading'}))
     try {
         //мы проверяем был ли пользователь залогнен до перезагрузка
         //и возвращаем те же данные в state что и были, если пользователь был залогинен ранее
         const result = await authApi.me()
         if (result.data.resultCode === 0) {
             //пользователь залогинен
-            dispatch(setIsLoggedInAC({isLoggedIn: true}))
+            dispatch(setIsLoggedIn({isLoggedIn: true}))
 
-            dispatch(setAppStatusAC('succeeded'))
+            dispatch(setAppStatus({status:'succeeded'}))
         } else {
             handleServerAppError(result.data, dispatch)
         }
@@ -135,7 +136,7 @@ export const meTC = () => async (dispatch: Dispatch) => {
 //когда мы уже узнали ответ от сервера был ли пользователь ранее проинициализирован, неважно да или нет,
     //мы уже изменим значение istInitialised  на true и уберем крутилку
 
-    dispatch(setInitialisedAC(true))
+    dispatch(setInitialised({isInitialised:true}))
 }
 
 

@@ -8,9 +8,9 @@ import {useAppDispatch, useAppSelector} from "../module/store";
 import LinearProgress from '@mui/material/LinearProgress';
 import {CustomizedSnackbars} from "../components/ErrorSnackBar/CustomizedSnackbars";
 import {Outlet} from "react-router-dom";
-import {meTC} from "../features/Login/auth-reducer";
+import {meTC} from "../features/Login/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import {RequestStatusType} from "./app-reducer";
+import {RequestStatusType} from "./appSlice";
 
 
 type ThemeMode = "dark" | "light"

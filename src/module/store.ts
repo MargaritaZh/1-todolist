@@ -3,8 +3,8 @@ import {applyMiddleware, combineReducers, legacy_createStore, UnknownAction,} fr
 import {todolistReducer} from "./todolists-reducer";
 import {thunk, ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
-import {appReducer} from "../app/app-reducer";
-import {authReducer} from "../features/Login/auth-reducer";
+import {appReducer} from "../app/appSlice";
+import {authReducer, authSlice} from "../features/Login/authSlice";
 import {configureStore} from "@reduxjs/toolkit";
 
 // объединяя reducer-ы с помощью combineReducers,
