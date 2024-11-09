@@ -5,6 +5,7 @@ import {thunk, ThunkDispatch} from "redux-thunk";
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {appReducer} from "../app/app-reducer";
 import {authReducer} from "../features/Login/auth-reducer";
+import {configureStore} from "@reduxjs/toolkit";
 
 // объединяя reducer-ы с помощью combineReducers,
 // мы задаём структуру нашего единственного объекта-состояния
@@ -16,7 +17,16 @@ const rootReducer = combineReducers({
 
 })
 // непосредственно создаём store
-export const store = legacy_createStore(rootReducer,{},applyMiddleware(thunk))
+//для обычного redux
+// export const store = legacy_createStore(rootReducer,{},applyMiddleware(thunk))
+
+//для redux toolkit
+//не нужно подключать thunkMiddleWare -он автоматически работает
+export const store =configureStore({
+    reducer:rootReducer,
+})
+
+
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>
 
