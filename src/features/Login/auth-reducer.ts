@@ -14,17 +14,29 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 
 export const authSlice = createSlice({
-    name: "auth",
-    initialState: {
-        isLoggedIn: false,
-    },
-    reducers: {
-        //Подредьюсер или action
-        setIsLoggedInAC(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
-            state.isLoggedIn = action.payload.isLoggedIn
+        name: "auth",
+        initialState: {
+            isLoggedIn: false,
+        },
+        // reducers: {
+        //     //Подредьюсер или action
+        //     setIsLoggedInAC(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
+        //         state.isLoggedIn = action.payload.isLoggedIn
+        //     }
+        // }
+
+        //НОВЫЙ СИНТАКСИС 2.0
+        reducers: (create) => {
+            return {
+                //Подредьюсер
+                setIsLoggedInAC: create.reducer<{ isLoggedIn: boolean }>((state, action) => {
+                    state.isLoggedIn = action.payload.isLoggedIn
+                })
+                //
+            }
         }
     }
-})
+)
 
 export const authReducer = authSlice.reducer
 export const {setIsLoggedInAC} = authSlice.actions
@@ -58,7 +70,7 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
         const result = await authApi.login(data)
         if (result.data.resultCode === 0) {
             //пользователь залогинен
-            dispatch(setIsLoggedInAC({isLoggedIn:true}))
+            dispatch(setIsLoggedInAC({isLoggedIn: true}))
 
             dispatch(setAppStatusAC('succeeded'))
         } else {
@@ -83,7 +95,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
         if (result.data.resultCode === 0) {
             //пользователь не залогинен
             //выйти из приложения false
-            dispatch(setIsLoggedInAC({isLoggedIn:false}))
+            dispatch(setIsLoggedInAC({isLoggedIn: false}))
             //крутилку убери:
             dispatch(setAppStatusAC('succeeded'))
 
@@ -110,7 +122,7 @@ export const meTC = () => async (dispatch: Dispatch) => {
         const result = await authApi.me()
         if (result.data.resultCode === 0) {
             //пользователь залогинен
-            dispatch(setIsLoggedInAC({isLoggedIn:true}))
+            dispatch(setIsLoggedInAC({isLoggedIn: true}))
 
             dispatch(setAppStatusAC('succeeded'))
         } else {
