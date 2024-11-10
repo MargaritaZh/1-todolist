@@ -47,7 +47,7 @@ export const tasksSlice = createSlice({
                 const tasks = state[action.payload.todolistId]
                 const index = tasks.findIndex((task) => task.id === action.payload.taskId);
                 if (index !== -1) {
-                    state.tasks.splice(index, 1);
+                    tasks.splice(index, 1);
                 }
             }),
             createTask: create.reducer<{ task: TaskType }>((state, action) => {
