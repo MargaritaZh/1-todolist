@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {LoginType} from "./Login";
 import {authApi} from "../../api/api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {clearTodosDataAC} from "../../module/todolistsSlice";
+import {clearTodosData} from "../../module/todolistsSlice";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 // type InitialStateType = typeof initialState
@@ -101,7 +101,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
             dispatch(setAppStatus({status:'succeeded'}))
 
             //зачисти данные после вылогинивания
-            dispatch(clearTodosDataAC())
+            dispatch(clearTodosData())
 
         } else {
             handleServerAppError(result.data, dispatch)

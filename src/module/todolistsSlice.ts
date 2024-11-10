@@ -4,7 +4,7 @@ import {
     RequestStatusType,
     setAppStatus
 } from "../app/appSlice";
-import {getTasksTC, Result_Code, SetTasksActionType} from "./tasksSlice";
+import {getTasksTC, Result_Code} from "./tasksSlice";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {ThunkDispatch} from "redux-thunk";
 import {AppRootStateType} from "./store";
@@ -106,11 +106,13 @@ export const todolistsSlice = createSlice({
                 const index = state.findIndex(todo => todo.id === action.payload.todolistId)
                 if (index !== -1) state[index].filter = action.payload.filter
             }),
+
             setTodos: create.reducer<{ todolists: Array<TodolistType> }>((state, action) => {
                 // return action.payload.todolists.map(tl => ({...tl, filter: "all", entityStatus: "idle"}))
 
                 //!!!ЗАМЕНМ НА
-                return state.map(tl => ({...tl, filter: "all", entityStatus: "idle"}))
+                return action.payload.todolists.map(tl => ({...tl, filter: "all", entityStatus: "idle"}))
+
             }),
 
             clearTodosData: create.reducer((state, action) => {
@@ -121,7 +123,7 @@ export const todolistsSlice = createSlice({
     }
 })
 
-export const todolistReducer = todolistsSlice.reducer
+export const todolistsReducer = todolistsSlice.reducer
 export const {
     deleteTodolist,
     createTodolist,
