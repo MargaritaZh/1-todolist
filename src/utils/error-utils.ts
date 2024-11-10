@@ -1,4 +1,4 @@
-import {setAppErrorAC, setAppStatusAC} from "../app/appSlice";
+import {setAppError, setAppStatus} from "../app/appSlice";
 import {Dispatch} from "redux";
 import {ResponseType} from "../api/api";
 
@@ -7,19 +7,19 @@ import {ResponseType} from "../api/api";
 
 export const handleServerAppError = <T>(data: ResponseType<T>, dispatch: Dispatch) => {
     if (data.messages.length) {
-        dispatch(setAppErrorAC(data.messages[0]))
+        dispatch(setAppError({error:data.messages[0]}))
     } else {
         //выводим дефолтную ошибку
-        dispatch(setAppErrorAC("Something went wrong"))
+        dispatch(setAppError({error:"Something went wrong"}))
     }
     //убрать крутилку
-    dispatch(setAppStatusAC("failed"))
+    dispatch(setAppStatus({status:"failed"}))
 }
 
 //о что попадает в catch, 500-ая ошибка или отключили интернет
 export const handleServerNetworkError =(error:{messages:string}, dispatch: Dispatch) => {
-    dispatch(setAppErrorAC(error.messages))
+    dispatch(setAppError({error:error.messages}))
     //убрать крутилку
-    dispatch(setAppStatusAC("failed"))
+    dispatch(setAppStatus({status:"failed"}))
 
 }

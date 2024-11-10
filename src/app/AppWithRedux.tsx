@@ -41,6 +41,7 @@ function AppWithRedux() {
     useEffect(() => {
         //1
         dispatch(meTC())
+
     }, []);
 
 

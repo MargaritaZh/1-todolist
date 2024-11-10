@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {LoginType} from "./Login";
 import {authApi} from "../../api/api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import {clearTodosDataAC} from "../../module/todolists-reducer";
+import {clearTodosDataAC} from "../../module/todolistsSlice";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 // type InitialStateType = typeof initialState

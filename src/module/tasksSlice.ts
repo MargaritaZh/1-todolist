@@ -2,12 +2,9 @@ import {Dispatch} from "redux";
 import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
 import {
-    changeEntityStatusAC, ClearDataActionType,
-    CreateTodolistActionType,
-    DeleteTodolistActionType,
-    SetTodosActionType
-} from "./todolists-reducer";
-import {setAppErrorAC, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from "../app/appSlice";
+    changeEntityStatus
+} from "./todolistsSlice";
+import {setAppError, setAppStatus} from "../app/appSlice";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 import {AxiosError} from "axios";
 
@@ -20,8 +17,8 @@ type ActionsType =
     | DeleteTodolistActionType
     | SetTodosActionType
     | SetTasksActionType
-    | SetAppStatusActionType
-    | SetAppErrorActionType
+    // | SetAppStatusActionType
+    // | SetAppErrorActionType
     | ClearDataActionType
 
 
@@ -118,9 +115,9 @@ const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => ({
     type: "SET-TASKS", payload: {tasks, todolistId}
 } as const)
 
-export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
     //покажи крутилку
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({status:"loading"}))
 
     todolistAPI.getTasks(todolistId).then((res) => {
         //res.data.items-массив тасок
@@ -128,7 +125,7 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsTyp
         //!!для getTasksTC проверку на ResultCode делать не надо
         dispatch(setTasksAC(res.data.items, todolistId))
         //убери крутилку
-        dispatch(setAppStatusAC("succeeded"))
+        dispatch(setAppStatus({status:"succeeded"}))
     })
 }
 ////////////////////
@@ -138,9 +135,9 @@ type DeleteTaskActionType = ReturnType<typeof deleteTaskAC>
 const deleteTaskAC = (todolistId: string, taskId: string) => ({type: 'DELETE-TASK', todolistId, taskId,} as const)
 
 
-export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<ActionsType>) => {
+export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
     //покажи крутилку
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({status:"loading"}))
 
     todolistAPI.deleteTask({todolistId, taskId}).then((res) => {
         //res.data.data
@@ -148,7 +145,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
         if (res.data.resultCode === Result_Code.SUCCESS) {
             dispatch(deleteTaskAC(todolistId, taskId))
             //убери крутилку
-            dispatch(setAppStatusAC("succeeded"))
+            dispatch(setAppStatus({status:"succeeded"}))
         } else {
             handleServerAppError(res.data, dispatch)
         }
@@ -172,9 +169,9 @@ export enum Result_Code {
     RECAPTCHA_ERROR = 10
 }
 
-export const createTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+export const createTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch) => {
     //покажи крутилку
-    dispatch(setAppStatusAC("loading"))
+    dispatch(setAppStatus({status:"loading"}))
 
     todolistAPI.createTask({title, todolistId})
         .then((res) => {
@@ -184,7 +181,7 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
                 //ОТПРАВИМ УЖЕ ПОЛУЧЕННУЮ ТАСКУ, ГОТОВЫЙ {c таской} c сервера в createTasksAC
                 dispatch(createTasksAC(res.data.data.item))
                 //убери крутилку
-                dispatch(setAppStatusAC("succeeded"))
+                dispatch(setAppStatus({status:"succeeded"}))
             } else {
 
                 handleServerAppError(res.data, dispatch)
@@ -222,9 +219,9 @@ export const updateTaskAC = (todolistId: string, taskId: string, model: UpdateDo
 
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: UpdateDomainTaskModelType) => {
 
-    return (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
+    return (dispatch: Dispatch, getState: () => AppRootStateType) => {
         //покажи крутилку
-        dispatch(setAppStatusAC("loading"))
+        dispatch(setAppStatus({status:"loading"}))
 
         //сначало обновим на сервере
         //1 при помощи функции getState мы находим наш state
@@ -256,7 +253,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
                     //когда пришел твет с сервера, то уже обновляем в BLL и т.д.
                     dispatch(updateTaskAC(todolistId, taskId, domainModel))
                     //убери крутилку
-                    dispatch(setAppStatusAC("succeeded"))
+                    dispatch(setAppStatus({status:"succeeded"}))
                 } else {
 
                     handleServerAppError(res.data, dispatch)

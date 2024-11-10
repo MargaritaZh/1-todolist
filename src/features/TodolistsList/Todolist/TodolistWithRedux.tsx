@@ -8,13 +8,13 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "../../../Todolist.styles";
 import {useAppDispatch, useAppSelector} from "../../../module/store";
-import {createTaskTC, getTasksTC} from "../../../module/tasks-reducer";
+import {createTaskTC, getTasksTC} from "../../../module/tasksSlice";
 import {
     changeFilterAC,
     deleteTodolistTC, FilterValuesType,
     TodolistDomainType,
     upDateTodolistTitleTC
-} from "../../../module/todolists-reducer";
+} from "../../../module/todolistsSlice";
 import {ButtonPropsType} from "../../../Button";
 import {TaskWithRedux} from "./Task/TaskWithRedux";
 import {TaskStatus, TaskType} from "../../../api/api";

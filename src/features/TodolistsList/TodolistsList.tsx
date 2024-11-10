@@ -4,7 +4,7 @@ import Paper from "@mui/material/Paper";
 import {TodolistWithRedux} from "./Todolist/TodolistWithRedux";
 import React, {useCallback, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../module/store";
-import {createTodolistTC, getTodolistsTC, TodolistDomainType} from "../../module/todolists-reducer";
+import {createTodolistTC, getTodolistsTC, TodolistDomainType} from "../../module/todolistsSlice";
 import {Navigate} from "react-router-dom";
 
 type PropsType = {
