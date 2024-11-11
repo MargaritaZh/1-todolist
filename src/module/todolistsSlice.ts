@@ -120,6 +120,11 @@ export const todolistsSlice = createSlice({
             })
 
         }
+    },
+    selectors: {
+        selectTodolists: state => state,
+        selectFilter:state=>state.map(todo=>todo.filter),
+        selectEntityStatus:state=>state.map(todo=>todo.entityStatus),
     }
 })
 
@@ -133,6 +138,8 @@ export const {
     changeFilter,
     clearTodosData
 } = todolistsSlice.actions
+
+export const {selectTodolists,selectFilter,selectEntityStatus}=todolistsSlice.selectors
 
 
 // export const todolistReducer = (state = initialState, action: ActionsType): TodolistDomainType[] => {

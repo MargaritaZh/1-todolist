@@ -4,8 +4,9 @@ import Paper from "@mui/material/Paper";
 import {TodolistWithRedux} from "./Todolist/TodolistWithRedux";
 import React, {useCallback, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../module/store";
-import {createTodolistTC, getTodolistsTC, TodolistDomainType} from "../../module/todolistsSlice";
+import {createTodolistTC, getTodolistsTC, selectTodolists, TodolistDomainType} from "../../module/todolistsSlice";
 import {Navigate} from "react-router-dom";
+import {selectIsLoggedIn} from "../Login/authSlice";
 
 type PropsType = {
     demo?: boolean
@@ -14,11 +15,11 @@ type PropsType = {
 
 export const TodolistsList: React.FC<PropsType> = ({demo = false, ...props}) => {
 
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
     const dispatch = useAppDispatch()
 
-    const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
+    const todolists = useAppSelector(selectTodolists)
 
     const addTodolists = useCallback((title: string) => {
         dispatch(createTodolistTC(title))

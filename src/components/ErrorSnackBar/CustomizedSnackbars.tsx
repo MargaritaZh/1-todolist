@@ -2,7 +2,7 @@ import * as React from 'react';
 import Snackbar, {SnackbarCloseReason} from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import {useAppDispatch, useAppSelector} from "../../module/store";
-import {setAppError} from "../../app/appSlice";
+import {selectAppError, setAppError} from "../../app/appSlice";
 
 
 export const CustomizedSnackbars = () => {
@@ -10,7 +10,8 @@ export const CustomizedSnackbars = () => {
     //уберем локальный стэйт
 
     //перепишем а глобальный стэйт для отображения ошибок всего приложения взависимости от status
-    const error = useAppSelector<string | null>(state => state.app.error)
+
+    const error = useAppSelector(selectAppError)
     const dispatch = useAppDispatch()
 
     // const handleClick = () => {

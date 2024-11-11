@@ -10,33 +10,22 @@ import {CustomizedSnackbars} from "../components/ErrorSnackBar/CustomizedSnackba
 import {Outlet} from "react-router-dom";
 import {meTC} from "../features/Login/authSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import {RequestStatusType} from "./appSlice";
+import {changeTheme, selectAppStatus, selectIsInitialised, selectThemeMode} from "./appSlice";
+import {getTheme} from "../common/theme/theme";
 
-
-type ThemeMode = "dark" | "light"
 
 function AppWithRedux() {
     const dispatch = useAppDispatch()
 
-    const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const status = useAppSelector(selectAppStatus)
+    const isInitialised = useAppSelector(selectIsInitialised)
+    const themeMode = useAppSelector(selectThemeMode)
 
-    const isInitialised = useAppSelector<boolean>(state => state.app.isInitialised)
-
-    const [themeMode, setThemeMode] = useState<ThemeMode>("light")
-
-    const theme = createTheme({
-        palette: {
-            mode: themeMode === "light" ? "light" : "dark",
-            primary: {
-                main: '#cf45cf',
-            },
-        },
-    });
+    const theme=getTheme(themeMode)
 
     const changeModeHandler = () => {
-        setThemeMode(themeMode == "light" ? "dark" : "light")
+        dispatch(changeTheme({themeMode: themeMode === "light" ? "dark" : "light"}))
     }
-
 
     useEffect(() => {
         //1
@@ -63,7 +52,6 @@ function AppWithRedux() {
                 <Container fixed>
                     <ButtonAppBar changeModeHandler={changeModeHandler}/>
                     {status === "loading" && <LinearProgress color="secondary"/>}
-
 
                     {/*//*/}
                     {/*перенести в router, и теперь это лежит там по нужному пути в children*/}

@@ -98,7 +98,6 @@ export const tasksSlice = createSlice({
                         state[tl.id] = []
                     })
                     //возвращаем получившийся объект { [tl1.id]:[],[tl2.id]:[],[tl3.id]:[] }
-
             })
             .addCase(createTodolist, (state, action) => {
                 //создали ключ в пустом {} тасок по id тодолиста и значение пустой [] для будующих тасок
@@ -111,6 +110,9 @@ export const tasksSlice = createSlice({
             .addCase(clearTodosData,(state, action)=>{
                 return {}
             })
+    },
+    selectors:{
+        selectTasks: (state, todolistId: string) => state[todolistId] || []
     }
 })
 
@@ -118,6 +120,7 @@ export const tasksSlice = createSlice({
 export const tasksReducer = tasksSlice.reducer
 export const {setTasks, deleteTask, createTask,updateTask} = tasksSlice.actions
 
+export const {selectTasks}=tasksSlice.selectors
 
 // export const tasksReducer = (state = initialState, action: ActionsType): TasksStateType => {
 //     switch (action.type) {

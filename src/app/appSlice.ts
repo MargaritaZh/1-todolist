@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+
 export type ThemeMode = "dark" | "light"
 
 // const initialState = {
@@ -25,33 +26,32 @@ export const appSlice = createSlice({
             setAppStatus: create.reducer<{ status: RequestStatusType }>((state, action) => {
                 state.status = action.payload.status
             }),
-            setInitialised:create.reducer<{isInitialised: boolean}>((state,action)=>{
-                state.isInitialised=action.payload.isInitialised
+            setInitialised: create.reducer<{ isInitialised: boolean }>((state, action) => {
+                state.isInitialised = action.payload.isInitialised
 
             }),
             setAppError: create.reducer<{ error: string | null }>((state, action) => {
                 state.error = action.payload.error
             }),
-            changeTheme:create.reducer<{themeMode: ThemeMode}>((state,action)=>{
-                state.themeMode=action.payload.themeMode
+            changeTheme: create.reducer<{ themeMode: ThemeMode }>((state, action) => {
+                state.themeMode = action.payload.themeMode
             })
         }
     },
-    // selectors:{
-    //     selectThemeMode:(state)=>state.themeMode,
-    //     selectAppStatus:(state)=>state.status,
-    //     selectAppError:(state)=>state.error,
-    // }
+    selectors: {
+        selectThemeMode: state => state.themeMode,
+        selectAppStatus: state => state.status,
+        selectAppError: state => state.error,
+        selectIsInitialised: state => state.isInitialised
+    }
 })
 
 
 export const appReducer = appSlice.reducer
 
-export const {setAppStatus,setAppError,setInitialised,changeTheme} = appSlice.actions
+export const {setAppStatus, setAppError, setInitialised,changeTheme} = appSlice.actions
 
-// export const {selectThemeMode,selectAppStatus,selectAppError}=appSlice.selectors
-
-
+export const {selectThemeMode,selectAppStatus,selectAppError,selectIsInitialised}=appSlice.selectors
 
 
 // export const appReducer = (
@@ -60,15 +60,15 @@ export const {setAppStatus,setAppError,setInitialised,changeTheme} = appSlice.ac
 // ): InitialStateType => {
 // switch (action.type) {
 //     case "APP/SET-IS-INITIALISED":
-    //     return {...state, isInitialised: action.isInitialised}
-    // case "CHANGE_THEME":
-    //     return {...state, themeMode: action.payload.themeMode}
-        // case 'APP/SET-STATUS':
-        //     return {...state, status: action.payload.status}
-        // case "APP/SET-ERROR":
-        //     return {...state, error: action.payload.error}
-        // default:
-        //     return state
+//     return {...state, isInitialised: action.isInitialised}
+// case "CHANGE_THEME":
+//     return {...state, themeMode: action.payload.themeMode}
+// case 'APP/SET-STATUS':
+//     return {...state, status: action.payload.status}
+// case "APP/SET-ERROR":
+//     return {...state, error: action.payload.error}
+// default:
+//     return state
 //     }
 // }
 
@@ -79,17 +79,17 @@ export const {setAppStatus,setAppError,setInitialised,changeTheme} = appSlice.ac
 
 // export const setAppErrorAC = (error: string | null) => ({type: 'APP/SET-ERROR', payload: {error},} as const)
 
-        // export const changeThemeAC = (themeMode: ThemeMode) => {
-        //     return {
-        //         type: "CHANGE_THEME",
-        //         payload: {themeMode},
-        //     } as const
-        // }
+// export const changeThemeAC = (themeMode: ThemeMode) => {
+//     return {
+//         type: "CHANGE_THEME",
+//         payload: {themeMode},
+//     } as const
+// }
 
-        // export const setInitialisedAC = (isInitialised: boolean) => ({
-        //     type: 'APP/SET-IS-INITIALISED',
-        //     isInitialised
-        // } as const)
+// export const setInitialisedAC = (isInitialised: boolean) => ({
+//     type: 'APP/SET-IS-INITIALISED',
+//     isInitialised
+// } as const)
 
 //type
 

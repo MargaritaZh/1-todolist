@@ -9,9 +9,9 @@ import TextField from '@mui/material/TextField'
 import {getTheme} from "../../common/theme/theme";
 import {useAppDispatch, useAppSelector} from "../../module/store";
 import {useFormik} from "formik";
-import {useDispatch} from "react-redux";
-import {loginTC} from "./authSlice";
+import {loginTC, selectIsLoggedIn} from "./authSlice";
 import {Navigate} from "react-router-dom";
+import {selectThemeMode} from "../../app/appSlice";
 
 
 type ErrorsType = {
@@ -30,11 +30,11 @@ export type LoginType = {
 
 export const Login = () => {
 
-    const isLoggedIn = useAppSelector(state => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector(selectIsLoggedIn)
 
     const dispatch = useAppDispatch()
 
-    const themeMode = useAppSelector(state => state.app.themeMode)
+    const themeMode = useAppSelector(selectThemeMode)
 
     const theme = getTheme(themeMode)
 

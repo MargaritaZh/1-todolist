@@ -18,6 +18,7 @@ export const authSlice = createSlice({
         initialState: {
             isLoggedIn: false,
         },
+        //старый синтаксис 1.0
         // reducers: {
         //     //Подредьюсер или action
         //     setIsLoggedInAC(state, action: PayloadAction<{ isLoggedIn: boolean }>) {
@@ -35,12 +36,16 @@ export const authSlice = createSlice({
                 })
                 //
             }
+        },
+        selectors: {
+            selectIsLoggedIn: state => state.isLoggedIn
         }
     }
 )
 
 export const authReducer = authSlice.reducer
 export const {setIsLoggedIn} = authSlice.actions
+export const {selectIsLoggedIn} = authSlice.selectors
 
 // export const authSlice = (
 //     state: InitialStateType = initialState,
@@ -65,7 +70,7 @@ export const {setIsLoggedIn} = authSlice.actions
 // thunks
 export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatus({status:'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     try {
         //если промис зарезолвился ,то отрабатывает эта логика в try
         const result = await authApi.login(data)
@@ -73,7 +78,7 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
             //пользователь залогинен
             dispatch(setIsLoggedIn({isLoggedIn: true}))
 
-            dispatch(setAppStatus({status:'succeeded'}))
+            dispatch(setAppStatus({status: 'succeeded'}))
         } else {
             handleServerAppError(result.data, dispatch)
         }
@@ -82,14 +87,14 @@ export const loginTC = (data: LoginType) => async (dispatch: Dispatch) => {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
 
-    dispatch(setAppStatus({status:"succeeded"}))
+    dispatch(setAppStatus({status: "succeeded"}))
 }
 
 
 //этот запрос нужен чтобы backEnd зачистил хранилище cookie
 export const logOutTC = () => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatus({status:'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     try {
         //если промис зарезолвился ,то отрабатывает эта логика в try
         const result = await authApi.logOut()
@@ -98,7 +103,7 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
             //выйти из приложения false
             dispatch(setIsLoggedIn({isLoggedIn: false}))
             //крутилку убери:
-            dispatch(setAppStatus({status:'succeeded'}))
+            dispatch(setAppStatus({status: 'succeeded'}))
 
             //зачисти данные после вылогинивания
             dispatch(clearTodosData())
@@ -110,13 +115,13 @@ export const logOutTC = () => async (dispatch: Dispatch) => {
     } catch (e) {
         handleServerNetworkError((e as unknown as { messages: string }), dispatch)
     }
-    dispatch(setAppStatus({status:"succeeded"}))
+    dispatch(setAppStatus({status: "succeeded"}))
 }
 
 
 export const meTC = () => async (dispatch: Dispatch) => {
 
-    dispatch(setAppStatus({status:'loading'}))
+    dispatch(setAppStatus({status: 'loading'}))
     try {
         //мы проверяем был ли пользователь залогнен до перезагрузка
         //и возвращаем те же данные в state что и были, если пользователь был залогинен ранее
@@ -125,7 +130,7 @@ export const meTC = () => async (dispatch: Dispatch) => {
             //пользователь залогинен
             dispatch(setIsLoggedIn({isLoggedIn: true}))
 
-            dispatch(setAppStatus({status:'succeeded'}))
+            dispatch(setAppStatus({status: 'succeeded'}))
         } else {
             handleServerAppError(result.data, dispatch)
         }
@@ -136,7 +141,7 @@ export const meTC = () => async (dispatch: Dispatch) => {
 //когда мы уже узнали ответ от сервера был ли пользователь ранее проинициализирован, неважно да или нет,
     //мы уже изменим значение istInitialised  на true и уберем крутилку
 
-    dispatch(setInitialised({isInitialised:true}))
+    dispatch(setInitialised({isInitialised: true}))
 }
 
 

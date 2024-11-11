@@ -8,7 +8,7 @@ import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import {filterButtonContainerSx} from "../../../Todolist.styles";
 import {useAppDispatch, useAppSelector} from "../../../module/store";
-import {createTaskTC, getTasksTC} from "../../../module/tasksSlice";
+import {createTaskTC, getTasksTC, selectTasks, setTasks} from "../../../module/tasksSlice";
 import {
     changeFilter,
     deleteTodolistTC, FilterValuesType,
@@ -30,7 +30,9 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const {id, title, filter, entityStatus} = todolist
 
-    let tasks = useAppSelector<Array<TaskType>>(state => state.tasks[id])
+    // let tasks = useAppSelector(state => state.tasks[id])
+    //ПОЛУЧИТЬ ЗАДАЧИ ДЛЯ КОНКРЕТНОГО ТОДОЛИСТА ПО ЕГО ID
+    let tasks = useAppSelector(state => selectTasks(state, id))
 
     const dispatch = useAppDispatch()
 
@@ -44,7 +46,7 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
 
     const changeFilterTasksHandler = useCallback((filter: FilterValuesType) => {
         // changeFilter(props.todolistId, filter)
-        dispatch(changeFilter({todolistId:id, filter:filter}))
+        dispatch(changeFilter({todolistId: id, filter: filter}))
     }, [dispatch])
 
 
@@ -93,20 +95,20 @@ export const TodolistWithRedux = React.memo(function (props: TodolistPropsType) 
                 <EditableSpan
                     oldTitle={title}
                     upDateItem={upDateTodolistHandler}
-                    disabled={entityStatus==="loading"}
+                    disabled={entityStatus === "loading"}
                 />
 
                 {/*<button onClick={() => props.deleteTodolist(props.todolistId)}>X</button>*/}
                 <IconButton aria-label="delete"
                     // onClick={() => props.deleteTodolist(props.todolistId)}>
                             onClick={() => dispatch(deleteTodolistTC(id))}
-                            disabled={entityStatus==="loading"}>
+                            disabled={entityStatus === "loading"}>
                     <DeleteIcon fontSize="inherit"/>
                 </IconButton>
 
             </div>
 
-            <AddItemForm addItem={addTaskHandler} disabled={entityStatus==="loading"}/>
+            <AddItemForm addItem={addTaskHandler} disabled={entityStatus === "loading"}/>
 
             {taskslist}
 
