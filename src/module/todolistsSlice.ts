@@ -1,4 +1,4 @@
-import {todolistAPI, TodolistType} from "../api/api";
+import {_todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
 import {
     RequestStatusType,
@@ -220,7 +220,7 @@ export const getTodolistsTC = () => (dispatch: ThunkDispatch<AppRootStateType, u
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
 
-    todolistAPI.getTodolists().then((res) => {
+    _todolistAPI.getTodolists().then((res) => {
         //!!для getTodolistsTC проверку на ResultCode делать не надо
 
         //после запроса на сервер вбрасываем полученные тодолисты с сервера в AC ,
@@ -262,7 +262,7 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => 
     //измени emptity статус тодолиста для управления  disaibled нужныx элементов
     dispatch(changeEntityStatus({todolistId: todolistId, entityStatus: "loading"}))
 
-    todolistAPI.deleteTodolist(todolistId)
+    _todolistAPI.deleteTodolist(todolistId)
         .then(res => {
             if (res.data.resultCode === Result_Code.SUCCESS) {
                 //
@@ -300,7 +300,7 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
 
-    todolistAPI.createTodolist({title})
+    _todolistAPI.createTodolist({title})
         .then(res => {
             //res.data.data.item
 
@@ -329,7 +329,7 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
 export const upDateTodolistTitleTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
-    todolistAPI.updateTodolist(todolistId, {title}).then(res => {
+    _todolistAPI.updateTodolist(todolistId, {title}).then(res => {
         if (res.data.resultCode === Result_Code.SUCCESS) {
             //сначало обновим на сервере, затем в BLL
             dispatch(upDateTodolistTitle({id: todolistId, newTitle: title}))

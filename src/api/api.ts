@@ -2,14 +2,9 @@
 //создаем объект ,в котором мы будем описывать методы в заимодействия с сервером
 import axios from "axios";
 import {LoginType} from "../features/Login/Login";
+import {createApi,fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 
-// const config = {
-//     withCredentials: true,
-//     headers: {
-//         'API-KEY': '2301ad51-5dfc-4feb-b807-a9eea7d3c61e'
-//     }
-// }
 
 const instance = axios.create({
     baseURL: "https://social-network.samuraijs.com/api/1.1",
@@ -18,7 +13,6 @@ const instance = axios.create({
         'API-KEY': '32f2b4a6-0672-4ffa-9026-e2be7bac6297',
         'Authorization': 'Bearer 135ac670-1610-4ceb-9e7c-a034c967a192'
     }
-
 })
 
 
@@ -36,9 +30,46 @@ export const authApi = {
     },
 
 }
+////////////////////////////////////////////////////////////////////////////////////////
+
+// 1
+// import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+// 2
+export const todolistsApi = createApi({
+    // 3
+    reducerPath: 'todolistsApi',
+    // 4
+    baseQuery: fetchBaseQuery ({
+        baseUrl: process.env.REACT_APP_BASE_URL,
+        prepareHeaders: headers => {
+            headers.set('API-KEY', `${process.env.REACT_APP_API_KEY}`)
+            headers.set('Authorization', `Bearer ${localStorage.getItem('sn-token')}`)
+        },
+    }),
+    // 5
+    endpoints: build => {
+        return {
+            // 6
+            getTodolists: build.query<any[], void>({
+                query: () => {
+                    return {
+                        url: 'todo-lists',
+                        method: 'GET',
+                    }
+                },
+            }),
+        }
+    },
+})
+
+// 7
+export const { useGetTodolistsQuery } = todolistsApi
 
 
-export const todolistAPI = {
+
+//////////////////////////////////////////////////////////////////////////////////////
+export const _todolistAPI = {
     getTodolists() {
         const promise = instance.get<Array<TodolistType>>('/todo-lists',)
         return promise

@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {TaskPriority, TaskStatus, TaskType, todolistAPI, UpdateTaskModelType} from "../api/api";
+import {TaskPriority, TaskStatus, TaskType, _todolistAPI, UpdateTaskModelType} from "../api/api";
 import {AppRootStateType} from "./store";
 import {
     changeEntityStatus, clearTodosData,
@@ -221,7 +221,7 @@ export const getTasksTC = (todolistId: string) => (dispatch: Dispatch) => {
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
 
-    todolistAPI.getTasks(todolistId).then((res) => {
+    _todolistAPI.getTasks(todolistId).then((res) => {
         //res.data.items-массив тасок
 
         //!!для getTasksTC проверку на ResultCode делать не надо
@@ -241,7 +241,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
 
-    todolistAPI.deleteTask({todolistId, taskId}).then((res) => {
+    _todolistAPI.deleteTask({todolistId, taskId}).then((res) => {
         //res.data.data
 
         if (res.data.resultCode === Result_Code.SUCCESS) {
@@ -275,7 +275,7 @@ export const createTaskTC = (title: string, todolistId: string) => (dispatch: Di
     //покажи крутилку
     dispatch(setAppStatus({status: "loading"}))
 
-    todolistAPI.createTask({title, todolistId})
+    _todolistAPI.createTask({title, todolistId})
         .then((res) => {
             //(res.data.data.item)
 
@@ -348,7 +348,7 @@ export const updateTaskTC = (todolistId: string, taskId: string, domainModel: Up
         }
 
 
-        todolistAPI.updateTask(todolistId, taskId, apiModel)
+        _todolistAPI.updateTask(todolistId, taskId, apiModel)
             .then(res => {
 
                 if (res.data.resultCode === Result_Code.SUCCESS) {

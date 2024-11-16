@@ -6,6 +6,8 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {appReducer, appSlice} from "../app/appSlice";
 import {authReducer, authSlice} from "../features/Login/authSlice";
 import {configureStore} from "@reduxjs/toolkit";
+import {todolistsApi} from "../api/api";
+import {setupListeners} from "@reduxjs/toolkit/query";
 
 //просто REDUX
 // объединяя reducer-ы с помощью combineReducers,
@@ -41,8 +43,20 @@ export const store =configureStore({
         [todolistsSlice.name]:todolistsReducer,
         [appSlice.name]:appReducer,
         [authSlice.name]:authReducer,
+
+        //RTK query
+        [todolistsApi.reducerPath]: todolistsApi.reducer,
+
     },
+    ////RTK query-> подключаем middleware
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(todolistsApi.middleware),
+
 })
+
+//RTK query
+setupListeners(store.dispatch)
+
 
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof store.getState>
